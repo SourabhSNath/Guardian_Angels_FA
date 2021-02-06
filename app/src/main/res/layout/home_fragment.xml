@@ -26,7 +26,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="32dp"
-        android:fontFamily="@font/roboto"
+        android:fontFamily="@font/raleway"
         android:text="Upcoming"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
         app:layout_constraintStart_toStartOf="parent"
@@ -35,13 +35,14 @@
     <!-- Upcoming Match Card -->
     <TextView
         android:id="@+id/moreUpcomingTV"
-        style="@style/TextAppearance.MaterialComponents.Caption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:drawableEnd="@drawable/ic_next"
+        android:fontFamily="@font/raleway"
         android:gravity="center"
         android:text="See More"
+        android:textSize="12sp"
         app:layout_constraintBaseline_toBaselineOf="@+id/upcomingTV"
         app:layout_constraintEnd_toEndOf="@+id/upcomingMatchCard" />
 
@@ -91,7 +92,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:fontFamily="@font/roboto"
+                        android:fontFamily="@font/poppins"
                         android:maxLines="1"
                         android:text="Gaurdian Angels"
                         android:textAlignment="center"
@@ -121,7 +122,7 @@
                         android:id="@+id/matchKickOffTime"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/poppins"
+                        android:fontFamily="@font/raleway"
                         android:text="KO: 1:30 PM"
                         android:textAlignment="center"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
@@ -165,7 +166,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:fontFamily="@font/roboto"
+                        android:fontFamily="@font/poppins"
                         android:maxLines="1"
                         android:text="FC Barcelona"
                         android:textColor="@color/black"
@@ -193,7 +194,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
-        android:fontFamily="@font/roboto"
+        android:fontFamily="@font/raleway"
         android:text="Stats"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
 
@@ -207,9 +208,8 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="12dp"
-
         app:cardCornerRadius="8dp"
-        app:cardElevation="16dp"
+
         app:layout_constraintEnd_toStartOf="@+id/guideline"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/statsTV">
@@ -226,16 +226,19 @@
                 android:fontFamily="@font/poppins"
                 android:letterSpacing="0.1"
                 android:text="GAMES"
-                android:textSize="16sp"
-                android:textColor="@color/mainStatGames" />
+                android:textColor="@color/mainStatGames"
+                android:textSize="16sp" />
 
             <TextView
-                style="@style/CountTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="8dp"
                 android:text="69"
                 android:textAlignment="textEnd"
+                android:textAppearance="@style/CountTextStyle"
                 android:textColor="@color/mainStatGames" />
         </LinearLayout>
 
@@ -244,14 +247,11 @@
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/wonStatCard"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="24dp"
-
         app:cardCornerRadius="8dp"
-        app:cardElevation="16dp"
-        app:layout_constraintBottom_toBottomOf="@+id/gamesStatCard"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline"
         app:layout_constraintTop_toBottomOf="@+id/statsTV">
@@ -262,37 +262,37 @@
             android:orientation="vertical">
 
             <TextView
-                style="@style/TextAppearance.MaterialComponents.Body1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
                 android:fontFamily="@font/poppins"
                 android:letterSpacing="0.1"
                 android:text="WON"
-                android:textColor="@color/mainStatWon" />
+                android:textColor="@color/mainStatWon"
+                android:textSize="16sp" />
 
             <TextView
-                style="@style/TextAppearance.MaterialComponents.Headline4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:fontFamily="@font/poppins_semibold"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="8dp"
                 android:text="59"
                 android:textAlignment="textEnd"
+                android:textAppearance="@style/CountTextStyle"
                 android:textColor="@color/mainStatWon" />
         </LinearLayout>
 
     </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/drawStatCard"
+        android:id="@+id/gameStatCard"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="12dp"
-
         app:cardCornerRadius="8dp"
-        app:cardElevation="16dp"
         app:layout_constraintEnd_toStartOf="@+id/guideline"
         app:layout_constraintStart_toStartOf="@+id/gamesStatCard"
         app:layout_constraintTop_toBottomOf="@+id/gamesStatCard">
@@ -313,13 +313,15 @@
                 android:textColor="@color/mainStatDraw" />
 
             <TextView
-                style="@style/TextAppearance.MaterialComponents.Headline4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:fontFamily="@font/poppins_semibold"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="8dp"
                 android:text="7"
                 android:textAlignment="textEnd"
+                android:textAppearance="@style/CountTextStyle"
                 android:textColor="@color/mainStatDraw" />
         </LinearLayout>
 
@@ -331,9 +333,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
         android:layout_marginTop="24dp"
-
         app:cardCornerRadius="8dp"
-        app:cardElevation="16dp"
         app:layout_constraintEnd_toEndOf="@+id/wonStatCard"
         app:layout_constraintStart_toStartOf="@+id/guideline"
         app:layout_constraintTop_toBottomOf="@+id/wonStatCard">
@@ -354,13 +354,15 @@
                 android:textColor="@color/mainStatLost" />
 
             <TextView
-                style="@style/TextAppearance.MaterialComponents.Headline4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:fontFamily="@font/poppins_semibold"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="8dp"
                 android:text="3"
                 android:textAlignment="textEnd"
+                android:textAppearance="@style/CountTextStyle"
                 android:textColor="@color/mainStatLost" />
         </LinearLayout>
 

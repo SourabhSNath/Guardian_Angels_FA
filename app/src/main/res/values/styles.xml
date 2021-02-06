@@ -37,7 +37,6 @@
     <style name="TextInputStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="boxStrokeColor">@color/text_input_layout_stroke_color</item>
         <item name="hintTextColor">@color/colorPrimary</item>
-        <item name="fontFamily">@font/poppins</item>
     </style>
 
 
@@ -49,8 +48,8 @@
     </style>
 
     <style name="CountTextStyle" parent="TextAppearance.MaterialComponents.Headline4">
-        <item name="fontFamily">@font/roboto</item>
-        <item name="android:fontFamily">@font/roboto</item>
+        <item name="fontFamily">@font/poppins</item>
+        <item name="android:fontFamily">@font/poppins</item>
     </style>
 
 

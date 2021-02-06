@@ -1,44 +1,103 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="155dp"
-    android:layout_height="175dp"
-    android:layout_margin="24dp">
+    android:id="@+id/playerItem"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    android:layout_marginStart="4dp"
+    android:layout_marginEnd="4dp"
+    android:layout_marginBottom="8dp"
+    android:elevation="0dp"
+    app:cardCornerRadius="16dp"
+    app:cardUseCompatPadding="true">
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:contentDescription="@string/player_picture"
-        android:scaleType="centerCrop"
-        android:src="@drawable/manchester_player" />
-
-    <View
-        android:layout_width="wrap_content"
+        android:id="@+id/playerImage"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="bottom"
-        android:background="@drawable/image_foreground_gradient" />
+        android:scaleType="centerCrop"
+        tools:src="@drawable/manchester_player" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layout_margin="16dp"
+        android:layout_height="match_parent"
+        android:background="@drawable/image_foreground_gradient"
+        android:gravity="bottom"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/playerNumber"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:fontFamily="@font/poppins_semibold"
             android:textColor="@color/white"
-            android:textSize="48sp"
+            android:textSize="28sp"
             tools:text="10" />
+
+        <View
+            android:layout_width="32dp"
+            android:layout_height="1dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:background="@color/pink" />
 
         <TextView
             android:id="@+id/playerName"
-            style="@style/TextAppearance.MaterialComponents.Headline6"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/white"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="4dp"
+            android:fontFamily="@font/poppins"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+            android:textSize="18sp"
             tools:text="Crooney" />
+
     </LinearLayout>
-</FrameLayout>
+</com.google.android.material.card.MaterialCardView><!--<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--    xmlns:tools="http://schemas.android.com/tools"-->
+    <!--    android:id="@+id/playerItem"-->
+    <!--    android:layout_width="155dp"-->
+    <!--    android:layout_height="175dp">-->
+
+    <!--    <ImageView-->
+    <!--        android:id="@+id/playerImage"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:contentDescription="@string/player_picture"-->
+    <!--        android:scaleType="centerCrop"-->
+    <!--        android:src="@drawable/manchester_player" />-->
+
+    <!--    <View-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="match_parent"-->
+    <!--        android:layout_gravity="bottom"-->
+    <!--        android:background="@drawable/image_foreground_gradient" />-->
+
+    <!--    <LinearLayout-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_gravity="bottom"-->
+    <!--        android:layout_margin="16dp"-->
+    <!--        android:orientation="vertical">-->
+
+    <!--            <TextView-->
+    <!--                android:id="@+id/playerNumber"-->
+    <!--                android:layout_width="match_parent"-->
+    <!--                android:layout_height="wrap_content"-->
+    <!--                android:textColor="@color/white"-->
+    <!--                android:textSize="48sp"-->
+    <!--                tools:text="10" />-->
+
+    <!--        <TextView-->
+    <!--            android:id="@+id/playerName"-->
+    <!--            style="@style/TextAppearance.MaterialComponents.Headline6"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:textColor="@color/white"-->
+    <!--            tools:text="Crooney" />-->
+    <!--    </LinearLayout>-->
+    <!--</FrameLayout>-->

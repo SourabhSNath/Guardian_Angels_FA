@@ -8,5 +8,5 @@
     <item
         android:id="@+id/players"
         android:icon="@drawable/ic_person"
-        android:title="Player" />
+        android:title="Players" />
 </menu>

@@ -17,17 +17,20 @@
 
     <fragment
         android:id="@+id/players"
-        android:name="com.gaurdianangels.football.ui.players.PlayerListFragment"
+        android:name="com.gaurdianangels.football.ui.players.playerlist.PlayerListFragment"
         android:label="Players"
         tools:layout="@layout/player_list_fragment">
         <action
             android:id="@+id/action_players_to_addPlayerFragment"
             app:destination="@id/addPlayerFragment" />
+        <action
+            android:id="@+id/action_players_to_playerDetailsFragment"
+            app:destination="@id/playerDetailsFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/addPlayerFragment"
-        android:name="com.gaurdianangels.football.ui.players.AddPlayerFragment"
+        android:name="com.gaurdianangels.football.ui.players.addplayer.AddPlayerFragment"
         android:label="Add Player"
         tools:layout="@layout/add_player_fragment" />
 
@@ -36,5 +39,14 @@
         android:name="com.gaurdianangels.football.ui.login.LoginFragment"
         android:label="LoginFragment"
         tools:layout="@layout/login_fragment"/>
+    <fragment
+        android:id="@+id/playerDetailsFragment"
+        android:name="com.gaurdianangels.football.ui.players.details.PlayerDetailsFragment"
+        android:label="PlayerDetailsFragment"
+        tools:layout="@layout/player_details_fragment">
+        <argument
+            android:name="playerModel"
+            app:argType="com.gaurdianangels.football.data.Player" />
+    </fragment>
 
 </navigation>
