@@ -27,14 +27,15 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/materialCardView"
-                android:layout_width="0dp"
+                android:layout_width="250dp"
                 android:layout_height="0dp"
+                android:layout_marginTop="16dp"
                 android:layout_weight="1"
                 android:elevation="16dp"
                 app:cardBackgroundColor="#4E4C42"
                 app:cardCornerRadius="8dp"
                 app:cardUseCompatPadding="true"
-                app:layout_constraintDimensionRatio="5:5.5"
+                app:layout_constraintDimensionRatio="4:4.5"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">

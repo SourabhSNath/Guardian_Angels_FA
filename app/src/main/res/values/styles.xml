@@ -9,15 +9,19 @@
         <!-- Window Background gradient -->
         <item name="android:windowBackground">@drawable/main_layout_gradient</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <item name="android:statusBarColor">@color/layoutGradientEnd</item>
         <!-- Navigation bar color. -->
         <item name="android:navigationBarColor">@color/bottomNavColor</item>
-
 
         <item name="colorOnPrimary">@color/white</item>  <!--Activated State-->
         <item name="colorOnSurface">@color/white</item>  <!--Focused State-->
 
         <item name="textInputStyle">@style/TextInputStyle</item>
+
+        <!-- Popup Options Menu Style -->
+        <item name="textAppearanceLargePopupMenu">@style/PopupMenuTextStyle</item>
+        <item name="textAppearanceSmallPopupMenu">@style/PopupMenuTextStyle</item>
+        <item name="popupMenuBackground">@drawable/custom_popup_bg</item>
     </style>
 
 
@@ -52,5 +56,12 @@
         <item name="android:fontFamily">@font/poppins</item>
     </style>
 
+    <style name="BottomNavigationBarTextStyle">
+        <item name="fontFamily">@font/poppins</item>
+    </style>
 
+    <style name="PopupMenuTextStyle" parent="TextAppearance.MaterialComponents.Subtitle1">
+        <item name="fontFamily">@font/raleway</item>
+        <item name="android:fontFamily">@font/raleway</item>
+    </style>
 </resources>

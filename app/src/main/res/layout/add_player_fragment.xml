@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -26,13 +25,6 @@
                 android:orientation="vertical"
                 app:layout_constraintGuide_percent="0.5" />
 
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guideline5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.47" />
-
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/materialCardView"
                 android:layout_width="0dp"
@@ -42,11 +34,10 @@
                 app:cardBackgroundColor="#4E4C42"
                 app:cardCornerRadius="8dp"
                 app:cardUseCompatPadding="true"
-                app:layout_constraintBottom_toTopOf="@+id/guideline5"
+                app:layout_constraintDimensionRatio="5:5.5"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0">
+                app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
                     android:id="@+id/playerImage"
@@ -95,15 +86,15 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
+                android:layout_marginStart="24dp"
                 android:layout_marginTop="24dp"
-                android:layout_marginEnd="24dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/guideline2"
-                app:layout_constraintTop_toBottomOf="@+id/playerNameTF"
-                tools:hint="Player Type">
+                android:layout_marginEnd="12dp"
+                android:hint="Player Position"
+                app:layout_constraintEnd_toStartOf="@+id/guideline2"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/playerNameTF">
 
-                <AutoCompleteTextView
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
                     android:id="@+id/dropDownPlayerType"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -117,21 +108,20 @@
                 android:id="@+id/playerNumber"
                 style="@style/TextInputStyle"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="12dp"
                 android:layout_marginTop="24dp"
-                android:layout_marginEnd="12dp"
+                android:layout_marginEnd="24dp"
                 android:hint="Shirt Number*"
                 app:layout_constraintBottom_toBottomOf="@+id/playerTypeTF"
-                app:layout_constraintEnd_toStartOf="@+id/guideline2"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/playerNameTF"
-                app:layout_constraintVertical_bias="0.0">
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/guideline2"
+                app:layout_constraintTop_toBottomOf="@+id/playerNameTF">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/playerNumberET"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:fontFamily="@font/poppins"
                     android:inputType="number" />
 
@@ -147,7 +137,7 @@
                 android:text="Physical Stats"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/playerNumber" />
+                app:layout_constraintTop_toBottomOf="@+id/playerTypeTF" />
 
             <LinearLayout
                 android:id="@+id/physicalStatsLayout"
@@ -232,35 +222,15 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="8dp"
-                android:layout_marginEnd="24dp"
+                android:layout_marginEnd="12dp"
                 android:layout_weight="1"
                 android:hint="Games"
-                app:layout_constraintEnd_toStartOf="@+id/categorySpecificTF"
+                app:layout_constraintEnd_toStartOf="@+id/guideline2"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/gameStats">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/gamesET"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins"
-                    android:inputType="numberDecimal" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/categorySpecificTF"
-                style="@style/TextInputStyle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:layout_marginEnd="24dp"
-                android:hint="Goals"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/guideline2"
-                app:layout_constraintTop_toTopOf="@+id/gamesTF">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/categorySpecificET"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins"
@@ -277,6 +247,7 @@
                 android:layout_marginEnd="12dp"
                 android:layout_weight="1"
                 android:hint="Saves"
+                android:visibility="gone"
                 app:layout_constraintEnd_toStartOf="@+id/guideline2"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/gamesTF">
@@ -287,6 +258,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins"
                     android:inputType="numberDecimal" />
+
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -295,13 +267,13 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
-                android:layout_marginTop="24dp"
                 android:layout_marginEnd="24dp"
                 android:layout_weight="1"
                 android:hint="Clean Sheets"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/guideline2"
-                app:layout_constraintTop_toBottomOf="@+id/gamesTF">
+                app:layout_constraintTop_toTopOf="@+id/savesTF">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/cleanSheetET"
@@ -311,17 +283,42 @@
                     android:inputType="numberDecimal" />
             </com.google.android.material.textfield.TextInputLayout>
 
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/categorySpecificTF"
+                style="@style/TextInputStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="24dp"
+                android:layout_weight="1"
+                android:hint="Goals"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/guideline2"
+                app:layout_constraintTop_toBottomOf="@+id/gameStats">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/categorySpecificET"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins"
+                    android:inputType="numberDecimal" />
+            </com.google.android.material.textfield.TextInputLayout>
+
             <View
                 android:layout_width="0dp"
-                android:layout_height="56dp"
+                android:layout_height="72dp"
+                android:layout_marginTop="24dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/savesTF" />
+                app:layout_constraintTop_toBottomOf="@+id/savesTF" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/button1"
+        android:id="@+id/backButton"
         style="@style/IconButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

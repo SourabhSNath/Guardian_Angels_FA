@@ -1,6 +1,7 @@
 package com.gaurdianangels.football.repository
 
 import android.net.Uri
+import android.util.Log
 import com.gaurdianangels.football.data.Player
 import com.gaurdianangels.football.data.SectionedPlayerRecyclerItem
 import com.gaurdianangels.football.network.NetworkState
@@ -8,7 +9,9 @@ import com.gaurdianangels.football.util.Converters.Companion.getPlayerTypeString
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
@@ -20,12 +23,14 @@ import javax.inject.Inject
 class MainRepository @Inject constructor(
     firestore: FirebaseFirestore,
     private val auth: FirebaseAuth,
-    storage: FirebaseStorage
+    private val storage: FirebaseStorage
 ) {
 
     companion object {
+        private const val TAG = "MainRepository"
+
         /* This is the only email allowed to login. The user will not have the ability to create a new account. */
-        const val EMAIL = "admin@gaurdian.angels"
+        private const val EMAIL = "admin@gaurdian.angels"
     }
 
     /***************************
@@ -78,8 +83,44 @@ class MainRepository @Inject constructor(
      * Add players to firebase cloud firestore.
      * Emitting a reference to the document along with network states.
      */
-    fun addPlayer(player: Player, uri: Uri) = flow<NetworkState<DocumentReference>> {
+    fun addPlayer(player: Player, uri: Uri) = flow<NetworkState<Boolean>> {
         emit(NetworkState.loading())
+
+        player.setImage(uri)
+        playerCollectionRef.add(player).await()
+
+        emit(NetworkState.success(true))
+
+    }.catch {
+        emit(NetworkState.failed(it.message.toString()))
+    }.flowOn(Dispatchers.IO)
+
+
+    /**
+     * Update the player.
+     */
+    fun updatePlayer(player: Player, uri: Uri?) = flow<NetworkState<Boolean>> {
+        emit(NetworkState.loading())
+
+        Log.d(TAG, "updatePlayer: In here")
+        if (uri != null) {
+            storage.getReferenceFromUrl(player.remoteUri!!).delete() // First delete the previous image from storage.
+            player.setImage(uri)
+        }
+
+//        Log.d(TAG, "updatePlayer: ${player.id}")
+        playerCollectionRef.document(player.id!!).set(player).await()
+
+        emit(NetworkState.success(true))
+    }.catch {
+        emit(NetworkState.failed(it.message.toString()))
+    }.flowOn(Dispatchers.IO)
+
+
+    /**
+     * Set the image url after uploading it to storage.
+     */
+    private suspend fun Player.setImage(uri: Uri) {
         val playerImageReference = storageReference.child("PlayerImages/${auth.currentUser?.uid}/${uri.lastPathSegment}")
 
         val playerImageDownloadUrl = playerImageReference.putFile(uri)
@@ -89,14 +130,8 @@ class MainRepository @Inject constructor(
             .await()
             .toString()
 
-        player.remoteUri = playerImageDownloadUrl
-        val playerCollection = playerCollectionRef.add(player).await()
-
-        emit(NetworkState.success(playerCollection))
-
-    }.catch {
-        emit(NetworkState.failed(it.message.toString()))
-    }.flowOn(Dispatchers.IO)
+        remoteUri = playerImageDownloadUrl
+    }
 
 
     /**
@@ -130,6 +165,7 @@ class MainRepository @Inject constructor(
 
             playerType.let { sectionedPlayerRecyclerItem.add(SectionedPlayerRecyclerItem.PlayerTypeItem(playerType)) }
             for (player in playersSectionGroup.getValue(type)) {
+                Log.d(TAG, "getPlayers: ${player.playerName} ${player.id}")
                 sectionedPlayerRecyclerItem.add(SectionedPlayerRecyclerItem.PlayerItem(player))
             }
         }
@@ -140,8 +176,41 @@ class MainRepository @Inject constructor(
     }.flowOn(Dispatchers.IO)
 
 
+    /**
+     * Delete multiple selected players
+     */
+    fun deleteMultiplePlayers(players: ArrayList<Player>) = flow {
+
+        Log.d(TAG, "deleteMultiplePlayers Called: list size = ${players.size}")
+        emit(NetworkState.loading())
+        for (player in players) {
+            Log.d(TAG, "deleteMultiplePlayers: ${player.id}")
+
+            playerCollectionRef.document(player.id!!).delete().onSuccessTask {
+                // When deleting the player is successful
+                Log.d(TAG, "deleteMultiplePlayers: Player Deleted, continue with storage deletion")
+                storage.getReferenceFromUrl(player.remoteUri!!).delete() // Delete using the url, since no direct path is available
+            }.await()
+        }
+        emit(NetworkState.success(true))
+    }.catch {
+        emit(NetworkState.failed(it.message.toString()))
+    }.flowOn(Dispatchers.IO)
+
+
+    /**
+     * Set player id, get the id from the query doc and set it to the object
+     */
     private fun Player.setID(id: String): Player {
         this.id = id
         return this
     }
+
+    /**
+     * Upcoming Matches
+     */
+
+    private val upcomingMatchCollectionRef = firestore.collection("upcoming_matches")
+
+    fun addUpcomingMatch() {}
 }
