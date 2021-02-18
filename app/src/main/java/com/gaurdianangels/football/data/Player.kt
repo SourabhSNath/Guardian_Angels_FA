@@ -1,9 +1,10 @@
 package com.gaurdianangels.football.data
 
 import android.os.Parcelable
+import com.google.firebase.firestore.Exclude
 import kotlinx.parcelize.Parcelize
 
-public enum class PlayerType {
+enum class PlayerType {
     GOAL_KEEPER,
     DEFENDER,
     MIDFIELDER,
@@ -16,13 +17,16 @@ public enum class PlayerType {
  */
 @Parcelize
 data class Player(
+
+    @get:Exclude // Exclude the id since it's only set at the time of download
     var id: String? = "",
+
     var playerName: String? = "",
     var playerNumber: String? = "",
     var playerType: PlayerType? = null,
     var playerAge: Int? = null,
-    var playerHeight: Int? = null,
-    var playerWeight: Int? = null,
+    var playerHeight: Float? = null,
+    var playerWeight: Float? = null,
 
     var totalGames: Int? = null,
     // PlayerStats
@@ -35,5 +39,5 @@ data class Player(
     // Stats for Coach
     var totalWins: Int? = null,
 
-    var remoteUri: String? = "" // Points to the image in firebase storage
+    var remoteUri: String? = "", // Points to the image in firebase storage
 ) : Parcelable
