@@ -13,10 +13,12 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
+    private var _binding: ActivityMainBinding? = null
+    private val binding: ActivityMainBinding get() = _binding!!
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        val binding = ActivityMainBinding.inflate(layoutInflater)
+        _binding = ActivityMainBinding.inflate(layoutInflater)
         val bottomNavigationBar = binding.bottomNavigation
 
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
@@ -45,8 +47,10 @@ class MainActivity : AppCompatActivity() {
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
                 R.id.addPlayerFragment,
+                R.id.addUpcomingMatchFragment,
                 R.id.loginFragment,
-                R.id.playerDetailsFragment -> bottomNavigationBar.visibility = View.GONE
+                R.id.playerDetailsFragment,
+                R.id.selectTeamFragment -> bottomNavigationBar.visibility = View.GONE
                 else -> bottomNavigationBar.visibility = View.VISIBLE
             }
 
@@ -55,5 +59,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
     }
 
-
+    override fun onDestroy() {
+        _binding = null
+        super.onDestroy()
+    }
 }

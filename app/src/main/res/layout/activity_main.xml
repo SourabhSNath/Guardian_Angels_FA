@@ -21,6 +21,8 @@
         android:layout_gravity="bottom"
         android:background="@color/bottomNavColor"
         app:itemIconTint="@drawable/bottom_icon_color"
+        app:itemTextAppearanceActive="@style/BottomNavigationBarTextStyle"
+        app:itemTextAppearanceInactive="@style/BottomNavigationBarTextStyle"
         app:itemTextColor="@drawable/bottom_icon_color"
         app:menu="@menu/bottom_navigation_menu" />
 </FrameLayout>

@@ -7,7 +7,6 @@
     android:orientation="vertical"
     tools:context=".ui.players.playerlist.PlayerListFragment">
 
-
     <TextView
         android:id="@+id/playersTV"
         android:layout_width="wrap_content"
@@ -15,22 +14,46 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="16dp"
         android:fontFamily="@font/poppins_semibold"
-        android:text="Players"
+        android:text="@string/players"
         android:textAppearance="@style/TitleTextStyle"
         android:textColor="@color/white"
+        app:layout_constraintStart_toEndOf="@+id/backButton"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/optionsButton"
+        style="@style/IconButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:drawableEnd="@drawable/ic_more_options"
+        app:layout_constraintBaseline_toBaselineOf="@+id/playersTV"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/backButton"
+        style="@style/IconButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:drawableEnd="@drawable/ic_back_arrow"
+        android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/addPlayerButton"
-        style="@style/IconButton"
+        android:id="@+id/cancelSelectionButton"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="24dp"
-        android:drawableEnd="@drawable/ic_person_add"
-        app:layout_constraintBottom_toBottomOf="@+id/playersTV"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/playersTV" />
+        android:drawableEnd="@drawable/ic_close"
+        android:text="Cancel"
+        android:visibility="gone"
+        app:layout_constraintBaseline_toBaselineOf="@+id/playersTV"
+        app:layout_constraintEnd_toEndOf="parent" />
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/playersListRecyclerView"
@@ -46,4 +69,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/playersTV"
         tools:listitem="@layout/player_list_image_item" />
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/confirmButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="72dp"
+        android:backgroundTint="@color/pink"
+        android:drawableEnd="@drawable/ic_delete"
+        android:fontFamily="@font/poppins"
+        android:text="DELETE"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
