@@ -209,7 +209,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="12dp"
         app:cardCornerRadius="8dp"
-
+        app:cardElevation="8dp"
         app:layout_constraintEnd_toStartOf="@+id/guideline"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/statsTV">
@@ -252,6 +252,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="24dp"
         app:cardCornerRadius="8dp"
+        app:cardElevation="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline"
         app:layout_constraintTop_toBottomOf="@+id/statsTV">
@@ -293,6 +294,7 @@
         android:layout_marginTop="24dp"
         android:layout_marginEnd="12dp"
         app:cardCornerRadius="8dp"
+        app:cardElevation="8dp"
         app:layout_constraintEnd_toStartOf="@+id/guideline"
         app:layout_constraintStart_toStartOf="@+id/gamesStatCard"
         app:layout_constraintTop_toBottomOf="@+id/gamesStatCard">
@@ -334,6 +336,7 @@
         android:layout_marginStart="12dp"
         android:layout_marginTop="24dp"
         app:cardCornerRadius="8dp"
+        app:cardElevation="8dp"
         app:layout_constraintEnd_toEndOf="@+id/wonStatCard"
         app:layout_constraintStart_toStartOf="@+id/guideline"
         app:layout_constraintTop_toBottomOf="@+id/wonStatCard">

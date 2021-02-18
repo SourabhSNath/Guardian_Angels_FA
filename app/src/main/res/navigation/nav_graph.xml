@@ -9,10 +9,13 @@
         android:id="@+id/home"
         android:name="com.gaurdianangels.football.ui.home.HomeFragment"
         android:label="Home"
-        tools:layout="@layout/home_fragment" >
+        tools:layout="@layout/home_fragment">
         <action
             android:id="@+id/action_home_to_loginFragment"
             app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_home_to_addUpcomingMatchFragment"
+            app:destination="@id/addUpcomingMatchFragment" />
     </fragment>
 
     <fragment
@@ -32,13 +35,19 @@
         android:id="@+id/addPlayerFragment"
         android:name="com.gaurdianangels.football.ui.players.addplayer.AddPlayerFragment"
         android:label="Add Player"
-        tools:layout="@layout/add_player_fragment" />
+        tools:layout="@layout/add_player_fragment" >
+        <argument
+            android:name="player"
+            app:argType="com.gaurdianangels.football.data.Player"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </fragment>
 
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.gaurdianangels.football.ui.login.LoginFragment"
         android:label="LoginFragment"
-        tools:layout="@layout/login_fragment"/>
+        tools:layout="@layout/login_fragment" />
     <fragment
         android:id="@+id/playerDetailsFragment"
         android:name="com.gaurdianangels.football.ui.players.details.PlayerDetailsFragment"
@@ -47,6 +56,23 @@
         <argument
             android:name="playerModel"
             app:argType="com.gaurdianangels.football.data.Player" />
+        <action
+            android:id="@+id/action_playerDetailsFragment_to_addPlayerFragment"
+            app:destination="@id/addPlayerFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/addUpcomingMatchFragment"
+        android:name="com.gaurdianangels.football.ui.matches.AddUpcomingMatchFragment"
+        android:label="AddUpcomingMatchFragment"
+        tools:layout="@layout/add_upcoming_match_fragment">
+        <action
+            android:id="@+id/action_addUpcomingMatchFragment_to_selectTeamFragment"
+            app:destination="@id/selectTeamFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/selectTeamFragment"
+        android:name="com.gaurdianangels.football.ui.matches.SelectTeamFragment"
+        android:label="SelectTeamFragment"
+        tools:layout="@layout/player_list_fragment" />
 
 </navigation>
