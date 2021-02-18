@@ -8,8 +8,8 @@
     android:layout_marginStart="12dp"
     android:layout_marginTop="8dp"
     android:layout_marginEnd="12dp"
-    android:layout_marginBottom="12dp"
-    android:fontFamily="@font/raleway"
+    android:layout_marginBottom="10dp"
+    android:fontFamily="@font/raleway_semibold"
     android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
     android:textStyle="bold"
     tools:text="TextView" />
