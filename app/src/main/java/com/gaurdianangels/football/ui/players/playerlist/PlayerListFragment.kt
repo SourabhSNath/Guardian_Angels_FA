@@ -96,7 +96,7 @@ class PlayerListFragment : Fragment(R.layout.player_list_fragment) {
     private fun buttonClickListeners(adapter: SectionedPlayerListAdapter) {
 
         binding.optionsButton.setOnClickListener {
-            showPopUpMenu(adapter)
+            showPopUpMenu()
         }
 
         binding.confirmButton.setOnClickListener {
@@ -206,7 +206,7 @@ class PlayerListFragment : Fragment(R.layout.player_list_fragment) {
 
 
     @SuppressLint("RestrictedApi") // Required for setOptionalIconsVisible
-    private fun showPopUpMenu(adapter: SectionedPlayerListAdapter) {
+    private fun showPopUpMenu() {
         val popupMenu = PopupMenu(requireContext(), binding.optionsButton)
         popupMenu.menuInflater.inflate(R.menu.players_popup_menu, popupMenu.menu)
 
