@@ -52,7 +52,6 @@ class MainRepository @Inject constructor(
         } else
             emit(NetworkState.failed("Log in Failed. Please try again."))
 
-
     }.catch {
         emit(NetworkState.failed(it.message.toString()))
     }.flowOn(Dispatchers.IO)
@@ -109,7 +108,6 @@ class MainRepository @Inject constructor(
             playerCollectionRef.document(player.id!!).get()
                 .addOnSuccessListener {
                     playerModel = it.toObject(Player::class.java)?.setID(it.id)!!
-                    Log.d(TAG, "updatePlayer: $playerModel")
                 }
         }.await()
 

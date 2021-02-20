@@ -43,12 +43,6 @@ class PlayerListFragment : Fragment(R.layout.player_list_fragment) {
                 viewModel.getSectionedPlayerResultLiveData()
             }
         }
-        setFragmentResultListener(Constants.REQUEST_PLAYER_UPDATE_COMPLETE_KEY) { _, bundle ->
-            val result = bundle.getBoolean(Constants.BUNDLE_PLAYER_UPDATE_COMPLETE)
-            if (result) {
-                viewModel.getSectionedPlayerResultLiveData()
-            }
-        }
 
         _binding = PlayerListFragmentBinding.bind(view)
 
@@ -142,7 +136,6 @@ class PlayerListFragment : Fragment(R.layout.player_list_fragment) {
                 is NetworkState.Loading -> Log.d(TAG, "observeViewModel: Loading")
                 is NetworkState.Success -> {
                     adapter.submitList(it.data)
-                    binding.playersListRecyclerView.smoothScrollToPosition(0)
                 }
                 is NetworkState.Failed -> {
                     Log.d(TAG, "onViewCreated: ${it.message}")
@@ -237,7 +230,6 @@ class PlayerListFragment : Fragment(R.layout.player_list_fragment) {
 
                 R.id.deletePlayers -> {
                     viewModel.multiSelectionHandler.setToolbarState(ToolbarState.MultiSelectState)
-                    adapter.notifyDataSetChanged()
                     true
                 }
 

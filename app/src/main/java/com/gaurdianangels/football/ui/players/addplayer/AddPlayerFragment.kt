@@ -18,10 +18,8 @@ import com.gaurdianangels.football.data.Player
 import com.gaurdianangels.football.data.PlayerType
 import com.gaurdianangels.football.databinding.AddPlayerFragmentBinding
 import com.gaurdianangels.football.network.NetworkState
-import com.gaurdianangels.football.util.Constants.BUNDLE_PLAYER_UPDATE_COMPLETE
 import com.gaurdianangels.football.util.Constants.BUNDLE_PLAYER_UPLOAD_COMPLETE
 import com.gaurdianangels.football.util.Constants.COACH
-import com.gaurdianangels.football.util.Constants.REQUEST_PLAYER_UPDATE_COMPLETE_KEY
 import com.gaurdianangels.football.util.Constants.REQUEST_PLAYER_UPLOAD_COMPLETE_KEY
 import com.gaurdianangels.football.util.Converters.Companion.getPlayerType
 import com.gaurdianangels.football.util.Converters.Companion.getPlayerTypeString
@@ -182,7 +180,7 @@ class AddPlayerFragment : Fragment(R.layout.add_player_fragment) {
                     Toast.makeText(requireContext(), "Success", Toast.LENGTH_SHORT).show()
 
                     /* Passing this to PlayerListFragment to reload the list after a player gets updated. */
-                    setFragmentResult(REQUEST_PLAYER_UPDATE_COMPLETE_KEY, bundleOf(BUNDLE_PLAYER_UPDATE_COMPLETE to true))
+                    setFragmentResult(REQUEST_PLAYER_UPLOAD_COMPLETE_KEY, bundleOf(BUNDLE_PLAYER_UPLOAD_COMPLETE to true))
 
                     /* Methods for pop back with results weren't working, so navigating backwards with popUpTo Inclusive. */
                     findNavController().navigate(AddPlayerFragmentDirections.actionAddPlayerFragmentToPlayerDetailsFragment(it.data!!))
