@@ -43,6 +43,12 @@ class PlayerListFragment : Fragment(R.layout.player_list_fragment) {
                 viewModel.getSectionedPlayerResultLiveData()
             }
         }
+        setFragmentResultListener(Constants.REQUEST_PLAYER_UPDATE_COMPLETE_KEY) { _, bundle ->
+            val result = bundle.getBoolean(Constants.BUNDLE_PLAYER_UPDATE_COMPLETE)
+            if (result) {
+                viewModel.getSectionedPlayerResultLiveData()
+            }
+        }
 
         _binding = PlayerListFragmentBinding.bind(view)
 

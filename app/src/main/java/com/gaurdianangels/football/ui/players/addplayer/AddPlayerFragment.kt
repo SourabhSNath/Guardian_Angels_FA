@@ -18,8 +18,10 @@ import com.gaurdianangels.football.data.Player
 import com.gaurdianangels.football.data.PlayerType
 import com.gaurdianangels.football.databinding.AddPlayerFragmentBinding
 import com.gaurdianangels.football.network.NetworkState
+import com.gaurdianangels.football.util.Constants.BUNDLE_PLAYER_UPDATE_COMPLETE
 import com.gaurdianangels.football.util.Constants.BUNDLE_PLAYER_UPLOAD_COMPLETE
 import com.gaurdianangels.football.util.Constants.COACH
+import com.gaurdianangels.football.util.Constants.REQUEST_PLAYER_UPDATE_COMPLETE_KEY
 import com.gaurdianangels.football.util.Constants.REQUEST_PLAYER_UPLOAD_COMPLETE_KEY
 import com.gaurdianangels.football.util.Converters.Companion.getPlayerType
 import com.gaurdianangels.football.util.Converters.Companion.getPlayerTypeString
@@ -55,9 +57,7 @@ class AddPlayerFragment : Fragment(R.layout.add_player_fragment) {
          * Check if a player was passed into this fragment, if it is then this is meant to be updated
          */
         val isUpdatable = args.player != null
-        Log.d(TAG, "onViewCreated: player ID = ${args.player?.id}")
 
-        Log.d(TAG, "onViewCreated: isUpdatable = $isUpdatable")
         if (isUpdatable) {
             setUpFieldsForEditMode(args.player!!, playerTypeDropdown)
         } else {
@@ -180,8 +180,12 @@ class AddPlayerFragment : Fragment(R.layout.add_player_fragment) {
                 is NetworkState.Loading -> Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT).show()
                 is NetworkState.Success -> {
                     Toast.makeText(requireContext(), "Success", Toast.LENGTH_SHORT).show()
-                    setFragmentResult(REQUEST_PLAYER_UPLOAD_COMPLETE_KEY, bundleOf(BUNDLE_PLAYER_UPLOAD_COMPLETE to true))
-                    findNavController().popBackStack()
+
+                    /* Passing this to PlayerListFragment to reload the list after a player gets updated. */
+                    setFragmentResult(REQUEST_PLAYER_UPDATE_COMPLETE_KEY, bundleOf(BUNDLE_PLAYER_UPDATE_COMPLETE to true))
+
+                    /* Methods for pop back with results weren't working, so navigating backwards with popUpTo Inclusive. */
+                    findNavController().navigate(AddPlayerFragmentDirections.actionAddPlayerFragmentToPlayerDetailsFragment(it.data!!))
                 }
                 is NetworkState.Failed -> {
                     Log.d(TAG, "updatePlayer: ${it.message}")

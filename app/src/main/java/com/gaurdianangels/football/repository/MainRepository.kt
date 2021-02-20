@@ -7,11 +7,8 @@ import com.gaurdianangels.football.data.SectionedPlayerRecyclerItem
 import com.gaurdianangels.football.network.NetworkState
 import com.gaurdianangels.football.util.Converters.Companion.getPlayerTypeString
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.SetOptions
 import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
@@ -99,19 +96,24 @@ class MainRepository @Inject constructor(
     /**
      * Update the player.
      */
-    fun updatePlayer(player: Player, uri: Uri?) = flow<NetworkState<Boolean>> {
+    fun updatePlayer(player: Player, uri: Uri?) = flow {
         emit(NetworkState.loading())
 
-        Log.d(TAG, "updatePlayer: In here")
         if (uri != null) {
-            storage.getReferenceFromUrl(player.remoteUri!!).delete() // First delete the previous image from storage.
+            storage.getReferenceFromUrl(player.remoteUri!!).delete().await() // First delete the previous image from storage.
             player.setImage(uri)
         }
 
-//        Log.d(TAG, "updatePlayer: ${player.id}")
-        playerCollectionRef.document(player.id!!).set(player).await()
+        var playerModel: Player? = null
+        playerCollectionRef.document(player.id!!).set(player).onSuccessTask {
+            playerCollectionRef.document(player.id!!).get()
+                .addOnSuccessListener {
+                    playerModel = it.toObject(Player::class.java)?.setID(it.id)!!
+                    Log.d(TAG, "updatePlayer: $playerModel")
+                }
+        }.await()
 
-        emit(NetworkState.success(true))
+        emit(NetworkState.success(playerModel))
     }.catch {
         emit(NetworkState.failed(it.message.toString()))
     }.flowOn(Dispatchers.IO)

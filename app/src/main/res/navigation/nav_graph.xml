@@ -35,12 +35,21 @@
         android:id="@+id/addPlayerFragment"
         android:name="com.gaurdianangels.football.ui.players.addplayer.AddPlayerFragment"
         android:label="Add Player"
-        tools:layout="@layout/add_player_fragment" >
+        tools:layout="@layout/add_player_fragment">
         <argument
             android:name="player"
+            android:defaultValue="@null"
             app:argType="com.gaurdianangels.football.data.Player"
-            app:nullable="true"
-            android:defaultValue="@null" />
+            app:nullable="true" />
+
+        <!--
+          * This is to pass the updated player back to details fragment when navigating back
+        -->
+        <action
+            android:id="@+id/action_addPlayerFragment_to_playerDetailsFragment"
+            app:destination="@id/playerDetailsFragment"
+            app:popUpTo="@id/playerDetailsFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment

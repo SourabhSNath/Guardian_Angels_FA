@@ -30,8 +30,8 @@ class AddPlayerViewModel @Inject constructor(
     private val _playerAddedRef = MutableLiveData<NetworkState<Boolean>>()
     val playerAddedRef: LiveData<NetworkState<Boolean>> get() = _playerAddedRef
 
-    private val _playerUpdatedResult = MutableLiveData<NetworkState<Boolean>>()
-    val playerUpdatedResult: LiveData<NetworkState<Boolean>> get() = _playerUpdatedResult
+    private val _playerUpdatedResult = MutableLiveData<NetworkState<Player?>>()
+    val playerUpdatedResult: LiveData<NetworkState<Player?>> get() = _playerUpdatedResult
 
     // Channel to wait for the uri to arrive and then pass it to the mainRepo
     private val uriChannel = Channel<Uri>()

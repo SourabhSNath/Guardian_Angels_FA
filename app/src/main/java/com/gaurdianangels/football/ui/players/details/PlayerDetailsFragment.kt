@@ -8,6 +8,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import coil.load
 import com.gaurdianangels.football.R
+import com.gaurdianangels.football.data.Player
 import com.gaurdianangels.football.data.PlayerType
 import com.gaurdianangels.football.databinding.PlayerDetailsFragmentBinding
 import com.gaurdianangels.football.util.Converters.Companion.getPlayerTypeString
@@ -18,13 +19,18 @@ class PlayerDetailsFragment : Fragment(R.layout.player_details_fragment) {
         private const val TAG = "PlayerDetailsFragment"
     }
 
+    /**
+     * Can receive data from PlayerListFragment and AddPlayerFragment.
+     * 1. From PlayerListFragment when opening a player item
+     * 2. From AddPlayerFragment when updating a player item
+     */
     private val args: PlayerDetailsFragmentArgs by navArgs()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val binding = PlayerDetailsFragmentBinding.bind(view)
 
-        val playerModel = args.playerModel
+        val playerModel: Player = args.playerModel
 
         Log.d(TAG, "onViewCreated: ${playerModel.id}")
 
@@ -72,5 +78,6 @@ class PlayerDetailsFragment : Fragment(R.layout.player_details_fragment) {
         binding.backButton.setOnClickListener {
             findNavController().popBackStack()
         }
+
     }
 }
