@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
@@ -68,10 +69,7 @@ abstract class BasePlayerListFragment : Fragment(R.layout.player_list_fragment) 
     protected open fun buttonClickListeners(adapter: SectionedPlayerListAdapter) {
 
         binding.cancelSelectionButton.setOnClickListener {
-            viewModel.multiSelectionHandler.setToolbarState(ToolbarState.NormalState)
-            viewModel.multiSelectionHandler.clearSelectedList()
-            adapter.notifyDataSetChanged()
-            resetTitle()
+            cancelSelection(adapter)
         }
     }
 
@@ -98,17 +96,24 @@ abstract class BasePlayerListFragment : Fragment(R.layout.player_list_fragment) 
         }
 
         /**
-         * Handle the toolbar state
+         * Handle the toolbar state.
+         *
+         * Callback is used to control the back press clicks when the playerItems are selected.
          */
+
+        val callback = requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) { cancelSelection(adapter) }
+
         viewModel.multiSelectionHandler.toolbarState.observe(viewLifecycleOwner) {
             it?.let {
                 when (it) {
                     ToolbarState.NormalState -> {
-                        setNormalState()
+                        setNormalStateToolbar()
+                        callback.isEnabled = false
                     }
 
                     ToolbarState.MultiSelectState -> {
-                        selectedState()
+                        setSelectedStateToolbar()
+                        callback.isEnabled = true
                     }
                 }
             }
@@ -128,6 +133,16 @@ abstract class BasePlayerListFragment : Fragment(R.layout.player_list_fragment) 
     }
 
     /**
+     * Used to cancel the selection.
+     */
+    private fun cancelSelection(adapter: SectionedPlayerListAdapter) {
+        viewModel.multiSelectionHandler.setToolbarState(ToolbarState.NormalState)
+        viewModel.multiSelectionHandler.clearSelectedList()
+        adapter.notifyDataSetChanged()
+        resetTitle()
+    }
+
+    /**
      * For fragment result api.
      * To be only used when player is added, updated or deleted.
      */
@@ -135,9 +150,9 @@ abstract class BasePlayerListFragment : Fragment(R.layout.player_list_fragment) 
 
     protected abstract fun playerItemClickListener(player: Player)
 
-    protected abstract fun selectedState()
+    protected abstract fun setSelectedStateToolbar()
 
-    protected abstract fun setNormalState()
+    protected abstract fun setNormalStateToolbar()
 
     protected fun resetTitle() {
         binding.playersTV.text = resources.getText(R.string.players)
