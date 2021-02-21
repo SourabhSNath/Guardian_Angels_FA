@@ -16,6 +16,7 @@ import com.gaurdianangels.football.ui.BasePlayerListFragment
 import com.gaurdianangels.football.ui.ToolbarState
 import com.gaurdianangels.football.ui.players.adapter.SectionedPlayerListAdapter
 import com.gaurdianangels.football.util.Constants
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -61,7 +62,16 @@ class PlayerListFragment : BasePlayerListFragment() {
     }
 
     private fun deletePlayersWithConfirmation() {
-        viewModel.multiSelectionHandler.deletePlayers()
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Confirm Deletion")
+            .setMessage("The selected players will be permanently deleted.")
+            .setNeutralButton("Cancel") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .setPositiveButton("Delete") { dialog, _ ->
+                viewModel.multiSelectionHandler.deletePlayers()
+                dialog.dismiss()
+            }.show()
     }
 
     override fun observeViewModel(adapter: SectionedPlayerListAdapter) {
@@ -87,12 +97,12 @@ class PlayerListFragment : BasePlayerListFragment() {
     /**
      * Toolbar states
      */
-    override fun setNormalState() {
+    override fun setNormalStateToolbar() {
         binding.optionsButton.visibility = View.VISIBLE
         modeViewVisibility(View.GONE)
     }
 
-    override fun selectedState() {
+    override fun setSelectedStateToolbar() {
         binding.optionsButton.visibility = View.GONE
         modeViewVisibility(View.VISIBLE)
     }
