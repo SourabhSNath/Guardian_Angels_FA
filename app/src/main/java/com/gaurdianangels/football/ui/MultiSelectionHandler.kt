@@ -2,7 +2,6 @@ package com.gaurdianangels.football.ui
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.asLiveData
 import com.gaurdianangels.football.data.Player
 import com.gaurdianangels.football.network.NetworkState
 import com.gaurdianangels.football.repository.MainRepository
