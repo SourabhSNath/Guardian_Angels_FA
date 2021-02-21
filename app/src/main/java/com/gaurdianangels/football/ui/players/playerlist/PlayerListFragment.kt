@@ -12,7 +12,7 @@ import androidx.navigation.fragment.findNavController
 import com.gaurdianangels.football.R
 import com.gaurdianangels.football.data.Player
 import com.gaurdianangels.football.network.NetworkState
-import com.gaurdianangels.football.ui.BasePlayerListFragment
+import com.gaurdianangels.football.ui.base.BasePlayerListFragment
 import com.gaurdianangels.football.ui.ToolbarState
 import com.gaurdianangels.football.ui.players.adapter.SectionedPlayerListAdapter
 import com.gaurdianangels.football.util.Constants
@@ -97,12 +97,12 @@ class PlayerListFragment : BasePlayerListFragment() {
     /**
      * Toolbar states
      */
-    override fun setNormalStateToolbar() {
+    override fun setNormalStateLayout() {
         binding.optionsButton.visibility = View.VISIBLE
         modeViewVisibility(View.GONE)
     }
 
-    override fun setSelectedStateToolbar() {
+    override fun setSelectedStateLayout() {
         binding.optionsButton.visibility = View.GONE
         modeViewVisibility(View.VISIBLE)
     }
