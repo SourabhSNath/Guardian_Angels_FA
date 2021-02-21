@@ -75,13 +75,8 @@
         android:label="AddUpcomingMatchFragment"
         tools:layout="@layout/add_upcoming_match_fragment">
         <action
-            android:id="@+id/action_addUpcomingMatchFragment_to_selectTeamFragment"
-            app:destination="@id/selectTeamFragment" />
+            android:id="@+id/action_addUpcomingMatchFragment_to_players"
+            app:destination="@id/players" />
     </fragment>
-    <fragment
-        android:id="@+id/selectTeamFragment"
-        android:name="com.gaurdianangels.football.ui.matches.SelectTeamFragment"
-        android:label="SelectTeamFragment"
-        tools:layout="@layout/player_list_fragment" />
 
 </navigation>

@@ -49,11 +49,15 @@ class MainActivity : AppCompatActivity() {
                 R.id.addPlayerFragment,
                 R.id.addUpcomingMatchFragment,
                 R.id.loginFragment,
-                R.id.playerDetailsFragment,
-                R.id.selectTeamFragment -> bottomNavigationBar.visibility = View.GONE
+                R.id.playerDetailsFragment -> bottomNavigationBar.visibility = View.GONE
                 else -> bottomNavigationBar.visibility = View.VISIBLE
             }
 
+        }
+
+        // Hide the bottom navigation bar for playerListFragment if the previous fragment was addUpcomingFragment
+        if (navController.previousBackStackEntry?.destination?.id == R.id.addUpcomingMatchFragment) {
+            bottomNavigationBar.visibility = View.GONE
         }
 
         setContentView(binding.root)

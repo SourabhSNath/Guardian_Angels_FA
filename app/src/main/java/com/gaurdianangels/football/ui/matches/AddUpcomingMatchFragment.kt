@@ -31,7 +31,7 @@ class AddUpcomingMatchFragment : Fragment(R.layout.add_upcoming_match_fragment) 
         timeEditText.toTimePicker(parentFragmentManager)
 
         binding.selectTeamButton.setOnClickListener {
-            findNavController().navigate(AddUpcomingMatchFragmentDirections.actionAddUpcomingMatchFragmentToSelectTeamFragment())
+//            findNavController().navigate(AddUpcomingMatchFragmentDirections.actionAddUpcomingMatchFragmentToSelectTeamFragment())
         }
     }
 
