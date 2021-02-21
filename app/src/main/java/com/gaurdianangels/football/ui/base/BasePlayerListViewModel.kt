@@ -1,6 +1,9 @@
-package com.gaurdianangels.football.ui.players.playerlist
+package com.gaurdianangels.football.ui.base
 
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.gaurdianangels.football.data.SectionedPlayerRecyclerItem
 import com.gaurdianangels.football.network.NetworkState
 import com.gaurdianangels.football.repository.MainRepository
@@ -11,8 +14,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class PlayerListViewModel @Inject constructor(private val mainRepository: MainRepository) : ViewModel() {
-    val checkLogin = mainRepository.checkLogin().asLiveData()
+class BasePlayerListViewModel @Inject constructor(private val mainRepository: MainRepository) : ViewModel() {
     private val _sectionedPlayerResultLiveData = MutableLiveData<NetworkState<List<SectionedPlayerRecyclerItem>>>()
     val sectionedPlayerResultLiveData: LiveData<NetworkState<List<SectionedPlayerRecyclerItem>>> get() = _sectionedPlayerResultLiveData
 

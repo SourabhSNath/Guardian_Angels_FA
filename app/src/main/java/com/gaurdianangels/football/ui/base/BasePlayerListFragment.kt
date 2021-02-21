@@ -1,4 +1,4 @@
-package com.gaurdianangels.football.ui
+package com.gaurdianangels.football.ui.base
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -12,12 +12,12 @@ import com.gaurdianangels.football.R
 import com.gaurdianangels.football.data.Player
 import com.gaurdianangels.football.databinding.PlayerListFragmentBinding
 import com.gaurdianangels.football.network.NetworkState
+import com.gaurdianangels.football.ui.ToolbarState
 import com.gaurdianangels.football.ui.players.adapter.SectionedPlayerListAdapter
-import com.gaurdianangels.football.ui.players.playerlist.PlayerListViewModel
 
 abstract class BasePlayerListFragment : Fragment(R.layout.player_list_fragment) {
 
-    protected val viewModel: PlayerListViewModel by viewModels()
+    protected val viewModel: BasePlayerListViewModel by viewModels()
     private var _binding: PlayerListFragmentBinding? = null
     protected val binding get() = _binding!!
 
@@ -107,12 +107,12 @@ abstract class BasePlayerListFragment : Fragment(R.layout.player_list_fragment) 
             it?.let {
                 when (it) {
                     ToolbarState.NormalState -> {
-                        setNormalStateToolbar()
+                        setNormalStateLayout()
                         callback.isEnabled = false
                     }
 
                     ToolbarState.MultiSelectState -> {
-                        setSelectedStateToolbar()
+                        setSelectedStateLayout()
                         callback.isEnabled = true
                     }
                 }
@@ -150,12 +150,12 @@ abstract class BasePlayerListFragment : Fragment(R.layout.player_list_fragment) 
 
     protected abstract fun playerItemClickListener(player: Player)
 
-    protected abstract fun setSelectedStateToolbar()
+    protected abstract fun setSelectedStateLayout()
 
-    protected abstract fun setNormalStateToolbar()
+    protected abstract fun setNormalStateLayout()
 
     protected fun resetTitle() {
-        binding.playersTV.text = resources.getText(R.string.players)
+        binding.playersTV.text = resources.getText(R.string.team)
     }
 
     override fun onDestroyView() {
