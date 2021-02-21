@@ -1,7 +1,9 @@
 <resources>
     <string name="app_name">Gaurdian Angels FA</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
     <string name="player_picture">Player Picture</string>
-    <string name="players">Players</string>
+
+    <string name="home">Home</string>
+    <string name="team">Team</string>
+    <string name="select_Team">Select Team</string>
 </resources>
