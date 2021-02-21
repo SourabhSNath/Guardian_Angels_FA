@@ -103,8 +103,10 @@ class AddPlayerFragment : Fragment(R.layout.add_player_fragment) {
 
             val winsOrGoals = binding.categorySpecificET.text.toString().toEmptySafeInt()
 
-            if (playerName.isNotBlank() && playerNumber.isNotBlank() && type.isNotBlank() && isPlayerImageDrawableSelected) {
-
+            if (playerName.isNotBlank() && type.isNotBlank() &&
+                (if (type == COACH) true else playerNumber.isNotBlank()) // If coach, move forward. Else check playerNumber
+                && isPlayerImageDrawableSelected
+            ) {
                 val player = Player(
                     playerName = playerName, playerType = playerType, playerNumber = playerNumber,
                     playerAge = age, playerWeight = weight, playerHeight = height,
@@ -137,8 +139,10 @@ class AddPlayerFragment : Fragment(R.layout.add_player_fragment) {
                     showSnackbar(view, "Please fill in important details.")
                 }
             }
+
         }
     }
+
 
     @Suppress("SpellCheckingInspection")
     private fun showSnackbar(view: View, message: String) {
