@@ -12,8 +12,6 @@ import com.gaurdianangels.football.R
 import com.gaurdianangels.football.data.Player
 import com.gaurdianangels.football.databinding.PlayerListFragmentBinding
 import com.gaurdianangels.football.network.NetworkState
-import com.gaurdianangels.football.ui.ToolbarState
-import com.gaurdianangels.football.ui.players.adapter.SectionedPlayerListAdapter
 
 abstract class BasePlayerListFragment : Fragment(R.layout.player_list_fragment) {
 
@@ -126,11 +124,15 @@ abstract class BasePlayerListFragment : Fragment(R.layout.player_list_fragment) 
             Log.d(TAG, "Selected Players: ${it.size}")
             if (it.size > 0) {
                 binding.playersTV.text = "${it.size} Selected"
+                setPlayersList(it)
             } else {
                 resetTitle()
             }
         }
     }
+
+    // Open so that it's implemented only fragments that requires to override it
+    protected open fun setPlayersList(selectedPlayers: List<Player>) {}
 
     /**
      * Used to cancel the selection.

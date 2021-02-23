@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import com.gaurdianangels.football.data.SectionedPlayerRecyclerItem
 import com.gaurdianangels.football.network.NetworkState
 import com.gaurdianangels.football.repository.MainRepository
-import com.gaurdianangels.football.ui.MultiSelectionHandler
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -31,6 +30,5 @@ class BasePlayerListViewModel @Inject constructor(private val mainRepository: Ma
             }
         }
     }
-
 
 }
