@@ -12,9 +12,9 @@ import androidx.navigation.fragment.findNavController
 import com.gaurdianangels.football.R
 import com.gaurdianangels.football.data.Player
 import com.gaurdianangels.football.network.NetworkState
+import com.gaurdianangels.football.ui.base.ToolbarState
 import com.gaurdianangels.football.ui.base.BasePlayerListFragment
-import com.gaurdianangels.football.ui.ToolbarState
-import com.gaurdianangels.football.ui.players.adapter.SectionedPlayerListAdapter
+import com.gaurdianangels.football.ui.base.SectionedPlayerListAdapter
 import com.gaurdianangels.football.util.Constants
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
