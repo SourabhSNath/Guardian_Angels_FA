@@ -9,9 +9,9 @@ object Constants {
 
 
     /**
-     * Constants for Fragment Request API
+     * Constants for Passing data between fragments
      */
     const val REQUEST_PLAYER_UPLOAD_COMPLETE_KEY = "playerUploadedCheckKey"
     const val BUNDLE_PLAYER_UPLOAD_COMPLETE = "bundlePlayerUpload"
-
+    const val PLAYER_SELECTED_KEY = "playerSelectedKey"
 }

@@ -5,5 +5,15 @@
 
     <string name="home">Home</string>
     <string name="team">Team</string>
-    <string name="select_Team">Select Team</string>
+
+    <string name="team_2_logo">Team 2 Logo</string>
+    <string name="team_1_logo">Team 1 Logo</string>
+    <string name="team_1">Team 1</string>
+    <string name="team_2">Team 2</string>
+    <string name="date">Date</string>
+    <string name="time">Time</string>
+    <string name="select_team">Select Team</string>
+    <string name="selected_team">Selected Team</string>
+    <string name="done">Done</string>
+    <string name="confirm">Confirm</string>
 </resources>

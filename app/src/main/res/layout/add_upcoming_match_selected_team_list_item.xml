@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/playerName"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="16dp"
-    android:fontFamily="@font/raleway_semibold"
+    android:layout_marginStart="8dp"
+    android:layout_marginTop="12dp"
+    android:layout_marginBottom="12dp"
+    android:fontFamily="@font/raleway"
     android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
     android:textSize="18sp"
     tools:text="Lionel Messi" />

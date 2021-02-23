@@ -49,7 +49,8 @@ class MainActivity : AppCompatActivity() {
                 R.id.addPlayerFragment,
                 R.id.addUpcomingMatchFragment,
                 R.id.loginFragment,
-                R.id.playerDetailsFragment -> bottomNavigationBar.visibility = View.GONE
+                R.id.playerDetailsFragment,
+                R.id.matchPlayerListFragment -> bottomNavigationBar.visibility = View.GONE
                 else -> bottomNavigationBar.visibility = View.VISIBLE
             }
 

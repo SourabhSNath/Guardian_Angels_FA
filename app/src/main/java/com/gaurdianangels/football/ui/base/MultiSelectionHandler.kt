@@ -1,5 +1,6 @@
-package com.gaurdianangels.football.ui
+package com.gaurdianangels.football.ui.base
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.gaurdianangels.football.data.Player
@@ -19,6 +20,11 @@ enum class ToolbarState {
  * Not using the recyclerview-selection library since it's buggy and doesn't support single click to select.
  */
 class MultiSelectionHandler(private val mainRepository: MainRepository, private val viewModelScope: CoroutineScope) {
+
+    companion object {
+        const val TAG = "MultiSelectionHandler"
+    }
+
     private val _toolbarState: MutableLiveData<ToolbarState> = MutableLiveData(ToolbarState.NormalState)
     val toolbarState: LiveData<ToolbarState> get() = _toolbarState
 
@@ -28,7 +34,7 @@ class MultiSelectionHandler(private val mainRepository: MainRepository, private 
 
     fun isMultiSelectionStateActive(): Boolean = _toolbarState.value == ToolbarState.MultiSelectState
 
-    private val _selectedPlayers = MutableLiveData<ArrayList<Player>>()
+    private val _selectedPlayers = MutableLiveData<ArrayList<Player>>(ArrayList())
     val selectedPlayers: LiveData<ArrayList<Player>> get() = _selectedPlayers
 
     /**
@@ -46,7 +52,6 @@ class MultiSelectionHandler(private val mainRepository: MainRepository, private 
             }
         }
 
-
         @Suppress("UNNECESSARY_NOT_NULL_ASSERTION") // Shows warning without this.
         _selectedPlayers.value = list!!
     }
@@ -56,6 +61,7 @@ class MultiSelectionHandler(private val mainRepository: MainRepository, private 
      */
     fun clearSelectedList() {
         _selectedPlayers.value?.clear()
+        Log.d(TAG, "clearSelectedList: Cleared selected players")
     }
 
     /**
@@ -73,13 +79,10 @@ class MultiSelectionHandler(private val mainRepository: MainRepository, private 
         }
     }
 
-    /**
-     * Observe toolbar forever to create a new ArrayList for the Selected Items when it enters Multi Select Mode
-     */
-    init {
-        toolbarState.observeForever {
-            if (it == ToolbarState.MultiSelectState) {
-                _selectedPlayers.value = ArrayList()
+    fun setSelectedPlayers(players: Array<Player>?) {
+        if (!players.isNullOrEmpty()) {
+            players.forEach {
+                addOrRemovePlayersFromSelectedList(it)
             }
         }
     }

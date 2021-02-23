@@ -7,7 +7,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.navigation.fragment.findNavController
 import com.gaurdianangels.football.R
+import com.gaurdianangels.football.data.Player
 import com.gaurdianangels.football.databinding.AddUpcomingMatchFragmentBinding
+import com.gaurdianangels.football.util.Constants.PLAYER_SELECTED_KEY
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.timepicker.MaterialTimePicker
@@ -18,6 +20,9 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
 class AddUpcomingMatchFragment : Fragment(R.layout.add_upcoming_match_fragment) {
+    companion object {
+        const val TAG = "AddUpcomingMatch"
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -30,8 +35,31 @@ class AddUpcomingMatchFragment : Fragment(R.layout.add_upcoming_match_fragment) 
         dateEditText.toDatePicker(parentFragmentManager)
         timeEditText.toTimePicker(parentFragmentManager)
 
+        val recyclerView = binding.selectedPlayerRecyclerView
+        val adapter = SelectedPlayerListAdapter()
+        recyclerView.adapter = adapter
+
+        var players: List<Player>? = null
+        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<List<Player>>(PLAYER_SELECTED_KEY)
+            ?.observe(viewLifecycleOwner) { result ->
+                if (result.isNotEmpty()) {
+                    binding.selectedPlayersTitle.visibility = View.VISIBLE
+                    binding.count.apply {
+                        visibility = View.VISIBLE
+                        text = result.size.toString()
+                    }
+                }
+                adapter.submitList(result)
+                players = result
+            }
+
+        val navController = findNavController()
         binding.selectTeamButton.setOnClickListener {
-//            findNavController().navigate(AddUpcomingMatchFragmentDirections.actionAddUpcomingMatchFragmentToSelectTeamFragment())
+            navController.navigate(AddUpcomingMatchFragmentDirections.actionAddUpcomingMatchFragmentToMatchPlayerListFragment(players?.toTypedArray()))
+        }
+
+        binding.backButton.setOnClickListener {
+            navController.popBackStack()
         }
     }
 

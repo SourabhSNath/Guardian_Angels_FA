@@ -75,8 +75,18 @@
         android:label="AddUpcomingMatchFragment"
         tools:layout="@layout/add_upcoming_match_fragment">
         <action
-            android:id="@+id/action_addUpcomingMatchFragment_to_players"
-            app:destination="@id/players" />
+            android:id="@+id/action_addUpcomingMatchFragment_to_matchPlayerListFragment"
+            app:destination="@id/matchPlayerListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/matchPlayerListFragment"
+        android:name="com.gaurdianangels.football.ui.matches.MatchPlayerListFragment"
+        android:label="MatchPlayerListFragment"
+        tools:layout="@layout/player_list_fragment" >
+        <argument
+            android:name="playerList"
+            app:argType="com.gaurdianangels.football.data.Player[]"
+            app:nullable="true" />
     </fragment>
 
 </navigation>
