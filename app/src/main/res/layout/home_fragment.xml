@@ -94,7 +94,7 @@
                         android:layout_marginTop="8dp"
                         android:fontFamily="@font/poppins"
                         android:maxLines="1"
-                        android:text="Gaurdian Angels"
+                        android:text="@string/guardian_angels"
                         android:textAlignment="center"
                         android:textColor="@color/black"
                         android:textSize="14sp" />

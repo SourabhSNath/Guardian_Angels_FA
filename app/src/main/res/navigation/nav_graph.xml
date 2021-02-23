@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/home"
-        android:name="com.gaurdianangels.football.ui.home.HomeFragment"
+        android:name="com.guardianangels.football.ui.home.HomeFragment"
         android:label="Home"
         tools:layout="@layout/home_fragment">
         <action
@@ -20,7 +20,7 @@
 
     <fragment
         android:id="@+id/players"
-        android:name="com.gaurdianangels.football.ui.players.playerlist.PlayerListFragment"
+        android:name="com.guardianangels.football.ui.players.playerlist.PlayerListFragment"
         android:label="Players"
         tools:layout="@layout/player_list_fragment">
         <action
@@ -33,13 +33,13 @@
 
     <fragment
         android:id="@+id/addPlayerFragment"
-        android:name="com.gaurdianangels.football.ui.players.addplayer.AddPlayerFragment"
+        android:name="com.guardianangels.football.ui.players.addplayer.AddPlayerFragment"
         android:label="Add Player"
         tools:layout="@layout/add_player_fragment">
         <argument
             android:name="player"
             android:defaultValue="@null"
-            app:argType="com.gaurdianangels.football.data.Player"
+            app:argType="com.guardianangels.football.data.Player"
             app:nullable="true" />
 
         <!--
@@ -54,24 +54,24 @@
 
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.gaurdianangels.football.ui.login.LoginFragment"
+        android:name="com.guardianangels.football.ui.login.LoginFragment"
         android:label="LoginFragment"
         tools:layout="@layout/login_fragment" />
     <fragment
         android:id="@+id/playerDetailsFragment"
-        android:name="com.gaurdianangels.football.ui.players.details.PlayerDetailsFragment"
+        android:name="com.guardianangels.football.ui.players.details.PlayerDetailsFragment"
         android:label="PlayerDetailsFragment"
         tools:layout="@layout/player_details_fragment">
         <argument
             android:name="playerModel"
-            app:argType="com.gaurdianangels.football.data.Player" />
+            app:argType="com.guardianangels.football.data.Player" />
         <action
             android:id="@+id/action_playerDetailsFragment_to_addPlayerFragment"
             app:destination="@id/addPlayerFragment" />
     </fragment>
     <fragment
         android:id="@+id/addUpcomingMatchFragment"
-        android:name="com.gaurdianangels.football.ui.matches.AddUpcomingMatchFragment"
+        android:name="com.guardianangels.football.ui.matches.AddUpcomingMatchFragment"
         android:label="AddUpcomingMatchFragment"
         tools:layout="@layout/add_upcoming_match_fragment">
         <action
@@ -80,12 +80,12 @@
     </fragment>
     <fragment
         android:id="@+id/matchPlayerListFragment"
-        android:name="com.gaurdianangels.football.ui.matches.MatchPlayerListFragment"
+        android:name="com.guardianangels.football.ui.matches.MatchPlayerListFragment"
         android:label="MatchPlayerListFragment"
-        tools:layout="@layout/player_list_fragment" >
+        tools:layout="@layout/player_list_fragment">
         <argument
             android:name="playerList"
-            app:argType="com.gaurdianangels.football.data.Player[]"
+            app:argType="com.guardianangels.football.data.Player[]"
             app:nullable="true" />
     </fragment>
 

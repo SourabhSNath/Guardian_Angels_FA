@@ -1,5 +1,6 @@
 <resources>
-    <string name="app_name">Gaurdian Angels FA</string>
+    <string name="app_name">Guardian Angels FA</string>
+    <string name="guardian_angels">Guardian Angels</string>
 
     <string name="player_picture">Player Picture</string>
 
