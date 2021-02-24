@@ -79,7 +79,7 @@ class MainRepository @Inject constructor(
      * Add players to firebase cloud firestore.
      * Emitting a reference to the document along with network states.
      */
-    fun addPlayer(player: Player, uri: Uri) = flow<NetworkState<Boolean>> {
+    fun addPlayer(player: Player, uri: Uri) = flow {
         emit(NetworkState.loading())
 
         player.setImage(uri)
