@@ -165,7 +165,6 @@ class MainRepository @Inject constructor(
 
             playerType.let { sectionedPlayerRecyclerItem.add(SectionedPlayerRecyclerItem.PlayerTypeItem(playerType)) }
             for (player in playersSectionGroup.getValue(type)) {
-                Log.d(TAG, "getPlayers: ${player.playerName} ${player.id}")
                 sectionedPlayerRecyclerItem.add(SectionedPlayerRecyclerItem.PlayerItem(player))
             }
         }
