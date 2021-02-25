@@ -1,6 +1,5 @@
 package com.guardianangels.football.ui.base
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.lifecycle.LifecycleOwner
@@ -13,6 +12,7 @@ import com.guardianangels.football.data.Player
 import com.guardianangels.football.data.SectionedPlayerRecyclerItem
 import com.guardianangels.football.databinding.HeaderItemBinding
 import com.guardianangels.football.databinding.PlayerListImageItemBinding
+import timber.log.Timber
 
 class SectionedPlayerListAdapter(
     private val viewLifecycleOwner: LifecycleOwner,
@@ -81,7 +81,7 @@ class SectionedPlayerListAdapter(
             // Show a border around the cardView when the item gets added to the list.
             adapter.selectedPlayers.observe(adapter.viewLifecycleOwner) { playerList ->
                 if (playerList.contains(player)) {
-                    Log.d("SectionedPlayerAdapter", "bind: ${player.playerName}")
+                    Timber.tag("SectionedPlayerAdapter").d("bind: ${player.playerName}")
                     materialCardView.apply {
                         strokeWidth = 8
                     }
