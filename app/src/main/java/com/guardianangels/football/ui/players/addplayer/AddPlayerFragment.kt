@@ -1,7 +1,6 @@
 package com.guardianangels.football.ui.players.addplayer
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Toast
@@ -13,6 +12,8 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import coil.load
+import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.guardianangels.football.R
 import com.guardianangels.football.data.Player
 import com.guardianangels.football.data.PlayerType
@@ -25,9 +26,8 @@ import com.guardianangels.football.util.Converters.Companion.getPlayerType
 import com.guardianangels.football.util.Converters.Companion.getPlayerTypeString
 import com.guardianangels.football.util.Converters.Companion.toEmptySafeFloat
 import com.guardianangels.football.util.Converters.Companion.toEmptySafeInt
-import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @Suppress("USELESS_CAST") // For Casting binding.view to MaterialAutoCompleteTextView. Seems to not work without this.
 @AndroidEntryPoint
@@ -120,12 +120,12 @@ class AddPlayerFragment : Fragment(R.layout.add_player_fragment) {
                 }
 
                 if (isUpdatable) {
-                    Log.d(TAG, "onViewCreated: Passing to updatePlayer()")
+                    Timber.tag(TAG).d("onViewCreated: Passing to updatePlayer()")
                     player.id = args.player?.id
                     player.remoteUri = args.player?.remoteUri
                     updatePlayer(player)
                 } else {
-                    Log.d(TAG, "onViewCreated: Passing to addPlayer()")
+                    Timber.tag(TAG).d("onViewCreated: Passing to addPlayer()")
                     addPlayer(player)
                 }
 
@@ -174,7 +174,6 @@ class AddPlayerFragment : Fragment(R.layout.add_player_fragment) {
      * Update the player on firestore
      */
     private fun updatePlayer(player: Player) {
-        Log.d(TAG, "updatePlayer: pass to viewModel update player")
         viewModel.updatePlayer(player)
 
         viewModel.playerUpdatedResult.observe(viewLifecycleOwner) {
@@ -190,7 +189,7 @@ class AddPlayerFragment : Fragment(R.layout.add_player_fragment) {
                     findNavController().navigate(AddPlayerFragmentDirections.actionAddPlayerFragmentToPlayerDetailsFragment(it.data!!))
                 }
                 is NetworkState.Failed -> {
-                    Log.d(TAG, "updatePlayer: ${it.message}")
+                    Timber.tag(TAG).d("updatePlayer: ${it.message}")
                     Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
                 }
             }
