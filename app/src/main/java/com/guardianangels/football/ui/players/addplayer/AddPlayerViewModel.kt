@@ -1,7 +1,6 @@
 package com.guardianangels.football.ui.players.addplayer
 
 import android.net.Uri
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -14,6 +13,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -52,7 +52,7 @@ class AddPlayerViewModel @Inject constructor(
      */
     fun updatePlayer(player: Player) {
         viewModelScope.launch {
-            Log.d(TAG, "updatePlayer: Passing to mainRepo")
+            Timber.tag(TAG).d("updatePlayer: Passing to mainRepo")
             mainRepo.updatePlayer(player, uriChannel.poll()).collect {
                 _playerUpdatedResult.value = it
             }
