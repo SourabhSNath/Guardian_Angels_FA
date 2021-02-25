@@ -1,7 +1,6 @@
 package com.guardianangels.football.ui.matches
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
@@ -10,10 +9,11 @@ import androidx.navigation.fragment.navArgs
 import com.guardianangels.football.R
 import com.guardianangels.football.data.Player
 import com.guardianangels.football.ui.base.BasePlayerListFragment
-import com.guardianangels.football.ui.base.ToolbarState
 import com.guardianangels.football.ui.base.SectionedPlayerListAdapter
+import com.guardianangels.football.ui.base.ToolbarState
 import com.guardianangels.football.util.Constants.PLAYER_SELECTED_KEY
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
 class MatchPlayerListFragment : BasePlayerListFragment() {
@@ -67,7 +67,7 @@ class MatchPlayerListFragment : BasePlayerListFragment() {
      */
     override fun setPlayersList(selectedPlayers: List<Player>) {
         binding.confirmButton.setOnClickListener {
-            Log.d(TAG, "setPlayersList: ${selectedPlayers.size}")
+            Timber.tag(TAG).d("setPlayersList: ${selectedPlayers.size}")
             val navController = findNavController()
             navController.previousBackStackEntry?.savedStateHandle?.set(PLAYER_SELECTED_KEY, selectedPlayers)
             navController.popBackStack()
