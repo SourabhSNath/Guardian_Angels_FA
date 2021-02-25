@@ -2,7 +2,6 @@ package com.guardianangels.football.ui.base
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
@@ -12,6 +11,7 @@ import com.guardianangels.football.R
 import com.guardianangels.football.data.Player
 import com.guardianangels.football.databinding.PlayerListFragmentBinding
 import com.guardianangels.football.network.NetworkState
+import timber.log.Timber
 
 abstract class BasePlayerListFragment : Fragment(R.layout.player_list_fragment) {
 
@@ -83,12 +83,12 @@ abstract class BasePlayerListFragment : Fragment(R.layout.player_list_fragment) 
          */
         viewModel.sectionedPlayerResultLiveData.observe(viewLifecycleOwner) {
             when (it) {
-                is NetworkState.Loading -> Log.d(TAG, "observeViewModel: Loading")
+                is NetworkState.Loading -> Timber.tag(TAG).d("observeViewModel: Loading")
                 is NetworkState.Success -> {
                     adapter.submitList(it.data)
                 }
                 is NetworkState.Failed -> {
-                    Log.d(TAG, "onViewCreated: ${it.message}")
+                    Timber.tag(TAG).d("onViewCreated: ${it.message}")
                 }
             }
         }
@@ -121,7 +121,7 @@ abstract class BasePlayerListFragment : Fragment(R.layout.player_list_fragment) 
          * Set the count in the toolbar
          */
         viewModel.multiSelectionHandler.selectedPlayers.observe(viewLifecycleOwner) {
-            Log.d(TAG, "Selected Players: ${it.size}")
+            Timber.tag(TAG).d("Selected Players: ${it.size}")
             if (it.size > 0) {
                 binding.playersTV.text = "${it.size} Selected"
                 setPlayersList(it)
