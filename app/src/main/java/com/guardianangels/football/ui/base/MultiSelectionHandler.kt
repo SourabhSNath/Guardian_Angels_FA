@@ -1,6 +1,5 @@
 package com.guardianangels.football.ui.base
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.guardianangels.football.data.Player
@@ -9,6 +8,7 @@ import com.guardianangels.football.repository.MainRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 enum class ToolbarState {
     NormalState,
@@ -44,11 +44,13 @@ class MultiSelectionHandler(private val mainRepository: MainRepository, private 
     fun addOrRemovePlayersFromSelectedList(player: Player) {
         val list = _selectedPlayers.value
 
-        if (list != null) {
+        list?.let {
             if (list.contains(player)) {
                 list.remove(player)
+                Timber.tag(TAG).d("addOrRemovePlayersFromSelectedList: Removed ${player.playerName}")
             } else {
                 list.add(player)
+                Timber.tag(TAG).d("addOrRemovePlayersFromSelectedList: Added ${player.playerName}")
             }
         }
 
@@ -61,7 +63,7 @@ class MultiSelectionHandler(private val mainRepository: MainRepository, private 
      */
     fun clearSelectedList() {
         _selectedPlayers.value?.clear()
-        Log.d(TAG, "clearSelectedList: Cleared selected players")
+        Timber.tag(TAG).d("clearSelectedList: Cleared selected players")
     }
 
     /**
@@ -81,8 +83,14 @@ class MultiSelectionHandler(private val mainRepository: MainRepository, private 
 
     fun setSelectedPlayers(players: Array<Player>?) {
         if (!players.isNullOrEmpty()) {
-            players.forEach {
-                addOrRemovePlayersFromSelectedList(it)
+            Timber.tag(TAG).d("setSelectedPlayers: Received again : ${players.size}")
+            players.forEach { player ->
+                val list = _selectedPlayers.value
+                list?.let {
+                    if (!list.contains(player)) {
+                        list.add(player)
+                    }
+                }
             }
         }
     }
