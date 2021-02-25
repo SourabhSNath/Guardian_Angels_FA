@@ -1,7 +1,6 @@
 package com.guardianangels.football.ui.players.details
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -12,6 +11,7 @@ import com.guardianangels.football.data.Player
 import com.guardianangels.football.data.PlayerType
 import com.guardianangels.football.databinding.PlayerDetailsFragmentBinding
 import com.guardianangels.football.util.Converters.Companion.getPlayerTypeString
+import timber.log.Timber
 
 class PlayerDetailsFragment : Fragment(R.layout.player_details_fragment) {
 
@@ -32,7 +32,7 @@ class PlayerDetailsFragment : Fragment(R.layout.player_details_fragment) {
 
         val playerModel: Player = args.playerModel
 
-        Log.d(TAG, "onViewCreated: ${playerModel.id}")
+        Timber.tag(TAG).d("onViewCreated: ${playerModel.id}")
 
         val categorySpecificTitle = binding.categorySpecifcTitle
         val categorySpecificScore = binding.totalCategorySpecificScore

@@ -1,20 +1,20 @@
 package com.guardianangels.football.repository
 
 import android.net.Uri
-import android.util.Log
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 import com.guardianangels.football.data.Player
 import com.guardianangels.football.data.SectionedPlayerRecyclerItem
 import com.guardianangels.football.network.NetworkState
 import com.guardianangels.football.util.Converters.Companion.getPlayerTypeString
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.tasks.await
+import timber.log.Timber
 import javax.inject.Inject
 
 class MainRepository @Inject constructor(
@@ -180,14 +180,11 @@ class MainRepository @Inject constructor(
      */
     fun deleteMultiplePlayers(players: ArrayList<Player>) = flow {
 
-        Log.d(TAG, "deleteMultiplePlayers Called: list size = ${players.size}")
         emit(NetworkState.loading())
         for (player in players) {
-            Log.d(TAG, "deleteMultiplePlayers: ${player.id}")
-
             playerCollectionRef.document(player.id!!).delete().onSuccessTask {
                 // When deleting the player is successful
-                Log.d(TAG, "deleteMultiplePlayers: Player Deleted, continue with storage deletion")
+                Timber.tag(TAG).d("deleteMultiplePlayers: ${player.playerName} Deleted, continue with storage deletion")
                 storage.getReferenceFromUrl(player.remoteUri!!).delete() // Delete using the url, since no direct path is available
             }.await()
         }
