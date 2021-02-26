@@ -40,7 +40,9 @@
                     android:id="@+id/team1Image"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:contentDescription="@string/team_1_logo" />
+                    android:contentDescription="@string/team_1_logo"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/gaurdian_angels" />
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -61,7 +63,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_semibold"
-                    android:text="@string/team" />
+                    android:text="@string/guardian_angels" />
             </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -82,7 +84,8 @@
                     android:id="@+id/team2Image"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:contentDescription="@string/team_2_logo" />
+                    android:contentDescription="@string/team_2_logo"
+                    android:scaleType="centerCrop" />
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.textfield.TextInputLayout
