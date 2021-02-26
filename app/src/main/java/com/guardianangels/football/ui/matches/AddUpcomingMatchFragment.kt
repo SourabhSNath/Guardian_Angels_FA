@@ -3,25 +3,46 @@ package com.guardianangels.football.ui.matches
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.guardianangels.football.R
-import com.guardianangels.football.data.Player
-import com.guardianangels.football.databinding.AddUpcomingMatchFragmentBinding
-import com.guardianangels.football.util.Constants.PLAYER_SELECTED_KEY
+import coil.load
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
+import com.guardianangels.football.R
+import com.guardianangels.football.data.Player
+import com.guardianangels.football.databinding.AddUpcomingMatchFragmentBinding
+import com.guardianangels.football.util.Constants.PLAYER_SELECTED_KEY
+import dagger.hilt.android.AndroidEntryPoint
 import java.time.Instant
 import java.time.LocalTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
+@AndroidEntryPoint
 class AddUpcomingMatchFragment : Fragment(R.layout.add_upcoming_match_fragment) {
     companion object {
-        const val TAG = "AddUpcomingMatch"
+        @Suppress("SpellCheckingInspection", "unused")
+        private const val TAG = "AddUpcomingMatchFgmt"
+    }
+
+    private val viewModel: AddUpcomingViewModel by viewModels()
+
+    /**
+     * Select images for team logos.
+     */
+    private val pickImagesForTeam1 = registerForActivityResult(ActivityResultContracts.GetContent()) {
+        it?.let { viewModel.team1Image(it) }
+    }
+
+    private val pickImagesForTeam2 = registerForActivityResult(ActivityResultContracts.GetContent()) {
+        it?.let { viewModel.team2Image(it) }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -31,6 +52,7 @@ class AddUpcomingMatchFragment : Fragment(R.layout.add_upcoming_match_fragment) 
 
         val dateEditText = binding.dateET
         val timeEditText = binding.timeET
+        val team2Logo = binding.team2Image
 
         dateEditText.toDatePicker(parentFragmentManager)
         timeEditText.toTimePicker(parentFragmentManager)
@@ -39,8 +61,15 @@ class AddUpcomingMatchFragment : Fragment(R.layout.add_upcoming_match_fragment) 
         val adapter = SelectedPlayerListAdapter()
         recyclerView.adapter = adapter
 
-        var players: List<Player>? = null
-        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<List<Player>>(PLAYER_SELECTED_KEY)
+        val navController = findNavController()
+
+        /**
+         * Get the players selected to be in the match.
+         * This can be null if the user doesn't select anyone.
+         * The result is passed back from MatchPlayerListFragment.
+         */
+        var team: List<Player> = emptyList()
+        navController.currentBackStackEntry?.savedStateHandle?.getLiveData<List<Player>>(PLAYER_SELECTED_KEY)
             ?.observe(viewLifecycleOwner) { result ->
                 if (result.isNotEmpty()) {
                     binding.selectedPlayersTitle.visibility = View.VISIBLE
@@ -50,19 +79,85 @@ class AddUpcomingMatchFragment : Fragment(R.layout.add_upcoming_match_fragment) 
                     }
                 }
                 adapter.submitList(result)
-                players = result
+                team = result
             }
 
-        val navController = findNavController()
+
+        binding.doneButton.setOnClickListener {
+            val team1Name = binding.team1NameET.text.toString().trim()
+            val team2Name = binding.team2NameET.text.toString().trim()
+            val date = dateEditText.text.toString()
+            val time = timeEditText.text.toString()
+            if (team1Name.isNotEmpty()
+                && team2Name.isNotEmpty()
+                && team2Logo.drawable != null
+                && date.isNotEmpty() && time.isNotEmpty()
+            ) {
+                viewModel.addMatchData(team1Name, binding.team2NameET.text.toString(), team)
+                resetViews(binding)
+                adapter.submitList(emptyList())
+            } else {
+                when {
+                    team1Name.isEmpty() || team2Name.isEmpty() -> showToast("Please enter the Team Name")
+                    team2Logo.drawable == null -> showToast("Please select the Team Logo")
+                    date.isEmpty() -> showToast("Please select the Date")
+                    time.isEmpty() -> showToast("Please select the Time")
+                }
+            }
+        }
+
+        /**
+         *  Navigate to player fragment to select players playing for the match
+         */
         binding.selectTeamButton.setOnClickListener {
-            navController.navigate(AddUpcomingMatchFragmentDirections.actionAddUpcomingMatchFragmentToMatchPlayerListFragment(players?.toTypedArray()))
+            /* If players were selected previously, pass them to the fragment */
+            navController.navigate(AddUpcomingMatchFragmentDirections.actionAddUpcomingMatchFragmentToMatchPlayerListFragment(team.toTypedArray()))
+        }
+
+        /**
+         * Get images from the storage
+         */
+        binding.team1Image.setOnClickListener {
+            pickImagesForTeam1.launch("image/*")
+        }
+
+        team2Logo.setOnClickListener {
+            pickImagesForTeam2.launch("image/*")
         }
 
         binding.backButton.setOnClickListener {
             navController.popBackStack()
         }
+
+        observeViewModel(binding)
     }
 
+    private fun resetViews(binding: AddUpcomingMatchFragmentBinding) {
+        binding.team1NameET.setText(getString(R.string.guardian_angels))
+        binding.team2NameET.setText("")
+        binding.dateET.setText("")
+        binding.timeET.setText("")
+        binding.team1Image.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.gaurdian_angels))
+        binding.team2Image.setImageDrawable(null)
+    }
+
+    private fun observeViewModel(binding: AddUpcomingMatchFragmentBinding) {
+        viewModel.team1ImageUri.observe(viewLifecycleOwner) {
+            it?.let {
+                binding.team1Image.load(it)
+            }
+        }
+
+        viewModel.team2ImageUri.observe(viewLifecycleOwner) {
+            it?.let {
+                binding.team2Image.load(it)
+            }
+        }
+    }
+
+    /**
+     * Select the date
+     */
     private fun TextInputEditText.toDatePicker(parentFragmentManager: FragmentManager) {
 
         // Without this you'd have to double tap to show the dialog
@@ -74,12 +169,17 @@ class AddUpcomingMatchFragment : Fragment(R.layout.add_upcoming_match_fragment) 
             }.build().also {
                 it.addOnPositiveButtonClickListener { selected ->
                     val localDate = Instant.ofEpochMilli(selected).atZone(ZoneId.systemDefault()).toLocalDate()
+
                     setText(localDate.format(DateTimeFormatter.ofPattern("EEE, dd MMM yyyy")))
+                    viewModel.setDate(localDate)
                 }
             }.show(parentFragmentManager, "Material Date Picker")
         }
     }
 
+    /**
+     * Select the time
+     */
     @SuppressLint("SetTextI18n")
     private fun TextInputEditText.toTimePicker(parentFragmentManager: FragmentManager) {
 
@@ -92,11 +192,17 @@ class AddUpcomingMatchFragment : Fragment(R.layout.add_upcoming_match_fragment) 
             picker.addOnPositiveButtonClickListener {
                 val time24 = String.format("%02d:%02d", picker.hour, picker.minute)
                 val time12 = LocalTime.parse(time24, DateTimeFormatter.ofPattern("HH:mm"))
-                    .format(DateTimeFormatter.ofPattern("hh:mm a"))
-                setText(time12)
+                val timeString = time12.format(DateTimeFormatter.ofPattern("hh:mm a"))
+
+                setText(timeString)
+                viewModel.setTime(time12)
             }
 
             picker.show(parentFragmentManager, "Material Time Picker")
         }
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 }

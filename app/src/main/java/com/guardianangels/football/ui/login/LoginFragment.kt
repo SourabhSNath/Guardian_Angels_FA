@@ -8,11 +8,11 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.textfield.TextInputLayout
 import com.guardianangels.football.R
 import com.guardianangels.football.databinding.LoginFragmentBinding
 import com.guardianangels.football.network.NetworkState
-import com.google.android.material.button.MaterialButton
-import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -31,13 +31,20 @@ class LoginFragment : Fragment(R.layout.login_fragment) {
         val loginButton = binding.loginButton
         val logoutButton = binding.logoutButton
 
-        viewModel.checkLogin.observe(viewLifecycleOwner) {
-            if (it != true) {
-                viewModel.logout()
-                logoutAction(loginTV, passwordTextField, loginButton, logoutButton)
-            } else {
-                loginAction(loginTV, passwordTextField, loginButton, logoutButton)
-            }
+//        viewModel.checkLogin.observe(viewLifecycleOwner) {
+//            if (it != true) {
+//                viewModel.logout()
+//                logoutAction(loginTV, passwordTextField, loginButton, logoutButton)
+//            } else {
+//                loginAction(loginTV, passwordTextField, loginButton, logoutButton)
+//            }
+//        }
+
+        if (viewModel.checkLogin()){
+            loginAction(loginTV, passwordTextField, loginButton, logoutButton)
+        } else {
+            viewModel.logout()
+            logoutAction(loginTV, passwordTextField, loginButton, logoutButton)
         }
 
         loginButton.setOnClickListener {

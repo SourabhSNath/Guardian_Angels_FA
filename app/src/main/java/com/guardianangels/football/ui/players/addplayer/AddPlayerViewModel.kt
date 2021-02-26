@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.guardianangels.football.data.Player
 import com.guardianangels.football.network.NetworkState
-import com.guardianangels.football.repository.MainRepository
+import com.guardianangels.football.repository.TeamRepository
 import com.guardianangels.football.util.Constants
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -18,7 +18,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AddPlayerViewModel @Inject constructor(
-    private val mainRepo: MainRepository
+    private val teamRepository: TeamRepository
 ) : ViewModel() {
 
     companion object {
@@ -33,7 +33,7 @@ class AddPlayerViewModel @Inject constructor(
     private val _playerUpdatedResult = MutableLiveData<NetworkState<Player?>>()
     val playerUpdatedResult: LiveData<NetworkState<Player?>> get() = _playerUpdatedResult
 
-    // Channel to wait for the uri to arrive and then pass it to the mainRepo
+    // Channel to wait for the uri to arrive and then pass it to the teamRepository
     private val uriChannel = Channel<Uri>()
 
     /**
@@ -41,7 +41,7 @@ class AddPlayerViewModel @Inject constructor(
      */
     fun addPlayer(player: Player) {
         viewModelScope.launch {
-            mainRepo.addPlayer(player, uriChannel.receive()).collect {
+            teamRepository.addPlayer(player, uriChannel.receive()).collect {
                 _playerAddedRef.value = it
             }
         }
@@ -52,8 +52,8 @@ class AddPlayerViewModel @Inject constructor(
      */
     fun updatePlayer(player: Player) {
         viewModelScope.launch {
-            Timber.tag(TAG).d("updatePlayer: Passing to mainRepo")
-            mainRepo.updatePlayer(player, uriChannel.poll()).collect {
+            Timber.tag(TAG).d("updatePlayer: Passing to teamRepository")
+            teamRepository.updatePlayer(player, uriChannel.poll()).collect {
                 _playerUpdatedResult.value = it
             }
         }

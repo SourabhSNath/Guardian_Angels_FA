@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.guardianangels.football.data.Player
 import com.guardianangels.football.network.NetworkState
-import com.guardianangels.football.repository.MainRepository
+import com.guardianangels.football.repository.TeamRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -19,7 +19,7 @@ enum class ToolbarState {
  * Class to handle RecyclerView MultiSelection
  * Not using the recyclerview-selection library since it's buggy and doesn't support single click to select.
  */
-class MultiSelectionHandler(private val mainRepository: MainRepository, private val viewModelScope: CoroutineScope) {
+class MultiSelectionHandler(private val teamRepository: TeamRepository, private val viewModelScope: CoroutineScope) {
 
     companion object {
         const val TAG = "MultiSelectionHandler"
@@ -74,7 +74,7 @@ class MultiSelectionHandler(private val mainRepository: MainRepository, private 
     fun deletePlayers() {
         viewModelScope.launch {
             selectedPlayers.value?.let {
-                mainRepository.deleteMultiplePlayers(it).collect { result ->
+                teamRepository.deleteMultiplePlayers(it).collect { result ->
                     _deletedState.value = result
                 }
             }

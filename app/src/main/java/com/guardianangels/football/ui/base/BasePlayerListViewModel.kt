@@ -6,18 +6,18 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.guardianangels.football.data.SectionedPlayerRecyclerItem
 import com.guardianangels.football.network.NetworkState
-import com.guardianangels.football.repository.MainRepository
+import com.guardianangels.football.repository.TeamRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class BasePlayerListViewModel @Inject constructor(private val mainRepository: MainRepository) : ViewModel() {
+class BasePlayerListViewModel @Inject constructor(private val teamRepository: TeamRepository) : ViewModel() {
     private val _sectionedPlayerResultLiveData = MutableLiveData<NetworkState<List<SectionedPlayerRecyclerItem>>>()
     val sectionedPlayerResultLiveData: LiveData<NetworkState<List<SectionedPlayerRecyclerItem>>> get() = _sectionedPlayerResultLiveData
 
-    val multiSelectionHandler = MultiSelectionHandler(mainRepository, viewModelScope)
+    val multiSelectionHandler = MultiSelectionHandler(teamRepository, viewModelScope)
 
     init {
         getSectionedPlayerResultLiveData()
@@ -25,7 +25,7 @@ class BasePlayerListViewModel @Inject constructor(private val mainRepository: Ma
 
     fun getSectionedPlayerResultLiveData() {
         viewModelScope.launch {
-            mainRepository.getPlayers().collect {
+            teamRepository.getPlayers().collect {
                 _sectionedPlayerResultLiveData.value = it
             }
         }
