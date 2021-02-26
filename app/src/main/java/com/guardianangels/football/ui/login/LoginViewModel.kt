@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.guardianangels.football.network.NetworkState
-import com.guardianangels.football.repository.TeamRepository
+import com.guardianangels.football.repository.LoginRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -13,21 +13,21 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val teamRepository: TeamRepository
+    private val loginRepository: LoginRepository
 ) : ViewModel() {
 
     private val _loginState = MutableLiveData<NetworkState<Boolean>>()
     val loginState: LiveData<NetworkState<Boolean>> get() = _loginState
 
-    fun checkLogin() = teamRepository.loginRepository.checkLogin()
+    fun checkLogin() = loginRepository.checkLogin()
 
     fun login(password: String) = viewModelScope.launch {
-        teamRepository.loginRepository.loginAdmin(password).collect {
+        loginRepository.loginAdmin(password).collect {
             _loginState.value = it
         }
     }
 
     fun logout() {
-        teamRepository.loginRepository.logoutAdmin()
+        loginRepository.logoutAdmin()
     }
 }
