@@ -31,15 +31,6 @@ class LoginFragment : Fragment(R.layout.login_fragment) {
         val loginButton = binding.loginButton
         val logoutButton = binding.logoutButton
 
-//        viewModel.checkLogin.observe(viewLifecycleOwner) {
-//            if (it != true) {
-//                viewModel.logout()
-//                logoutAction(loginTV, passwordTextField, loginButton, logoutButton)
-//            } else {
-//                loginAction(loginTV, passwordTextField, loginButton, logoutButton)
-//            }
-//        }
-
         if (viewModel.checkLogin()){
             loginAction(loginTV, passwordTextField, loginButton, logoutButton)
         } else {
