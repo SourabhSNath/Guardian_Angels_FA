@@ -97,7 +97,9 @@ class PlayerListFragment : BasePlayerListFragment() {
      * Toolbar states
      */
     override fun setNormalStateLayout() {
-        binding.optionsButton.visibility = View.VISIBLE
+        if (viewModel.isUserLoggedIn) {
+            binding.optionsButton.visibility = View.VISIBLE
+        }
         modeViewVisibility(View.GONE)
     }
 
