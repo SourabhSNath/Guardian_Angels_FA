@@ -121,8 +121,8 @@ abstract class BasePlayerListFragment : Fragment(R.layout.player_list_fragment) 
          * Set the count in the toolbar
          */
         viewModel.multiSelectionHandler.selectedPlayers.observe(viewLifecycleOwner) {
-            Timber.tag(TAG).d("Selected Players: ${it.size}")
             if (it.size > 0) {
+                Timber.tag(TAG).d("Selected Players: ${it.size}")
                 binding.playersTV.text = "${it.size} Selected"
                 setPlayersList(it)
             } else {
