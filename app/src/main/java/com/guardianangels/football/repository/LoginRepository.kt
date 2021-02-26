@@ -23,7 +23,7 @@ class LoginRepository constructor(private val auth: FirebaseAuth) {
     /**
      * Get current user id
      */
-    val currentUserUid = if (checkLogin()) auth.currentUser?.uid else null
+    val currentUserUid = auth.currentUser?.uid
 
     /**
      * Login user and return a flow
