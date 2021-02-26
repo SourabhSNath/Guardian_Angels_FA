@@ -85,8 +85,7 @@
         tools:layout="@layout/player_list_fragment">
         <argument
             android:name="playerList"
-            app:argType="com.guardianangels.football.data.Player[]"
-            app:nullable="true" />
+            app:argType="com.guardianangels.football.data.Player[]" />
     </fragment>
 
 </navigation>
