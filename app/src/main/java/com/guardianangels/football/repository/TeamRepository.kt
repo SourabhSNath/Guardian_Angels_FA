@@ -80,7 +80,7 @@ class TeamRepository @Inject constructor(
     /**
      * Set the image url after uploading it to storage.
      */
-    private suspend fun Player.setImage(uri: Uri) {
+    private suspend inline fun Player.setImage(uri: Uri) {
         val playerImageReference = storageReference.child("PlayerImages/${loginRepository.currentUserUid}/${uri.lastPathSegment}")
 
         val playerImageDownloadUrl = playerImageReference.putFile(uri)
