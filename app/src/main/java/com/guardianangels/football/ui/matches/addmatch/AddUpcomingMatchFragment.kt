@@ -1,4 +1,4 @@
-package com.guardianangels.football.ui.matches
+package com.guardianangels.football.ui.matches.addmatch
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -18,8 +18,12 @@ import com.google.android.material.timepicker.TimeFormat
 import com.guardianangels.football.R
 import com.guardianangels.football.data.Player
 import com.guardianangels.football.databinding.AddUpcomingMatchFragmentBinding
+import com.guardianangels.football.network.NetworkState
+import com.guardianangels.football.ui.matches.AddUpcomingMatchFragmentDirections
+import com.guardianangels.football.ui.matches.SelectedPlayerListAdapter
 import com.guardianangels.football.util.Constants.PLAYER_SELECTED_KEY
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 import java.time.Instant
 import java.time.LocalTime
 import java.time.ZoneId
@@ -95,7 +99,8 @@ class AddUpcomingMatchFragment : Fragment(R.layout.add_upcoming_match_fragment) 
             ) {
                 viewModel.addMatchData(team1Name, binding.team2NameET.text.toString(), team)
                 resetViews(binding)
-                adapter.submitList(emptyList())
+                team = emptyList() // Drop previous team
+                adapter.submitList(team)
             } else {
                 when {
                     team1Name.isEmpty() || team2Name.isEmpty() -> showToast("Please enter the Team Name")
@@ -132,15 +137,6 @@ class AddUpcomingMatchFragment : Fragment(R.layout.add_upcoming_match_fragment) 
         observeViewModel(binding)
     }
 
-    private fun resetViews(binding: AddUpcomingMatchFragmentBinding) {
-        binding.team1NameET.setText(getString(R.string.guardian_angels))
-        binding.team2NameET.setText("")
-        binding.dateET.setText("")
-        binding.timeET.setText("")
-        binding.team1Image.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.gaurdian_angels))
-        binding.team2Image.setImageDrawable(null)
-    }
-
     private fun observeViewModel(binding: AddUpcomingMatchFragmentBinding) {
         viewModel.team1ImageUri.observe(viewLifecycleOwner) {
             it?.let {
@@ -153,6 +149,26 @@ class AddUpcomingMatchFragment : Fragment(R.layout.add_upcoming_match_fragment) 
                 binding.team2Image.load(it)
             }
         }
+
+        viewModel.matchUploadResult.observe(viewLifecycleOwner) {
+            when(it) {
+                is NetworkState.Loading -> Timber.tag(TAG).d("Loading")
+                is NetworkState.Success -> showToast("Complete")
+                is NetworkState.Failed -> {
+                    Timber.d(it.message)
+                    showToast(it.message)
+                }
+            }
+        }
+    }
+
+    private fun resetViews(binding: AddUpcomingMatchFragmentBinding) {
+        binding.team1NameET.setText(getString(R.string.guardian_angels))
+        binding.team2NameET.setText("")
+        binding.dateET.setText("")
+        binding.timeET.setText("")
+        binding.team1Image.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.gaurdian_angels))
+        binding.team2Image.setImageDrawable(null)
     }
 
     /**
