@@ -71,7 +71,7 @@
     </fragment>
     <fragment
         android:id="@+id/addUpcomingMatchFragment"
-        android:name="com.guardianangels.football.ui.matches.AddUpcomingMatchFragment"
+        android:name="com.guardianangels.football.ui.matches.addmatch.AddUpcomingMatchFragment"
         android:label="AddUpcomingMatchFragment"
         tools:layout="@layout/add_upcoming_match_fragment">
         <action
