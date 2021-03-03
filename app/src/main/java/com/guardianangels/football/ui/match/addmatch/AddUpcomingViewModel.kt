@@ -31,8 +31,8 @@ class AddUpcomingViewModel @Inject constructor(private val matchRepository: Matc
     private val _team2ImageUri = MutableLiveData<Uri>()
     val team2ImageUri: LiveData<Uri> get() = _team2ImageUri
 
-    private val _matchUploadResult = MutableLiveData<NetworkState<Boolean>>()
-    val matchUploadResult: LiveData<NetworkState<Boolean>> get() = _matchUploadResult
+    private val _matchUploadResult = MutableLiveData<NetworkState<Match?>>()
+    val matchUploadResult: LiveData<NetworkState<Match?>> get() = _matchUploadResult
 
     fun setDate(localDate: LocalDate) {
         viewModelScope.launch {
@@ -54,7 +54,7 @@ class AddUpcomingViewModel @Inject constructor(private val matchRepository: Matc
         _team2ImageUri.value = it
     }
 
-    fun addMatchData(team1Name: String, team2Name: String, team: List<Player>) {
+    fun addMatchData(team1Name: String, team2Name: String, tournamentName: String, locationName: String, team: List<Player>) {
         val date = dateChannel.poll()
         val time = timeChannel.poll()
 
@@ -69,6 +69,8 @@ class AddUpcomingViewModel @Inject constructor(private val matchRepository: Matc
         team.forEach { listOfIds.add(it.id!!) }
 
         val match = Match(team1Name, team2Name, dateAndTime = epoch, team1TeamIds = listOfIds)
+        if (tournamentName.isNotEmpty()) match.tournamentName = tournamentName
+        if (locationName.isNotEmpty()) match.locationName = locationName
 
         viewModelScope.launch {
             matchRepository.addMatchData(match, team1ImageUri.value, team2ImageUri.value!!).collect {

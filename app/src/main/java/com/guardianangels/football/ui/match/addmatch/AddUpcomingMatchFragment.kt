@@ -1,7 +1,10 @@
 package com.guardianangels.football.ui.matches.addmatch
 
 import android.annotation.SuppressLint
+import android.graphics.Paint
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -11,6 +14,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import coil.load
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.timepicker.MaterialTimePicker
@@ -19,7 +23,6 @@ import com.guardianangels.football.R
 import com.guardianangels.football.data.Player
 import com.guardianangels.football.databinding.AddUpcomingMatchFragmentBinding
 import com.guardianangels.football.network.NetworkState
-import com.guardianangels.football.ui.matches.AddUpcomingMatchFragmentDirections
 import com.guardianangels.football.ui.matches.SelectedPlayerListAdapter
 import com.guardianangels.football.util.Constants.PLAYER_SELECTED_KEY
 import dagger.hilt.android.AndroidEntryPoint
@@ -57,6 +60,7 @@ class AddUpcomingMatchFragment : Fragment(R.layout.add_upcoming_match_fragment) 
         val dateEditText = binding.dateET
         val timeEditText = binding.timeET
         val team2Logo = binding.team2Image
+        val team1 = binding.team1NameET
 
         dateEditText.toDatePicker(parentFragmentManager)
         timeEditText.toTimePicker(parentFragmentManager)
@@ -88,16 +92,18 @@ class AddUpcomingMatchFragment : Fragment(R.layout.add_upcoming_match_fragment) 
 
 
         binding.doneButton.setOnClickListener {
-            val team1Name = binding.team1NameET.text.toString().trim()
+            val team1Name = team1.text.toString().trim()
             val team2Name = binding.team2NameET.text.toString().trim()
             val date = dateEditText.text.toString()
             val time = timeEditText.text.toString()
+            val tournamentName = binding.tournamentNameET.text.toString().trim()
+            val locationName = binding.locationET.text.toString().trim()
             if (team1Name.isNotEmpty()
                 && team2Name.isNotEmpty()
                 && team2Logo.drawable != null
                 && date.isNotEmpty() && time.isNotEmpty()
             ) {
-                viewModel.addMatchData(team1Name, binding.team2NameET.text.toString(), team)
+                viewModel.addMatchData(team1Name, binding.team2NameET.text.toString(), tournamentName, locationName, team)
                 resetViews(binding)
                 team = emptyList() // Drop previous team
                 adapter.submitList(team)
@@ -111,10 +117,17 @@ class AddUpcomingMatchFragment : Fragment(R.layout.add_upcoming_match_fragment) 
             }
         }
 
+
+        /**
+         * Disable team selection if it isn't guardian angels
+         */
+        val selectTeamButton = binding.selectTeamButton
+        disableButtonIfTeam1NotGA(team1, selectTeamButton)
+
         /**
          *  Navigate to player fragment to select players playing for the match
          */
-        binding.selectTeamButton.setOnClickListener {
+        selectTeamButton.setOnClickListener {
             /* If players were selected previously, pass them to the fragment */
             navController.navigate(AddUpcomingMatchFragmentDirections.actionAddUpcomingMatchFragmentToMatchPlayerListFragment(team.toTypedArray()))
         }
@@ -137,6 +150,7 @@ class AddUpcomingMatchFragment : Fragment(R.layout.add_upcoming_match_fragment) 
         observeViewModel(binding)
     }
 
+
     private fun observeViewModel(binding: AddUpcomingMatchFragmentBinding) {
         viewModel.team1ImageUri.observe(viewLifecycleOwner) {
             it?.let {
@@ -151,9 +165,13 @@ class AddUpcomingMatchFragment : Fragment(R.layout.add_upcoming_match_fragment) 
         }
 
         viewModel.matchUploadResult.observe(viewLifecycleOwner) {
-            when(it) {
+            when (it) {
                 is NetworkState.Loading -> Timber.tag(TAG).d("Loading")
-                is NetworkState.Success -> showToast("Complete")
+                is NetworkState.Success -> {
+                    if (it.data != null) {
+                        showToast("Complete")
+                    }
+                }
                 is NetworkState.Failed -> {
                     Timber.d(it.message)
                     showToast(it.message)
@@ -217,6 +235,27 @@ class AddUpcomingMatchFragment : Fragment(R.layout.add_upcoming_match_fragment) 
             picker.show(parentFragmentManager, "Material Time Picker")
         }
     }
+
+    private fun disableButtonIfTeam1NotGA(team1: TextInputEditText, selectTeamButton: MaterialButton) {
+        team1.addTextChangedListener(object : TextWatcher {
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                val isGuardianAngels = s.toString() == getString(R.string.guardian_angels)
+                selectTeamButton.isEnabled = isGuardianAngels
+                selectTeamButton.strike = !isGuardianAngels
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun afterTextChanged(s: Editable?) {}
+        })
+    }
+
+
+    private inline var MaterialButton.strike: Boolean
+        set(visible) {
+            paintFlags = if (visible) paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+            else paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+        }
+        get() = paintFlags and Paint.STRIKE_THRU_TEXT_FLAG == Paint.STRIKE_THRU_TEXT_FLAG
 
     private fun showToast(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
