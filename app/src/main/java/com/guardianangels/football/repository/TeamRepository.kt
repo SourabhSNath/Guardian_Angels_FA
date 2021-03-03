@@ -1,6 +1,7 @@
 package com.guardianangels.football.repository
 
 import android.net.Uri
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.guardianangels.football.data.Player
@@ -22,7 +23,7 @@ import javax.inject.Inject
 class TeamRepository @Inject constructor(
     firestore: FirebaseFirestore,
     private val storage: FirebaseStorage,
-    val loginRepository: LoginRepository
+    val auth: FirebaseAuth
 ) {
 
     private companion object {
@@ -81,7 +82,7 @@ class TeamRepository @Inject constructor(
      * Set the image url after uploading it to storage.
      */
     private suspend inline fun Player.setImage(uri: Uri) {
-        val playerImageReference = storageReference.child("PlayerImages/${loginRepository.currentUserUid}/${uri.lastPathSegment}")
+        val playerImageReference = storageReference.child("PlayerImages/${auth.currentUser?.uid}/${uri.lastPathSegment}")
 
         val playerImageDownloadUrl = playerImageReference.putFile(uri)
             .await()
