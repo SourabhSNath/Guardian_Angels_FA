@@ -43,24 +43,12 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.addPlayerFragment,
-                R.id.addUpcomingMatchFragment,
-                R.id.loginFragment,
-                R.id.playerDetailsFragment,
-                R.id.matchPlayerListFragment -> bottomNavigationBar.visibility = View.GONE
-                else -> bottomNavigationBar.visibility = View.VISIBLE
+                R.id.home, R.id.players -> bottomNavigationBar.visibility = View.VISIBLE
+                else -> bottomNavigationBar.visibility = View.GONE
             }
-
         }
-
-        // Hide the bottom navigation bar for playerListFragment if the previous fragment was addUpcomingFragment
-        if (navController.previousBackStackEntry?.destination?.id == R.id.addUpcomingMatchFragment) {
-            bottomNavigationBar.visibility = View.GONE
-        }
-
         setContentView(binding.root)
     }
 
