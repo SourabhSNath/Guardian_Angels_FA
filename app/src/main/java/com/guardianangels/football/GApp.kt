@@ -14,7 +14,6 @@ class GApp : Application() {
         super.onCreate()
         if (BuildConfig.DEBUG) {
             Timber.plant(DebugTree())
-            StrictMode.enableDefaults()
         }
     }
 }
