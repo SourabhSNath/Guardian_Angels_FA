@@ -1,4 +1,4 @@
-package com.guardianangels.football.ui.matches.addmatch
+package com.guardianangels.football.ui.match.addmatch
 
 import android.net.Uri
 import androidx.lifecycle.LiveData
@@ -31,8 +31,8 @@ class AddUpcomingViewModel @Inject constructor(private val matchRepository: Matc
     private val _team2ImageUri = MutableLiveData<Uri>()
     val team2ImageUri: LiveData<Uri> get() = _team2ImageUri
 
-    private val _matchUploadResult = MutableLiveData<NetworkState<Match?>>()
-    val matchUploadResult: LiveData<NetworkState<Match?>> get() = _matchUploadResult
+    private val _matchUploadResult = MutableLiveData<NetworkState<Boolean>>()
+    val matchUploadResult: LiveData<NetworkState<Boolean>> get() = _matchUploadResult
 
     fun setDate(localDate: LocalDate) {
         viewModelScope.launch {

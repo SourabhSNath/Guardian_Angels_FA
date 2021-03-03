@@ -1,4 +1,4 @@
-package com.guardianangels.football.ui.matches.addmatch
+package com.guardianangels.football.ui.match.addmatch
 
 import android.annotation.SuppressLint
 import android.graphics.Paint
@@ -9,8 +9,10 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import coil.load
@@ -23,8 +25,9 @@ import com.guardianangels.football.R
 import com.guardianangels.football.data.Player
 import com.guardianangels.football.databinding.AddUpcomingMatchFragmentBinding
 import com.guardianangels.football.network.NetworkState
-import com.guardianangels.football.ui.matches.SelectedPlayerListAdapter
+import com.guardianangels.football.util.Constants.BUNDLE_MATCH_UPLOAD_COMPLETE
 import com.guardianangels.football.util.Constants.PLAYER_SELECTED_KEY
+import com.guardianangels.football.util.Constants.REQUEST_MATCH_UPLOAD_COMPLETE_KEY
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 import java.time.Instant
@@ -40,6 +43,7 @@ class AddUpcomingMatchFragment : Fragment(R.layout.add_upcoming_match_fragment) 
     }
 
     private val viewModel: AddUpcomingViewModel by viewModels()
+    private var team: List<Player> = emptyList()
 
     /**
      * Select images for team logos.
@@ -76,7 +80,6 @@ class AddUpcomingMatchFragment : Fragment(R.layout.add_upcoming_match_fragment) 
          * This can be null if the user doesn't select anyone.
          * The result is passed back from MatchPlayerListFragment.
          */
-        var team: List<Player> = emptyList()
         navController.currentBackStackEntry?.savedStateHandle?.getLiveData<List<Player>>(PLAYER_SELECTED_KEY)
             ?.observe(viewLifecycleOwner) { result ->
                 if (result.isNotEmpty()) {
@@ -104,9 +107,6 @@ class AddUpcomingMatchFragment : Fragment(R.layout.add_upcoming_match_fragment) 
                 && date.isNotEmpty() && time.isNotEmpty()
             ) {
                 viewModel.addMatchData(team1Name, binding.team2NameET.text.toString(), tournamentName, locationName, team)
-                resetViews(binding)
-                team = emptyList() // Drop previous team
-                adapter.submitList(team)
             } else {
                 when {
                     team1Name.isEmpty() || team2Name.isEmpty() -> showToast("Please enter the Team Name")
@@ -147,11 +147,11 @@ class AddUpcomingMatchFragment : Fragment(R.layout.add_upcoming_match_fragment) 
             navController.popBackStack()
         }
 
-        observeViewModel(binding)
+        observeViewModel(binding, adapter)
     }
 
 
-    private fun observeViewModel(binding: AddUpcomingMatchFragmentBinding) {
+    private fun observeViewModel(binding: AddUpcomingMatchFragmentBinding, adapter: SelectedPlayerListAdapter) {
         viewModel.team1ImageUri.observe(viewLifecycleOwner) {
             it?.let {
                 binding.team1Image.load(it)
@@ -168,9 +168,13 @@ class AddUpcomingMatchFragment : Fragment(R.layout.add_upcoming_match_fragment) 
             when (it) {
                 is NetworkState.Loading -> Timber.tag(TAG).d("Loading")
                 is NetworkState.Success -> {
-                    if (it.data != null) {
-                        showToast("Complete")
-                    }
+                    resetViews(binding)
+                    team = emptyList() // Drop previous team
+                    adapter.submitList(team)
+
+                    /* Send a message to matchListFragment that a player has been added, so that it can refresh the list */
+                    setFragmentResult(REQUEST_MATCH_UPLOAD_COMPLETE_KEY, bundleOf(BUNDLE_MATCH_UPLOAD_COMPLETE to true))
+                    showToast("Complete")
                 }
                 is NetworkState.Failed -> {
                     Timber.d(it.message)
