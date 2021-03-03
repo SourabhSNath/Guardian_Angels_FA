@@ -1,4 +1,4 @@
-package com.guardianangels.football.ui.matches.addmatch
+package com.guardianangels.football.ui.match.addmatch
 
 import android.os.Bundle
 import android.view.View
@@ -11,19 +11,18 @@ import com.guardianangels.football.data.Player
 import com.guardianangels.football.ui.base.BasePlayerListFragment
 import com.guardianangels.football.ui.base.SectionedPlayerListAdapter
 import com.guardianangels.football.ui.base.ToolbarState
-import com.guardianangels.football.ui.matches.MatchPlayerListFragmentArgs
 import com.guardianangels.football.util.Constants.PLAYER_SELECTED_KEY
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
 @AndroidEntryPoint
-class MatchPlayerListFragment : BasePlayerListFragment() {
+class MatchSelectPlayersFragment : BasePlayerListFragment() {
 
     companion object {
         const val TAG = "MatchPlayerListFragment"
     }
 
-    private val args: MatchPlayerListFragmentArgs by navArgs()
+    private val args: MatchSelectPlayersFragmentArgs by navArgs()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -45,9 +44,7 @@ class MatchPlayerListFragment : BasePlayerListFragment() {
      */
     override fun listenForFragmentResult() {
         val players = args.playerList
-        if (players != null) {
-            viewModel.multiSelectionHandler.setSelectedPlayers(players)
-        }
+        viewModel.multiSelectionHandler.setSelectedPlayers(players)
     }
 
     override fun playerItemClickListener(player: Player) {
