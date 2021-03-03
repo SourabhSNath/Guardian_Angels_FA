@@ -18,7 +18,7 @@ class BasePlayerListViewModel @Inject constructor(private val teamRepository: Te
     val sectionedPlayerResultLiveData: LiveData<NetworkState<List<SectionedPlayerRecyclerItem>>> get() = _sectionedPlayerResultLiveData
 
     val multiSelectionHandler = MultiSelectionHandler(teamRepository, viewModelScope)
-    val isUserLoggedIn = teamRepository.loginRepository.checkLogin()
+    val isUserLoggedIn = teamRepository.auth.currentUser != null
 
     init {
         getSectionedPlayerResultLiveData()
