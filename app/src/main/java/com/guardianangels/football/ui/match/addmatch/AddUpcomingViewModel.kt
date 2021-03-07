@@ -77,7 +77,7 @@ class AddUpcomingViewModel @Inject constructor(private val matchRepository: Matc
                 if (locationName.isNotEmpty()) match.locationName = locationName
 
                 matchRepository.addMatchData(match, team1ImageUri.value, team2ImageUri.value!!).collect {
-                    _matchUploadResult.value = it
+                    _matchUploadResult.postValue(it)
                 }
             }
         }
