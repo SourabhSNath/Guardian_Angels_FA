@@ -10,6 +10,7 @@ import com.guardianangels.football.data.Player
 import com.guardianangels.football.network.NetworkState
 import com.guardianangels.football.repository.MatchRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -55,26 +56,26 @@ class AddUpcomingViewModel @Inject constructor(private val matchRepository: Matc
     }
 
     fun addMatchData(team1Name: String, team2Name: String, tournamentName: String, locationName: String, team: List<Player>) {
-        val date = dateChannel.poll()
-        val time = timeChannel.poll()
+        viewModelScope.launch(Dispatchers.Default) {
+            val date = dateChannel.poll()
+            val time = timeChannel.poll()
 
-        if (date != null || time != null) {
+            if (date != null || time != null) {
 
-            val dateTime = date?.atTime(time)!!
-            val zoneID = ZoneId.systemDefault()
-            val epoch: Long = dateTime.atZone(zoneID).toEpochSecond()
+                val dateTime = date?.atTime(time)!!
+                val zoneID = ZoneId.systemDefault()
+                val epoch: Long = dateTime.atZone(zoneID).toEpochSecond()
 
-            Timber.tag("AddUpcomingViewModel")
-                .d("$team1Name, $team2Name, $dateTime == $epoch, ${if (team.isEmpty()) "Players not selected" else team[0].playerName}")
+                Timber.tag("AddUpcomingViewModel")
+                    .d("$team1Name, $team2Name, $dateTime == $epoch, ${if (team.isEmpty()) "Players not selected" else team[0].playerName}")
 
-            val listOfIds = arrayListOf<String>()
-            team.forEach { listOfIds.add(it.id!!) }
+                val listOfIds = arrayListOf<String>()
+                team.sortedBy { it.playerType }.mapTo(listOfIds) { it.id!! } // Sort them by player type and get the ids.
 
-            val match = Match(team1Name, team2Name, dateAndTime = epoch, team1TeamIds = listOfIds)
-            if (tournamentName.isNotEmpty()) match.tournamentName = tournamentName
-            if (locationName.isNotEmpty()) match.locationName = locationName
+                val match = Match(team1Name, team2Name, dateAndTime = epoch, team1TeamIds = listOfIds)
+                if (tournamentName.isNotEmpty()) match.tournamentName = tournamentName
+                if (locationName.isNotEmpty()) match.locationName = locationName
 
-            viewModelScope.launch {
                 matchRepository.addMatchData(match, team1ImageUri.value, team2ImageUri.value!!).collect {
                     _matchUploadResult.value = it
                 }
