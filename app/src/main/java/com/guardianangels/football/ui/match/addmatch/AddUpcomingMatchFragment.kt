@@ -106,7 +106,7 @@ class AddUpcomingMatchFragment : Fragment(R.layout.add_upcoming_match_fragment) 
                 && team2Logo.drawable != null
                 && date.isNotEmpty() && time.isNotEmpty()
             ) {
-                viewModel.addMatchData(team1Name, binding.team2NameET.text.toString(), tournamentName, locationName, team)
+                viewModel.addMatchData(team1Name, team2Name, tournamentName, locationName, team)
             } else {
                 when {
                     team1Name.isEmpty() || team2Name.isEmpty() -> showToast("Please enter the Team Name")
