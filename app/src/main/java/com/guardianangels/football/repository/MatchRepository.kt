@@ -45,6 +45,47 @@ class MatchRepository @Inject constructor(
         emit(NetworkState.failed(it.message.toString()))
     }.flowOn(Dispatchers.IO)
 
+
+    /**
+     * Update the match data.
+     */
+    fun updateMatchData(match: Match, team1Logo: Uri?, team2Logo: Uri?) = flow {
+        emit(NetworkState.loading())
+
+        if (team1Logo != null) {
+
+            // Delete the previous team 1 logo from storage
+            val remoteTeam1Logo = match.team1Logo!!
+            if (remoteTeam1Logo.isNotEmpty())
+                storage.getReferenceFromUrl(remoteTeam1Logo).delete().await()
+
+            match.setTeam1ImageUrl(team1Logo) // This can be null if the logo is default guardian angels
+        }
+
+        if (team2Logo != null) {
+
+            // Delete the previous team 2 logo from storage
+            val remoteTeam2Logo = match.team2Logo!!
+            if (remoteTeam2Logo.isNotEmpty())
+                storage.getReferenceFromUrl(remoteTeam2Logo).delete().await()
+
+            match.setTeam2ImageUrl(team2Logo)
+        }
+
+        var matchModel: Match? = null
+        matchCollectionRef.document(match.matchID!!).set(match).onSuccessTask {
+            matchCollectionRef.document(match.matchID!!).get()
+                .addOnSuccessListener {
+                    matchModel = it.toObject(Match::class.java)?.setId(it.id)!!
+                }
+        }.await()
+
+        emit(NetworkState.success(matchModel))
+    }.catch {
+        emit(NetworkState.failed(it.message.toString()))
+    }.flowOn(Dispatchers.IO)
+
+
     /**
      * Set the image download url to the Upcoming Match model before uploading it to firestore.
      */
