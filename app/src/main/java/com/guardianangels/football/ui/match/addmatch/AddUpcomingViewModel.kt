@@ -58,26 +58,28 @@ class AddUpcomingViewModel @Inject constructor(private val matchRepository: Matc
         val date = dateChannel.poll()
         val time = timeChannel.poll()
 
-        val dateTime = date?.atTime(time)!!
-        val zoneID = ZoneId.systemDefault()
-        val epoch: Long = dateTime.atZone(zoneID).toEpochSecond()
+        if (date != null || time != null) {
 
-        Timber.tag("AddUpcomingViewModel")
-            .d("$team1Name, $team2Name, $dateTime == $epoch, ${if (team.isEmpty()) "Players not selected" else team[0].playerName}")
+            val dateTime = date?.atTime(time)!!
+            val zoneID = ZoneId.systemDefault()
+            val epoch: Long = dateTime.atZone(zoneID).toEpochSecond()
 
-        val listOfIds = arrayListOf<String>()
-        team.forEach { listOfIds.add(it.id!!) }
+            Timber.tag("AddUpcomingViewModel")
+                .d("$team1Name, $team2Name, $dateTime == $epoch, ${if (team.isEmpty()) "Players not selected" else team[0].playerName}")
 
-        val match = Match(team1Name, team2Name, dateAndTime = epoch, team1TeamIds = listOfIds)
-        if (tournamentName.isNotEmpty()) match.tournamentName = tournamentName
-        if (locationName.isNotEmpty()) match.locationName = locationName
+            val listOfIds = arrayListOf<String>()
+            team.forEach { listOfIds.add(it.id!!) }
 
-        viewModelScope.launch {
-            matchRepository.addMatchData(match, team1ImageUri.value, team2ImageUri.value!!).collect {
-                _matchUploadResult.value = it
+            val match = Match(team1Name, team2Name, dateAndTime = epoch, team1TeamIds = listOfIds)
+            if (tournamentName.isNotEmpty()) match.tournamentName = tournamentName
+            if (locationName.isNotEmpty()) match.locationName = locationName
+
+            viewModelScope.launch {
+                matchRepository.addMatchData(match, team1ImageUri.value, team2ImageUri.value!!).collect {
+                    _matchUploadResult.value = it
+                }
             }
         }
     }
-
 
 }
