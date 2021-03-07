@@ -21,4 +21,6 @@
     <string name="selected_team">Selected Team</string>
     <string name="done">Done</string>
     <string name="confirm">Confirm</string>
+    <string name="games">GAMES</string>
+    <string name="upcoming_matches">Upcoming Matches</string>
 </resources>

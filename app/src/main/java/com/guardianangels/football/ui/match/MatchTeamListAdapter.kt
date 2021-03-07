@@ -9,7 +9,7 @@ import coil.load
 import com.guardianangels.football.data.Player
 import com.guardianangels.football.databinding.MatchSelectedPlayersBinding
 
-class TeamListAdapter : ListAdapter<Player, TeamListAdapter.ViewHolder>(DiffItem) {
+class MatchTeamListAdapter : ListAdapter<Player, MatchTeamListAdapter.ViewHolder>(DiffItem) {
 
     companion object DiffItem : DiffUtil.ItemCallback<Player>() {
 

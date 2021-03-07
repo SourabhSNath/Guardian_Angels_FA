@@ -73,6 +73,17 @@
         <item name="cornerSize">4dp</item>
     </style>
 
+    <!-- ShapeableImageView -->
+    <!-- For round imageView-->
+    <style name="ShapeAppearanceOverlay.App.CornerSize50Percent" parent="">
+        <item name="cornerSize">50%</item>
+    </style>
+
+    <!-- Bottom Rounded corners -->
+    <style name="BottomRoundedShapeableImageView">
+        <item name="cornerSizeBottomRight">16dp</item>
+        <item name="cornerSizeBottomLeft">16dp</item>
+    </style>
 
     <!-- Text Styles -->
     <style name="TitleTextStyle" parent="TextAppearance.MaterialComponents.Headline6">
@@ -81,9 +92,16 @@
         <item name="android:letterSpacing">0.05</item>
     </style>
 
+    <style name="MainTotalCardTextStyle">
+        <item name="android:textSize">17sp</item>
+        <item name="fontFamily">@font/poppins</item>
+        <item name="android:letterSpacing">0.1</item>
+    </style>
+
     <style name="CountTextStyle" parent="TextAppearance.MaterialComponents.Headline4">
         <item name="fontFamily">@font/poppins</item>
         <item name="android:fontFamily">@font/poppins</item>
+        <item name="android:textSize">36sp</item>
     </style>
 
     <style name="BottomNavigationBarTextStyle">

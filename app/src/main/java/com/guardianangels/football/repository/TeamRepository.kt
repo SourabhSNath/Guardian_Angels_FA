@@ -135,6 +135,22 @@ class TeamRepository @Inject constructor(
         emit(NetworkState.failed(it.message.toString()))
     }.flowOn(Dispatchers.IO)
 
+    /**
+     * Get a list of players using the ids
+     */
+    fun getPlayers(ids: List<String>) = flow<NetworkState<List<Player>>> {
+        emit(NetworkState.loading())
+        val players = ArrayList<Player>()
+        ids.forEach {
+            val player = playerCollectionRef.document(it).get().await().toObject(Player::class.java)
+            if (player != null) {
+                players.add(player)
+            }
+        }
+        emit(NetworkState.success(players))
+    }.catch {
+        emit(NetworkState.failed(it.message.toString()))
+    }.flowOn(Dispatchers.IO)
 
     /**
      * Delete multiple selected players

@@ -14,8 +14,8 @@
             android:id="@+id/action_home_to_loginFragment"
             app:destination="@id/loginFragment" />
         <action
-            android:id="@+id/action_home_to_addUpcomingMatchFragment"
-            app:destination="@id/addUpcomingMatchFragment" />
+            android:id="@+id/action_home_to_matchListFragment"
+            app:destination="@id/matchListFragment" />
     </fragment>
 
     <fragment
@@ -69,23 +69,48 @@
             android:id="@+id/action_playerDetailsFragment_to_addPlayerFragment"
             app:destination="@id/addPlayerFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/addUpcomingMatchFragment"
-        android:name="com.guardianangels.football.ui.matches.addmatch.AddUpcomingMatchFragment"
+        android:name="com.guardianangels.football.ui.match.addmatch.AddUpcomingMatchFragment"
         android:label="AddUpcomingMatchFragment"
         tools:layout="@layout/add_upcoming_match_fragment">
         <action
             android:id="@+id/action_addUpcomingMatchFragment_to_matchPlayerListFragment"
-            app:destination="@id/matchPlayerListFragment" />
+            app:destination="@id/matchSelectPlayersFragment" />
     </fragment>
+
     <fragment
-        android:id="@+id/matchPlayerListFragment"
-        android:name="com.guardianangels.football.ui.matches.MatchPlayerListFragment"
+        android:id="@+id/matchSelectPlayersFragment"
+        android:name="com.guardianangels.football.ui.match.addmatch.MatchSelectPlayersFragment"
         android:label="MatchPlayerListFragment"
         tools:layout="@layout/player_list_fragment">
         <argument
             android:name="playerList"
             app:argType="com.guardianangels.football.data.Player[]" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/matchDetailsFragment"
+        android:name="com.guardianangels.football.ui.match.details.MatchDetailsFragment"
+        android:label="MatchDetailsFragment"
+        tools:layout="@layout/match_details_fragment">
+        <argument
+            android:name="matchInfo"
+            app:argType="com.guardianangels.football.data.Match" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/matchListFragment"
+        android:name="com.guardianangels.football.ui.match.MatchListFragment"
+        android:label="MatchListFragment"
+        tools:layout="@layout/match_list_fragment">
+        <action
+            android:id="@+id/action_matchListFragment_to_addUpcomingMatchFragment"
+            app:destination="@id/addUpcomingMatchFragment" />
+        <action
+            android:id="@+id/action_matchListFragment_to_matchDetailsFragment"
+            app:destination="@id/matchDetailsFragment" />
     </fragment>
 
 </navigation>

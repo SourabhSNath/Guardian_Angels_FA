@@ -23,7 +23,7 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
         }
 
         binding.moreUpcomingTV.setOnClickListener {
-            findNavController().navigate(HomeFragmentDirections.actionHomeToAddUpcomingMatchFragment())
+            findNavController().navigate(HomeFragmentDirections.actionHomeToMatchListFragment())
         }
 
     }

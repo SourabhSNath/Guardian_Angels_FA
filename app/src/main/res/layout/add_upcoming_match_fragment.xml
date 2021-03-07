@@ -167,8 +167,7 @@
                     android:id="@+id/tournamentNameET"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins"
-                    android:inputType="date" />
+                    android:fontFamily="@font/poppins" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -188,8 +187,7 @@
                     android:id="@+id/locationET"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins"
-                    android:inputType="date" />
+                    android:fontFamily="@font/poppins" />
             </com.google.android.material.textfield.TextInputLayout>
 
 
