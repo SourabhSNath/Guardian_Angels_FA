@@ -26,6 +26,7 @@ import com.guardianangels.football.util.Converters.Companion.getPlayerType
 import com.guardianangels.football.util.Converters.Companion.getPlayerTypeString
 import com.guardianangels.football.util.Converters.Companion.toEmptySafeFloat
 import com.guardianangels.football.util.Converters.Companion.toEmptySafeInt
+import com.guardianangels.football.util.toStringOrEmpty
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
@@ -237,14 +238,6 @@ class AddPlayerFragment : Fragment(R.layout.add_player_fragment) {
         }
     }
 
-    private fun Any?.toStringOrEmpty(): String {
-        if (this is Number) {
-            if (this == 0 || this == 0.0) {
-                return ""
-            }
-        }
-        return this?.toString() ?: ""
-    }
 
     /**
      * Set the drop down text
