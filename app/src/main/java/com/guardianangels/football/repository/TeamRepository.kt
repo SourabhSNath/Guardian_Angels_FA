@@ -144,6 +144,7 @@ class TeamRepository @Inject constructor(
         ids.forEach {
             val player = playerCollectionRef.document(it).get().await().toObject(Player::class.java)
             if (player != null) {
+                player.setID(it)
                 players.add(player)
             }
         }
