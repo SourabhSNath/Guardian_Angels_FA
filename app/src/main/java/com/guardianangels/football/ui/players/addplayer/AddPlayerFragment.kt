@@ -161,7 +161,7 @@ class AddPlayerFragment : Fragment(R.layout.add_player_fragment) {
                 is NetworkState.Success -> {
                     Toast.makeText(requireContext(), "Success", Toast.LENGTH_SHORT).show()
                     setFragmentResult(REQUEST_PLAYER_UPLOAD_COMPLETE_KEY, bundleOf(BUNDLE_PLAYER_UPLOAD_COMPLETE to true))
-                    resetFields(null)
+                    resetFields()
                 }
                 is NetworkState.Failed -> {
                     Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
@@ -205,7 +205,7 @@ class AddPlayerFragment : Fragment(R.layout.add_player_fragment) {
     }
 
 
-    private fun resetFields(playerModel: Player?) {
+    private fun resetFields(playerModel: Player? = null) {
 
         if (playerModel?.remoteUri != null) {
             binding.playerImage.load(playerModel.remoteUri)
