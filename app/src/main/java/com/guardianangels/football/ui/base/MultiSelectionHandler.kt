@@ -21,10 +21,6 @@ enum class ToolbarState {
  */
 class MultiSelectionHandler(private val teamRepository: TeamRepository, private val viewModelScope: CoroutineScope) {
 
-    companion object {
-        const val TAG = "MultiSelectionHandler"
-    }
-
     private val _toolbarState: MutableLiveData<ToolbarState> = MutableLiveData(ToolbarState.NormalState)
     val toolbarState: LiveData<ToolbarState> get() = _toolbarState
 
@@ -47,10 +43,10 @@ class MultiSelectionHandler(private val teamRepository: TeamRepository, private 
         list?.let {
             if (list.contains(player)) {
                 list.remove(player)
-                Timber.tag(TAG).d("addOrRemovePlayersFromSelectedList: Removed ${player.playerName}")
+                Timber.d("addOrRemovePlayersFromSelectedList: Removed ${player.playerName}")
             } else {
                 list.add(player)
-                Timber.tag(TAG).d("addOrRemovePlayersFromSelectedList: Added ${player.playerName}")
+                Timber.d("addOrRemovePlayersFromSelectedList: Added ${player.playerName}")
             }
         }
 
@@ -63,7 +59,7 @@ class MultiSelectionHandler(private val teamRepository: TeamRepository, private 
      */
     fun clearSelectedList() {
         _selectedPlayers.value?.clear()
-        Timber.tag(TAG).d("clearSelectedList: Cleared selected players")
+        Timber.d("clearSelectedList: Cleared selected players")
     }
 
     /**
@@ -83,7 +79,7 @@ class MultiSelectionHandler(private val teamRepository: TeamRepository, private 
 
     fun setSelectedPlayers(players: Array<Player>?) {
         if (!players.isNullOrEmpty()) {
-            Timber.tag(TAG).d("setSelectedPlayers: Received again : ${players.size}")
+            Timber.d("setSelectedPlayers: Received again : ${players.size}")
             players.forEach { player ->
                 val list = _selectedPlayers.value
                 list?.let {
