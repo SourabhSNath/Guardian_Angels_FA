@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import javax.inject.Inject
 
 class MatchRepository @Inject constructor(
@@ -56,23 +57,26 @@ class MatchRepository @Inject constructor(
 
             // Delete the previous team 1 logo from storage
             val remoteTeam1Logo = match.team1Logo!!
-            if (remoteTeam1Logo.isNotEmpty())
+            if (remoteTeam1Logo.isNotEmpty()) {
                 storage.getReferenceFromUrl(remoteTeam1Logo).delete().await()
-
-            match.setTeam1ImageUrl(team1Logo) // This can be null if the logo is default guardian angels
+            }
+            match.setTeam1ImageUrl(team1Logo)
         }
 
         if (team2Logo != null) {
 
             // Delete the previous team 2 logo from storage
             val remoteTeam2Logo = match.team2Logo!!
-            if (remoteTeam2Logo.isNotEmpty())
+            if (remoteTeam2Logo.isNotEmpty()) {
                 storage.getReferenceFromUrl(remoteTeam2Logo).delete().await()
+                Timber.d("Deleted Previous Team2 Image")
+            }
 
             match.setTeam2ImageUrl(team2Logo)
         }
 
         var matchModel: Match? = null
+        Timber.d("Match id: ${matchModel?.matchID}")
         matchCollectionRef.document(match.matchID!!).set(match).onSuccessTask {
             matchCollectionRef.document(match.matchID!!).get()
                 .addOnSuccessListener {
@@ -80,7 +84,8 @@ class MatchRepository @Inject constructor(
                 }
         }.await()
 
-        emit(NetworkState.success(matchModel))
+        emit(NetworkState.success(matchModel!!))
+
     }.catch {
         emit(NetworkState.failed(it.message.toString()))
     }.flowOn(Dispatchers.IO)
@@ -103,6 +108,7 @@ class MatchRepository @Inject constructor(
      * Set the image url after uploading it to storage.
      */
     private suspend fun getUri(uri: Uri): String {
+        Timber.d("Storage Team Image name: ${uri.lastPathSegment}")
         val teamsImageStorageReference = storageReference.child("TeamsImage/${auth.currentUser?.uid}/${uri.lastPathSegment}")
 
         return teamsImageStorageReference.putFile(uri)

@@ -6,12 +6,15 @@ import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import coil.load
 import com.guardianangels.football.R
+import com.guardianangels.football.data.Match
 import com.guardianangels.football.databinding.MatchDetailsFragmentBinding
 import com.guardianangels.football.network.NetworkState
 import com.guardianangels.football.ui.match.MatchTeamListAdapter
+import com.guardianangels.football.util.Constants
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 import java.time.Instant
@@ -30,7 +33,18 @@ class MatchDetailsFragment : Fragment(R.layout.match_details_fragment) {
 
         val binding = MatchDetailsFragmentBinding.bind(view)
 
-        val matchInfo = args.matchInfo
+        val navController = findNavController()
+
+        var matchInfo = args.matchInfo
+        navController.currentBackStackEntry?.savedStateHandle?.getLiveData<Match>(Constants.MATCH_UPDATED_RESULT_KEY)
+            ?.observe(viewLifecycleOwner) { result ->
+                Timber.d("Reviced: ${result.team2Name}")
+                matchInfo = result
+            }
+
+        binding.editButton.setOnClickListener {
+            navController.navigate(MatchDetailsFragmentDirections.actionMatchDetailsFragmentToAddUpcomingMatchFragment(matchInfo))
+        }
 
         val team1LogoLink = matchInfo.team1Logo
         if (team1LogoLink!!.isNotEmpty()) {

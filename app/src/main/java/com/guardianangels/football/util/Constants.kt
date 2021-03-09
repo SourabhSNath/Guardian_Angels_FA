@@ -16,5 +16,7 @@ object Constants {
 
     const val REQUEST_MATCH_UPLOAD_COMPLETE_KEY = "matchUploadedCheckKey"
     const val BUNDLE_MATCH_UPLOAD_COMPLETE = "bundleMatchUpload"
+
     const val PLAYER_SELECTED_KEY = "playerSelectedKey"
+    const val MATCH_UPDATED_RESULT_KEY = "matchUpdatedKey"
 }

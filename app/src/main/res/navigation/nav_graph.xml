@@ -78,6 +78,11 @@
         <action
             android:id="@+id/action_addUpcomingMatchFragment_to_matchPlayerListFragment"
             app:destination="@id/matchSelectPlayersFragment" />
+        <argument
+            android:name="matchData"
+            app:argType="com.guardianangels.football.data.Match"
+            app:nullable="true"
+            android:defaultValue="@null" />
     </fragment>
 
     <fragment
@@ -98,6 +103,9 @@
         <argument
             android:name="matchInfo"
             app:argType="com.guardianangels.football.data.Match" />
+        <action
+            android:id="@+id/action_matchDetailsFragment_to_addUpcomingMatchFragment"
+            app:destination="@id/addUpcomingMatchFragment" />
     </fragment>
 
     <fragment

@@ -8,13 +8,13 @@ import android.text.TextWatcher
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import coil.load
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -22,15 +22,18 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 import com.guardianangels.football.R
+import com.guardianangels.football.data.Match
 import com.guardianangels.football.data.Player
 import com.guardianangels.football.databinding.AddUpcomingMatchFragmentBinding
 import com.guardianangels.football.network.NetworkState
 import com.guardianangels.football.util.Constants.BUNDLE_MATCH_UPLOAD_COMPLETE
+import com.guardianangels.football.util.Constants.MATCH_UPDATED_RESULT_KEY
 import com.guardianangels.football.util.Constants.PLAYER_SELECTED_KEY
 import com.guardianangels.football.util.Constants.REQUEST_MATCH_UPLOAD_COMPLETE_KEY
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 import java.time.Instant
+import java.time.LocalDate
 import java.time.LocalTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -43,6 +46,12 @@ class AddUpcomingMatchFragment : Fragment(R.layout.add_upcoming_match_fragment) 
     }
 
     private val viewModel: AddUpcomingViewModel by viewModels()
+    private val args: AddUpcomingMatchFragmentArgs by navArgs()
+
+    private var adapter = SelectedPlayerListAdapter()
+    private var _binding: AddUpcomingMatchFragmentBinding? = null
+    private val binding get() = _binding!!
+
     private var team: List<Player> = emptyList()
 
     /**
@@ -59,7 +68,16 @@ class AddUpcomingMatchFragment : Fragment(R.layout.add_upcoming_match_fragment) 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val binding = AddUpcomingMatchFragmentBinding.bind(view)
+        Timber.d("OnViewCreated")
+        _binding = AddUpcomingMatchFragmentBinding.bind(view)
+
+        val matchData = args.matchData
+        var editMode = false
+        if (matchData != null) {
+            editMode = true
+            setUpFields(matchData)
+        }
+
 
         val dateEditText = binding.dateET
         val timeEditText = binding.timeET
@@ -70,7 +88,7 @@ class AddUpcomingMatchFragment : Fragment(R.layout.add_upcoming_match_fragment) 
         timeEditText.toTimePicker(parentFragmentManager)
 
         val recyclerView = binding.selectedPlayerRecyclerView
-        val adapter = SelectedPlayerListAdapter()
+        /*val adapter = SelectedPlayerListAdapter()*/
         recyclerView.adapter = adapter
 
         val navController = findNavController()
@@ -88,6 +106,7 @@ class AddUpcomingMatchFragment : Fragment(R.layout.add_upcoming_match_fragment) 
                         visibility = View.VISIBLE
                         text = result.size.toString()
                     }
+                    Timber.d("${result.map { it.playerName }}")
                 }
                 adapter.submitList(result)
                 team = result
@@ -106,7 +125,17 @@ class AddUpcomingMatchFragment : Fragment(R.layout.add_upcoming_match_fragment) 
                 && team2Logo.drawable != null
                 && date.isNotEmpty() && time.isNotEmpty()
             ) {
-                viewModel.addMatchData(team1Name, team2Name, tournamentName, locationName, team)
+                if (editMode) {
+                    matchData!!.apply {
+                        this.team1Name = team1Name
+                        this.team2Name = team2Name
+                        if (tournamentName.isNotEmpty()) this.tournamentName = tournamentName
+                        if (locationName.isNotEmpty()) this.locationName = locationName
+                    }
+                    viewModel.updateMatchData(matchData, team)
+                } else {
+                    viewModel.addMatchData(team1Name, team2Name, tournamentName, locationName, team)
+                }
             } else {
                 when {
                     team1Name.isEmpty() || team2Name.isEmpty() -> showToast("Please enter the Team Name")
@@ -129,6 +158,7 @@ class AddUpcomingMatchFragment : Fragment(R.layout.add_upcoming_match_fragment) 
          */
         selectTeamButton.setOnClickListener {
             /* If players were selected previously, pass them to the fragment */
+            Timber.d("${team.size} ${team.map { it.playerName }}")
             navController.navigate(AddUpcomingMatchFragmentDirections.actionAddUpcomingMatchFragmentToMatchPlayerListFragment(team.toTypedArray()))
         }
 
@@ -147,11 +177,11 @@ class AddUpcomingMatchFragment : Fragment(R.layout.add_upcoming_match_fragment) 
             navController.popBackStack()
         }
 
-        observeViewModel(binding, adapter)
+        observeViewModel()
     }
 
 
-    private fun observeViewModel(binding: AddUpcomingMatchFragmentBinding, adapter: SelectedPlayerListAdapter) {
+    private fun observeViewModel() {
         viewModel.team1ImageUri.observe(viewLifecycleOwner) {
             it?.let {
                 binding.team1Image.load(it)
@@ -166,9 +196,9 @@ class AddUpcomingMatchFragment : Fragment(R.layout.add_upcoming_match_fragment) 
 
         viewModel.matchUploadResult.observe(viewLifecycleOwner) {
             when (it) {
-                is NetworkState.Loading -> Timber.tag(TAG).d("Loading")
+                is NetworkState.Loading -> Timber.tag(TAG).d("Add result Loading")
                 is NetworkState.Success -> {
-                    resetViews(binding)
+                    setUpFields()
                     team = emptyList() // Drop previous team
                     adapter.submitList(team)
 
@@ -182,15 +212,113 @@ class AddUpcomingMatchFragment : Fragment(R.layout.add_upcoming_match_fragment) 
                 }
             }
         }
+
+        viewModel.matchUpdateResult.observe(viewLifecycleOwner) {
+            when (it) {
+                is NetworkState.Loading -> Timber.tag(TAG).d("Add result Loading")
+                is NetworkState.Success -> {
+
+                    /* Send a message to matchListFragment that a player has been added, so that it can refresh the list */
+                    /*setFragmentResult(REQUEST_MATCH_UPDATE_COMPLETE_KEY, bundleOf(BUNDLE_MATCH_UPDATE_COMPLETE to true))*/
+                    val navController = findNavController()
+                    navController.previousBackStackEntry?.savedStateHandle?.set(MATCH_UPDATED_RESULT_KEY, it.data)
+                    navController.popBackStack()
+                    showToast("Complete")
+                }
+                is NetworkState.Failed -> {
+                    Timber.d(it.message)
+                    showToast(it.message)
+                }
+            }
+        }
     }
 
-    private fun resetViews(binding: AddUpcomingMatchFragmentBinding) {
-        binding.team1NameET.setText(getString(R.string.guardian_angels))
-        binding.team2NameET.setText("")
-        binding.dateET.setText("")
-        binding.timeET.setText("")
-        binding.team1Image.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.gaurdian_angels))
-        binding.team2Image.setImageDrawable(null)
+    /**
+     * Set up fields.
+     * Resets the views when it the fragment is done adding the data to firebase.
+     * Sets up the views when the fragment is editing an existing match data.
+     */
+    private fun setUpFields(match: Match? = null) {
+
+        if (match?.team1Logo.isNullOrEmpty()) {
+            binding.team1Image.load(R.drawable.gaurdian_angels)
+        } else {
+            /*viewModel.team1Image(Uri.parse(match?.team1Logo))*/
+            binding.team1Image.load(match?.team1Logo)
+        }
+
+        if (match?.team2Logo.isNullOrEmpty())
+            binding.team2Image.setImageDrawable(null)
+        else {
+            binding.team2Image.load(match?.team2Logo)
+            /*viewModel.team2Image(Uri.parse(match?.team2Logo))*/
+        }
+
+        val guardianAngels = getString(R.string.guardian_angels)
+
+        val team1Name = match?.team1Name
+        if (team1Name.isNullOrEmpty()) {
+            binding.team1NameET.setText(guardianAngels)
+            selectButtonState(binding.selectTeamButton, true)
+        } else {
+            binding.team1NameET.setText(match.team1Name)
+            if (team1Name == getString(R.string.guardian_angels)) {
+                selectButtonState(binding.selectTeamButton, true)
+            } else {
+                selectButtonState(binding.selectTeamButton, false)
+            }
+        }
+
+        binding.team2NameET.setText(match?.team2Name)
+
+        if (match != null) {
+            val dateTimeEpoch = match.dateAndTime!!
+            val zonedDateTime = Instant.ofEpochSecond(dateTimeEpoch).atZone(ZoneId.systemDefault())
+            val localDate = zonedDateTime.toLocalDate()
+            val localTime = zonedDateTime.toLocalTime()
+
+            binding.dateET.setDate(localDate)
+            binding.timeET.setTime(localTime)
+            viewModel.setDate(localDate)
+            viewModel.setTime(localTime)
+        } else {
+            binding.dateET.setText("")
+            binding.timeET.setText("")
+        }
+
+        binding.locationET.setText(match?.locationName)
+        binding.tournamentNameET.setText(match?.tournamentName)
+
+
+        val team1Ids = match?.team1TeamIds
+        Timber.d("${team.size} ${team.map { it.playerName }}")
+        if (!team1Ids.isNullOrEmpty() && team.isEmpty()) {
+            Timber.d("Inside for getTeam()")
+            binding.selectedPlayersTitle.visibility = View.VISIBLE
+            binding.count.apply {
+                visibility = View.VISIBLE
+                text = team1Ids.size.toString()
+            }
+            viewModel.getTeamListFromIds(team1Ids)
+            observeTeamLiveData()
+        }
+    }
+
+    private fun observeTeamLiveData() {
+        viewModel.team.observe(viewLifecycleOwner) {
+            when (it) {
+                is NetworkState.Loading -> Timber.d("team Loading")
+                is NetworkState.Success -> {
+                    Timber.d("Setting team to ${it.data.map { p -> p.playerName }}")
+                    team = it.data
+                    adapter.submitList(it.data)
+                }
+                is NetworkState.Failed -> {
+                    Timber.d(it.message)
+                    showToast(it.message)
+                }
+            }
+        }
     }
 
     /**
@@ -207,13 +335,18 @@ class AddUpcomingMatchFragment : Fragment(R.layout.add_upcoming_match_fragment) 
             }.build().also {
                 it.addOnPositiveButtonClickListener { selected ->
                     val localDate = Instant.ofEpochMilli(selected).atZone(ZoneId.systemDefault()).toLocalDate()
-
-                    setText(localDate.format(DateTimeFormatter.ofPattern("EEE, dd MMM yyyy")))
-                    viewModel.setDate(localDate)
+                    setDate(localDate)
                 }
             }.show(parentFragmentManager, "Material Date Picker")
         }
     }
+
+    private fun TextInputEditText.setDate(localDate: LocalDate) {
+        Timber.d("$localDate")
+        setText(localDate.format(DateTimeFormatter.ofPattern("EEE, dd MMM yyyy")))
+        viewModel.setDate(localDate)
+    }
+
 
     /**
      * Select the time
@@ -230,27 +363,36 @@ class AddUpcomingMatchFragment : Fragment(R.layout.add_upcoming_match_fragment) 
             picker.addOnPositiveButtonClickListener {
                 val time24 = String.format("%02d:%02d", picker.hour, picker.minute)
                 val time12 = LocalTime.parse(time24, DateTimeFormatter.ofPattern("HH:mm"))
-                val timeString = time12.format(DateTimeFormatter.ofPattern("hh:mm a"))
 
-                setText(timeString)
-                viewModel.setTime(time12)
+                setTime(time12)
             }
 
             picker.show(parentFragmentManager, "Material Time Picker")
         }
     }
 
+    private fun TextInputEditText.setTime(time12: LocalTime) {
+        Timber.d("$time12")
+        val timeString = time12.format(DateTimeFormatter.ofPattern("hh:mm a"))
+        setText(timeString)
+        viewModel.setTime(time12)
+    }
+
     private fun disableButtonIfTeam1NotGA(team1: TextInputEditText, selectTeamButton: MaterialButton) {
         team1.addTextChangedListener(object : TextWatcher {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                val isGuardianAngels = s.toString() == getString(R.string.guardian_angels)
-                selectTeamButton.isEnabled = isGuardianAngels
-                selectTeamButton.strike = !isGuardianAngels
+                val isGuardianAngels = s.toString().trim() == getString(R.string.guardian_angels)
+                selectButtonState(selectTeamButton, isGuardianAngels)
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun afterTextChanged(s: Editable?) {}
         })
+    }
+
+    private fun selectButtonState(selectTeamButton: MaterialButton, enabled: Boolean) {
+        selectTeamButton.isEnabled = enabled
+        selectTeamButton.strike = !enabled
     }
 
 
@@ -263,5 +405,11 @@ class AddUpcomingMatchFragment : Fragment(R.layout.add_upcoming_match_fragment) 
 
     private fun showToast(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onDestroyView() {
+        binding.selectedPlayerRecyclerView.adapter = null
+        _binding = null
+        super.onDestroyView()
     }
 }

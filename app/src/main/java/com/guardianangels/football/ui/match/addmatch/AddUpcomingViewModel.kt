@@ -9,6 +9,7 @@ import com.guardianangels.football.data.Match
 import com.guardianangels.football.data.Player
 import com.guardianangels.football.network.NetworkState
 import com.guardianangels.football.repository.MatchRepository
+import com.guardianangels.football.repository.TeamRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
@@ -21,7 +22,10 @@ import java.time.ZoneId
 import javax.inject.Inject
 
 @HiltViewModel
-class AddUpcomingViewModel @Inject constructor(private val matchRepository: MatchRepository) : ViewModel() {
+class AddUpcomingViewModel @Inject constructor(
+    private val matchRepository: MatchRepository,
+    private val teamRepository: TeamRepository
+) : ViewModel() {
 
     private val dateChannel = Channel<LocalDate>()
     private val timeChannel = Channel<LocalTime>()
@@ -34,6 +38,9 @@ class AddUpcomingViewModel @Inject constructor(private val matchRepository: Matc
 
     private val _matchUploadResult = MutableLiveData<NetworkState<Boolean>>()
     val matchUploadResult: LiveData<NetworkState<Boolean>> get() = _matchUploadResult
+
+    private val _matchUpdateResult = MutableLiveData<NetworkState<Match>>()
+    val matchUpdateResult: LiveData<NetworkState<Match>> get() = _matchUpdateResult
 
     fun setDate(localDate: LocalDate) {
         viewModelScope.launch {
@@ -55,6 +62,16 @@ class AddUpcomingViewModel @Inject constructor(private val matchRepository: Matc
         _team2ImageUri.value = it
     }
 
+    private val _team = MutableLiveData<NetworkState<List<Player>>>()
+    val team: LiveData<NetworkState<List<Player>>> get() = _team
+    fun getTeamListFromIds(teamIds: List<String>) {
+        viewModelScope.launch {
+            teamRepository.getPlayers(teamIds).collect {
+                _team.value = it
+            }
+        }
+    }
+
     fun addMatchData(team1Name: String, team2Name: String, tournamentName: String, locationName: String, team: List<Player>) {
         viewModelScope.launch(Dispatchers.Default) {
             val date = dateChannel.poll()
@@ -66,8 +83,7 @@ class AddUpcomingViewModel @Inject constructor(private val matchRepository: Matc
                 val zoneID = ZoneId.systemDefault()
                 val epoch: Long = dateTime.atZone(zoneID).toEpochSecond()
 
-                Timber.tag("AddUpcomingViewModel")
-                    .d("$team1Name, $team2Name, $dateTime == $epoch, ${if (team.isEmpty()) "Players not selected" else team[0].playerName}")
+                Timber.d("$team1Name, $team2Name, $dateTime == $epoch, ${if (team.isEmpty()) "Players not selected" else team[0].playerName}")
 
                 val listOfIds = arrayListOf<String>()
                 team.sortedBy { it.playerType }.mapTo(listOfIds) { it.id!! } // Sort them by player type and get the ids.
@@ -78,6 +94,33 @@ class AddUpcomingViewModel @Inject constructor(private val matchRepository: Matc
 
                 matchRepository.addMatchData(match, team1ImageUri.value, team2ImageUri.value!!).collect {
                     _matchUploadResult.postValue(it)
+                }
+            }
+        }
+    }
+
+    fun updateMatchData(match: Match, team: List<Player>) {
+        viewModelScope.launch(Dispatchers.Default) {
+            val date = dateChannel.poll()
+            val time = timeChannel.poll()
+
+            if (date != null || time != null) {
+
+                val dateTime = date?.atTime(time)!!
+                val zoneID = ZoneId.systemDefault()
+                val epoch: Long = dateTime.atZone(zoneID).toEpochSecond()
+
+                val listOfIds = arrayListOf<String>()
+                team.sortedBy { it.playerType }.mapTo(listOfIds) { it.id!! } // Sort them by player type and get the ids.
+
+                match.apply {
+                    dateAndTime = epoch
+                    team1TeamIds = listOfIds
+                }
+
+                Timber.d("${team1ImageUri.value}, ${team2ImageUri.value}")
+                matchRepository.updateMatchData(match, team1ImageUri.value, team2ImageUri.value).collect {
+                    _matchUpdateResult.postValue(it)
                 }
             }
         }
