@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -99,20 +100,16 @@ class TeamRepository @Inject constructor(
      * Get a list of all Players
      */
     fun getPlayers() = flow<NetworkState<List<SectionedPlayerRecyclerItem>>> {
-
         emit(NetworkState.loading())
 
         /*
          * Returns a map -> Map<Type, List<Player>>
          */
-        val playersSectionGroup = playerCollectionRef.get().await().map {
-            it.toObject(Player::class.java).setID(it.id)
-        }.groupBy { it.playerType }.toSortedMap(compareBy { playerType ->
-            playerType
-        })
+        val playersSectionGroup = getAllPlayers()
+            .groupBy { it.playerType }
+            .toSortedMap(compareBy { it }) // compareBy it = playerType
 
-        /*
-         * Take the Map and turn it into List<SectionedPlayerRecyclerItem>
+        /* Take the Map and turn it into List<SectionedPlayerRecyclerItem>
          * Coach [Header]
          *  Player
          * Forward [Header]
@@ -133,25 +130,33 @@ class TeamRepository @Inject constructor(
         emit(NetworkState.success(sectionedPlayerRecyclerItem))
     }.catch {
         emit(NetworkState.failed(it.message.toString()))
-    }.flowOn(Dispatchers.IO)
+    }.flowOn(Dispatchers.Default)
+
 
     /**
-     * Get a list of players using the ids
+     * Get a list of players using the document ids
+     * (Used for getting guardian angel's team for the match.)
      */
-    fun getPlayers(ids: List<String>) = flow<NetworkState<List<Player>>> {
+    fun getPlayers(ids: List<String>) = flow {
         emit(NetworkState.loading())
-        val players = ArrayList<Player>()
-        ids.forEach {
-            val player = playerCollectionRef.document(it).get().await().toObject(Player::class.java)
-            if (player != null) {
-                player.setID(it)
-                players.add(player)
-            }
-        }
+
+        val playerList: List<Player> = getAllPlayers().sortedBy { it.playerType }
+
+        val players = playerList.filter { it.id in ids }
+
         emit(NetworkState.success(players))
     }.catch {
         emit(NetworkState.failed(it.message.toString()))
-    }.flowOn(Dispatchers.IO)
+    }.flowOn(Dispatchers.Default)
+
+    /**
+     * Getting all the players.
+     * This would ensure that the same list gets loaded for both the match deltails fragment and the player list fragment in offline mode.
+     */
+    private suspend fun getAllPlayers() = withContext(Dispatchers.IO) {
+        playerCollectionRef.get().await().map { it.toObject(Player::class.java).setID(it.id) }
+    }
+
 
     /**
      * Delete multiple selected players
