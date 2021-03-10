@@ -41,10 +41,18 @@
             style="@style/IconButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="24dp"
+            android:layout_marginEnd="8dp"
             android:drawableEnd="@drawable/ic_edit"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/deleteButton"
+            style="@style/IconButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="24dp"
+            android:drawableEnd="@drawable/ic_delete" />
 
     </LinearLayout>
 
@@ -61,7 +69,7 @@
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/upcomingMatchCard"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="300dp"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="24dp"
@@ -87,7 +95,7 @@
                         android:layout_width="0dp"
                         android:layout_height="0dp"
                         android:background="@drawable/match_detail_gradient"
-                        app:layout_constraintBottom_toTopOf="@+id/guideline"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -97,7 +105,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        app:layout_constraintGuide_begin="136dp" />
+                        app:layout_constraintGuide_begin="236dp" />
 
                     <ImageView
                         android:id="@+id/team1Logo"
@@ -114,17 +122,15 @@
 
                     <TextView
                         android:id="@+id/matchDate"
+                        style="@style/ShadowTextStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppins_semibold"
-                        android:shadowColor="@color/black"
-                        android:shadowDx="2.6"
-                        android:shadowDy="1"
-                        android:shadowRadius="1"
                         android:text="FRI 22 JAN"
                         android:textAlignment="center"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-                        android:textColor="@color/white"
+                        android:textColor="@color/black"
+                        android:shadowColor="@color/white"
                         app:layout_constraintEnd_toStartOf="@+id/team2Logo"
                         app:layout_constraintHorizontal_bias="0.5"
                         app:layout_constraintStart_toEndOf="@+id/team1Logo"
@@ -132,12 +138,13 @@
 
                     <TextView
                         android:id="@+id/matchKickOffTime"
+                        style="@style/ShadowTextStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppins_semibold"
                         android:textAlignment="center"
-                        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-                        android:textColor="@color/colorPrimary"
+                        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+                        android:textColor="#FFEB3B"
                         app:layout_constraintBottom_toBottomOf="@+id/team1Logo"
                         app:layout_constraintEnd_toEndOf="@+id/matchDate"
                         app:layout_constraintStart_toStartOf="@+id/matchDate"
@@ -161,12 +168,13 @@
 
                     <TextView
                         android:id="@+id/team1TV"
+                        style="@style/ShadowTextStyle"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="24dp"
                         android:layout_marginBottom="24dp"
-                        android:fontFamily="@font/poppins"
+                        android:fontFamily="@font/poppins_semibold"
                         android:singleLine="true"
                         android:textAlignment="center"
                         android:textColor="@color/white"
@@ -195,10 +203,11 @@
 
                     <TextView
                         android:id="@+id/team2TV"
+                        style="@style/ShadowTextStyle"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="16dp"
-                        android:fontFamily="@font/poppins"
+                        android:fontFamily="@font/poppins_semibold"
                         android:singleLine="true"
                         android:textAlignment="center"
                         android:textColor="@color/white"

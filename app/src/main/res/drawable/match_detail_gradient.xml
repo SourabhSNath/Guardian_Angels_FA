@@ -4,9 +4,9 @@
 
     <gradient
         android:angle="90"
-        android:startColor="#8D000000"
-        android:centerColor="#6B000000"
-        android:endColor="#16000000"
+        android:startColor="#4B000000"
+        android:centerColor="#25000000"
+        android:endColor="#00000000"
         />
 
     <corners android:radius="0dp" />
