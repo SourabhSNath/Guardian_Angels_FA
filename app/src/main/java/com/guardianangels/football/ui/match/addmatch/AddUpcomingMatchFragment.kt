@@ -120,12 +120,14 @@ class AddUpcomingMatchFragment : Fragment(R.layout.add_upcoming_match_fragment) 
             val time = timeEditText.text.toString()
             val tournamentName = binding.tournamentNameET.text.toString().trim()
             val locationName = binding.locationET.text.toString().trim()
+            Timber.d("Done Button clicked")
             if (team1Name.isNotEmpty()
                 && team2Name.isNotEmpty()
                 && team2Logo.drawable != null
                 && date.isNotEmpty() && time.isNotEmpty()
             ) {
                 if (editMode) {
+                    Timber.d("Done Button clicked: Edit Mode")
                     matchData!!.apply {
                         this.team1Name = team1Name
                         this.team2Name = team2Name
@@ -134,6 +136,7 @@ class AddUpcomingMatchFragment : Fragment(R.layout.add_upcoming_match_fragment) 
                     }
                     viewModel.updateMatchData(matchData, team)
                 } else {
+                    Timber.d("Done Button clicked: Add Mode")
                     viewModel.addMatchData(team1Name, team2Name, tournamentName, locationName, team)
                 }
             } else {
@@ -272,15 +275,12 @@ class AddUpcomingMatchFragment : Fragment(R.layout.add_upcoming_match_fragment) 
         binding.team2NameET.setText(match?.team2Name)
 
         if (match != null) {
-            val dateTimeEpoch = match.dateAndTime!!
-            val zonedDateTime = Instant.ofEpochSecond(dateTimeEpoch).atZone(ZoneId.systemDefault())
+            val zonedDateTime = viewModel.getZonedDateTime(match.dateAndTime!!, ZoneId.systemDefault())
             val localDate = zonedDateTime.toLocalDate()
             val localTime = zonedDateTime.toLocalTime()
 
             binding.dateET.setDate(localDate)
             binding.timeET.setTime(localTime)
-            viewModel.setDate(localDate)
-            viewModel.setTime(localTime)
         } else {
             binding.dateET.setText("")
             binding.timeET.setText("")
@@ -336,15 +336,14 @@ class AddUpcomingMatchFragment : Fragment(R.layout.add_upcoming_match_fragment) 
                 it.addOnPositiveButtonClickListener { selected ->
                     val localDate = Instant.ofEpochMilli(selected).atZone(ZoneId.systemDefault()).toLocalDate()
                     setDate(localDate)
+                    viewModel.setDate(localDate)
                 }
             }.show(parentFragmentManager, "Material Date Picker")
         }
     }
 
     private fun TextInputEditText.setDate(localDate: LocalDate) {
-        Timber.d("$localDate")
         setText(localDate.format(DateTimeFormatter.ofPattern("EEE, dd MMM yyyy")))
-        viewModel.setDate(localDate)
     }
 
 
@@ -365,6 +364,7 @@ class AddUpcomingMatchFragment : Fragment(R.layout.add_upcoming_match_fragment) 
                 val time12 = LocalTime.parse(time24, DateTimeFormatter.ofPattern("HH:mm"))
 
                 setTime(time12)
+                viewModel.setTime(time12)
             }
 
             picker.show(parentFragmentManager, "Material Time Picker")
@@ -372,10 +372,8 @@ class AddUpcomingMatchFragment : Fragment(R.layout.add_upcoming_match_fragment) 
     }
 
     private fun TextInputEditText.setTime(time12: LocalTime) {
-        Timber.d("$time12")
         val timeString = time12.format(DateTimeFormatter.ofPattern("hh:mm a"))
         setText(timeString)
-        viewModel.setTime(time12)
     }
 
     private fun disableButtonIfTeam1NotGA(team1: TextInputEditText, selectTeamButton: MaterialButton) {

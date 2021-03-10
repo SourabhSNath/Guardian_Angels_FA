@@ -16,9 +16,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.time.LocalDate
-import java.time.LocalTime
-import java.time.ZoneId
+import java.time.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -77,25 +75,23 @@ class AddUpcomingViewModel @Inject constructor(
             val date = dateChannel.poll()
             val time = timeChannel.poll()
 
-            if (date != null || time != null) {
+            val dateTime = date?.atTime(time)!!
+            val zoneID = ZoneId.systemDefault()
+            val epoch: Long = dateTime.atZone(zoneID).toEpochSecond()
 
-                val dateTime = date?.atTime(time)!!
-                val zoneID = ZoneId.systemDefault()
-                val epoch: Long = dateTime.atZone(zoneID).toEpochSecond()
+            Timber.d("$team1Name, $team2Name, $dateTime == $epoch, ${if (team.isEmpty()) "Players not selected" else team[0].playerName}")
 
-                Timber.d("$team1Name, $team2Name, $dateTime == $epoch, ${if (team.isEmpty()) "Players not selected" else team[0].playerName}")
+            val listOfIds = arrayListOf<String>()
+            team.sortedBy { it.playerType }.mapTo(listOfIds) { it.id!! } // Sort them by player type and get the ids.
 
-                val listOfIds = arrayListOf<String>()
-                team.sortedBy { it.playerType }.mapTo(listOfIds) { it.id!! } // Sort them by player type and get the ids.
+            val match = Match(team1Name, team2Name, dateAndTime = epoch, team1TeamIds = listOfIds)
+            if (tournamentName.isNotEmpty()) match.tournamentName = tournamentName
+            if (locationName.isNotEmpty()) match.locationName = locationName
 
-                val match = Match(team1Name, team2Name, dateAndTime = epoch, team1TeamIds = listOfIds)
-                if (tournamentName.isNotEmpty()) match.tournamentName = tournamentName
-                if (locationName.isNotEmpty()) match.locationName = locationName
-
-                matchRepository.addMatchData(match, team1ImageUri.value, team2ImageUri.value!!).collect {
-                    _matchUploadResult.postValue(it)
-                }
+            matchRepository.addMatchData(match, team1ImageUri.value, team2ImageUri.value!!).collect {
+                _matchUploadResult.postValue(it)
             }
+
         }
     }
 
@@ -104,26 +100,44 @@ class AddUpcomingViewModel @Inject constructor(
             val date = dateChannel.poll()
             val time = timeChannel.poll()
 
-            if (date != null || time != null) {
-
-                val dateTime = date?.atTime(time)!!
-                val zoneID = ZoneId.systemDefault()
-                val epoch: Long = dateTime.atZone(zoneID).toEpochSecond()
-
-                val listOfIds = arrayListOf<String>()
-                team.sortedBy { it.playerType }.mapTo(listOfIds) { it.id!! } // Sort them by player type and get the ids.
-
-                match.apply {
-                    dateAndTime = epoch
-                    team1TeamIds = listOfIds
+            Timber.d("Date: $date Time: $time")
+            val zoneId = ZoneId.systemDefault()
+            val matchDateTIme = match.dateAndTime!!
+            val dateTime: LocalDateTime? = when {
+                date != null && time == null -> {
+                    val localTime = getZonedDateTime(matchDateTIme, zoneId).toLocalTime()
+                    date.atTime(localTime)!!
                 }
+                time != null && date == null -> {
+                    val localDate = getZonedDateTime(matchDateTIme, zoneId).toLocalDate()
+                    localDate.atTime(time)
+                }
+                time != null && date != null -> {
+                    date.atTime(time)
+                }
+                else -> null
+            }
 
-                Timber.d("${team1ImageUri.value}, ${team2ImageUri.value}")
-                matchRepository.updateMatchData(match, team1ImageUri.value, team2ImageUri.value).collect {
+            val listOfIds = arrayListOf<String>()
+            team.sortedBy { it.playerType }.mapTo(listOfIds) { it.id!! } // Sort them by player type and get the ids.
+
+            /**
+             * If its null, the previous data will not be changed.
+             */
+            if (dateTime != null) {
+                match.dateAndTime = dateTime.atZone(zoneId).toEpochSecond()
+            }
+
+            match.team1TeamIds = listOfIds
+
+            Timber.d("${match.dateAndTime}")
+            Timber.d("${team1ImageUri.value}, ${team2ImageUri.value}")
+            matchRepository.updateMatchData(match, team1ImageUri.value, team2ImageUri.value)
+                .collect {
                     _matchUpdateResult.postValue(it)
                 }
-            }
         }
     }
 
+    fun getZonedDateTime(matchDateTime: Long, zoneId: ZoneId): ZonedDateTime = Instant.ofEpochSecond(matchDateTime).atZone(zoneId)
 }
