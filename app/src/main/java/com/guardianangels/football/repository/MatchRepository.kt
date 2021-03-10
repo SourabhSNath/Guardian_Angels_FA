@@ -76,7 +76,6 @@ class MatchRepository @Inject constructor(
         }
 
         var matchModel: Match? = null
-        Timber.d("Match id: ${matchModel?.matchID}")
         matchCollectionRef.document(match.matchID!!).set(match).onSuccessTask {
             matchCollectionRef.document(match.matchID!!).get()
                 .addOnSuccessListener {
@@ -149,7 +148,7 @@ class MatchRepository @Inject constructor(
 
             /* Get top 10 matches after deleting older matches */
             val matches: List<Match> = matchList()
-                .filter { it.isCompleted == false }
+                .filter { it.isCompleted == true }
                 .sortedByDescending { it.dateAndTime }
                 .deleteOlderCompletedMatches()
 
@@ -194,9 +193,12 @@ class MatchRepository @Inject constructor(
      * Delete operation.
      */
     private suspend fun deleteMatchFromFirebase(match: Match) {
-        matchCollectionRef.document(match.matchID!!).delete().onSuccessTask {
-            storage.getReferenceFromUrl(match.team1Logo!!).delete()
-            storage.getReferenceFromUrl(match.team2Logo!!).delete()
+        matchCollectionRef.document(match.matchID!!).delete().addOnSuccessListener {
+            val team1Logo = match.team1Logo!!
+            val team2Logo = match.team2Logo!!
+
+            if (team1Logo.isNotEmpty()) storage.getReferenceFromUrl(team1Logo).delete()
+            if (team2Logo.isNotEmpty()) storage.getReferenceFromUrl(team2Logo).delete()
         }.await()
     }
 
