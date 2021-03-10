@@ -82,10 +82,10 @@ class AddUpcomingViewModel @Inject constructor(
 
                 Timber.d("$team1Name, $team2Name, $dateTime == $epoch, ${if (team.isEmpty()) "Players not selected" else team[0].playerName}")
 
-                val listOfIds = arrayListOf<String>()
-                team.sortedBy { it.playerType }.mapTo(listOfIds) { it.id!! } // Sort them by player type and get the ids.
+                // Sort them by player type and get the ids.
+                val idList: List<String> = team.map { it.id!! }
 
-                val match = Match(team1Name, team2Name, dateAndTime = epoch, team1TeamIds = listOfIds)
+                val match = Match(team1Name, team2Name, dateAndTime = epoch, team1TeamIds = idList)
                 if (tournamentName.isNotEmpty()) match.tournamentName = tournamentName
                 if (locationName.isNotEmpty()) match.locationName = locationName
 
