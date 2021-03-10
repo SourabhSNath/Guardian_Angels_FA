@@ -9,12 +9,14 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import coil.load
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.guardianangels.football.R
 import com.guardianangels.football.data.Match
 import com.guardianangels.football.databinding.MatchDetailsFragmentBinding
 import com.guardianangels.football.network.NetworkState
 import com.guardianangels.football.ui.match.MatchTeamListAdapter
 import com.guardianangels.football.util.Constants
+import com.guardianangels.football.util.Constants.MATCH_DELETED_RESULT_KEY
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 import java.time.Instant
@@ -112,5 +114,39 @@ class MatchDetailsFragment : Fragment(R.layout.match_details_fragment) {
             }
         }
 
+        binding.deleteButton.setOnClickListener {
+            deleteConfirmation(matchInfo)
+        }
+
+        viewModel.deleteState.observe(viewLifecycleOwner) {
+            when (it) {
+                is NetworkState.Loading -> Timber.d("Loading")
+                is NetworkState.Success -> {
+                    Toast.makeText(requireContext(), "Match has been deleted", Toast.LENGTH_SHORT).show()
+                    findNavController().apply {
+                        previousBackStackEntry?.savedStateHandle?.set(MATCH_DELETED_RESULT_KEY, it.data)
+                        popBackStack()
+                    }
+                }
+                is NetworkState.Failed -> {
+                    Timber.d("deleteState: ${it.message}")
+                    Toast.makeText(requireContext(), "Failed Deleting : ${it.message}", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+    private fun deleteConfirmation(match: Match) {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Confirm Deletion")
+            .setMessage("Match will be permanently deleted.")
+            .setNeutralButton("Cancel") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .setPositiveButton("Delete") { dialog, _ ->
+                viewModel.deleteMatch(match)
+                dialog.dismiss()
+            }
+            .show()
     }
 }

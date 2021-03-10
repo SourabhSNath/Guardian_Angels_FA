@@ -6,12 +6,14 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
+import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.guardianangels.football.R
 import com.guardianangels.football.data.Match
 import com.guardianangels.football.databinding.MatchListFragmentBinding
 import com.guardianangels.football.network.NetworkState
 import com.guardianangels.football.util.Constants.BUNDLE_MATCH_UPLOAD_COMPLETE
+import com.guardianangels.football.util.Constants.MATCH_DELETED_RESULT_KEY
 import com.guardianangels.football.util.Constants.REQUEST_MATCH_UPLOAD_COMPLETE_KEY
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
@@ -24,9 +26,9 @@ class MatchListFragment : Fragment(R.layout.match_list_fragment) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        listenForFragmentResults()
-
         val binding = MatchListFragmentBinding.bind(view)
+        val navController = findNavController()
+        listenForFragmentResults(navController)
 
         val recyclerView = binding.recyclerview
         val adapter = UpcomingMatchListAdapter(::navigateToDetailsFragment)
@@ -37,7 +39,7 @@ class MatchListFragment : Fragment(R.layout.match_list_fragment) {
             binding.addMatchButton.apply {
                 visibility = View.VISIBLE
                 setOnClickListener {
-                    findNavController().navigate(MatchListFragmentDirections.actionMatchListFragmentToAddUpcomingMatchFragment())
+                    navController.navigate(MatchListFragmentDirections.actionMatchListFragmentToAddUpcomingMatchFragment())
                 }
             }
         }
@@ -65,9 +67,9 @@ class MatchListFragment : Fragment(R.layout.match_list_fragment) {
         }
     }
 
-    private fun listenForFragmentResults() {
+    private fun listenForFragmentResults(navController: NavController) {
         /**
-         * Reload the list if something was added or updated
+         * Reload the list if match was added or updated
          */
         setFragmentResultListener(REQUEST_MATCH_UPLOAD_COMPLETE_KEY) { _, bundle ->
             val result = bundle.getBoolean(BUNDLE_MATCH_UPLOAD_COMPLETE)
@@ -75,6 +77,14 @@ class MatchListFragment : Fragment(R.layout.match_list_fragment) {
                 viewModel.getUpcomingMatches()
             }
         }
+
+        /**
+         * Reload if match was deleted
+         */
+        navController.currentBackStackEntry?.savedStateHandle?.getLiveData<Boolean>(MATCH_DELETED_RESULT_KEY)
+            ?.observe(viewLifecycleOwner) {
+                if (it) viewModel.getUpcomingMatches()
+            }
     }
 
     private fun showToast(message: String) {
