@@ -1,4 +1,4 @@
-package com.guardianangels.football.ui.match
+package com.guardianangels.football.ui.match.upcomingmatches
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

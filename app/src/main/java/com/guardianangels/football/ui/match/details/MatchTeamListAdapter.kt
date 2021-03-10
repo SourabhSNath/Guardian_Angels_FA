@@ -1,4 +1,4 @@
-package com.guardianangels.football.ui.match
+package com.guardianangels.football.ui.match.details
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

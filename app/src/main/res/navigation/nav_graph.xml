@@ -110,7 +110,7 @@
 
     <fragment
         android:id="@+id/matchListFragment"
-        android:name="com.guardianangels.football.ui.match.MatchListFragment"
+        android:name="com.guardianangels.football.ui.match.upcomingmatches.MatchListFragment"
         android:label="MatchListFragment"
         tools:layout="@layout/match_list_fragment">
         <action

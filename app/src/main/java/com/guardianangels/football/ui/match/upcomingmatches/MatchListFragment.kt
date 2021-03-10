@@ -1,4 +1,4 @@
-package com.guardianangels.football.ui.match
+package com.guardianangels.football.ui.match.upcomingmatches
 
 import android.os.Bundle
 import android.view.View
