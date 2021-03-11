@@ -42,17 +42,17 @@ class LoginViewModel @Inject constructor(
                     _loginState.postValue(NetworkState.success(true))
                 } else {
                     Timber.d("Failed Login")
-                    _loginState.postValue(NetworkState.failed("Log in Failed. Please try again."))
+                    _loginState.postValue(NetworkState.failed(Exception("Failed Login"), "Log in Failed. Please try again."))
                 }
             } catch (e: Exception) {
                 Timber.d(e.message.toString())
-                _loginState.postValue(NetworkState.failed(e.message.toString()))
+                _loginState.postValue(NetworkState.failed(e, e.message.toString()))
             }
 
+        }
     }
-}
 
-fun logout() {
-    auth.signOut()
-}
+    fun logout() {
+        auth.signOut()
+    }
 }

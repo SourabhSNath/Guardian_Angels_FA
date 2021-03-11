@@ -50,7 +50,7 @@ class TeamRepository @Inject constructor(
         emit(NetworkState.success(true))
 
     }.catch {
-        emit(NetworkState.failed(it.message.toString()))
+        emit(NetworkState.failed(it, it.message.toString()))
     }.flowOn(Dispatchers.IO)
 
 
@@ -75,7 +75,7 @@ class TeamRepository @Inject constructor(
 
         emit(NetworkState.success(playerModel))
     }.catch {
-        emit(NetworkState.failed(it.message.toString()))
+        emit(NetworkState.failed(it, it.message.toString()))
     }.flowOn(Dispatchers.IO)
 
 
@@ -129,7 +129,7 @@ class TeamRepository @Inject constructor(
 
         emit(NetworkState.success(sectionedPlayerRecyclerItem))
     }.catch {
-        emit(NetworkState.failed(it.message.toString()))
+        emit(NetworkState.failed(it, it.message.toString()))
     }.flowOn(Dispatchers.Default)
 
 
@@ -146,7 +146,7 @@ class TeamRepository @Inject constructor(
 
         emit(NetworkState.success(players))
     }.catch {
-        emit(NetworkState.failed(it.message.toString()))
+        emit(NetworkState.failed(it, it.message.toString()))
     }.flowOn(Dispatchers.Default)
 
     /**
@@ -173,7 +173,7 @@ class TeamRepository @Inject constructor(
         }
         emit(NetworkState.success(true))
     }.catch {
-        emit(NetworkState.failed(it.message.toString()))
+        emit(NetworkState.failed(it, it.message.toString()))
     }.flowOn(Dispatchers.IO)
 
 

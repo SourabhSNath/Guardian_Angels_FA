@@ -43,7 +43,7 @@ class MatchRepository @Inject constructor(
 
         emit(NetworkState.success(true))
     }.catch {
-        emit(NetworkState.failed(it.message.toString()))
+        emit(NetworkState.failed(it, it.message.toString()))
     }.flowOn(Dispatchers.IO)
 
 
@@ -86,7 +86,7 @@ class MatchRepository @Inject constructor(
         emit(NetworkState.success(matchModel!!))
 
     }.catch {
-        emit(NetworkState.failed(it.message.toString()))
+        emit(NetworkState.failed(it, it.message.toString()))
     }.flowOn(Dispatchers.IO)
 
 
@@ -124,47 +124,59 @@ class MatchRepository @Inject constructor(
     fun getAllUpcomingMatches() = flow {
         emit(NetworkState.loading())
 
-        val matches = matchList()
-            .filter { it.isCompleted == null || it.isCompleted == false }
-            .sortedBy { it.dateAndTime }
+        val matches = getUpcomingMatchList()
 
         emit(NetworkState.success(matches))
     }.catch {
-        emit(NetworkState.failed(it.message.toString()))
-    }.flowOn(Dispatchers.IO)
+        emit(NetworkState.failed(it, it.message.toString()))
+    }.flowOn(Dispatchers.Default)
+
+    /**
+     * Get nextUpcomingMatch, to be displayed in HomeFragment
+     */
+    fun getNextUpcomingMatch() = flow {
+        emit(NetworkState.loading())
+        val match = getUpcomingMatchList()[0]
+        emit(NetworkState.success(match))
+    }.catch {
+        emit(NetworkState.failed(it, it.message.toString()))
+    }.flowOn(Dispatchers.Default)
+
+
+    /**
+     * Get a list of first 10 completed matches.
+     */
+    fun getCompletedMatches() = flow {
+        emit(NetworkState.loading())
+
+        /* Get top 10 matches after deleting older matches */
+        val matches: List<Match> = getMatchList()
+            .filter { it.isCompleted == true }
+            .sortedByDescending { it.dateAndTime }
+            .deleteOlderCompletedMatches()
+
+        emit(NetworkState.success(matches))
+
+    }.catch {
+        emit(NetworkState.failed(it, it.message.toString()))
+    }.flowOn(Dispatchers.Default)
+
+    /**
+     * List of all matches
+     */
+    private suspend fun getMatchList() = withContext(Dispatchers.IO) {
+        matchCollectionRef.get().await().map { it.toObject(Match::class.java).setId(it.id) }
+    }
+
+    /**
+     * Get upcoming matches
+     */
+    private suspend fun getUpcomingMatchList() = getMatchList().filter { it.isCompleted == null || it.isCompleted == false }.sortedBy { it.dateAndTime }
 
     private fun Match.setId(id: String): Match {
         this.matchID = id
         return this
     }
-
-    /**
-     * Get a list of first 10 completed matches.
-     */
-    fun getAllCompletedMatches() = flow {
-        emit(NetworkState.loading())
-
-        withContext(Dispatchers.Default) {
-
-            /* Get top 10 matches after deleting older matches */
-            val matches: List<Match> = matchList()
-                .filter { it.isCompleted == true }
-                .sortedByDescending { it.dateAndTime }
-                .deleteOlderCompletedMatches()
-
-            emit(NetworkState.success(matches))
-        }
-    }.catch {
-        emit(NetworkState.failed(it.message.toString()))
-    }.flowOn(Dispatchers.IO)
-
-    /**
-     * List of all matches
-     */
-    private suspend fun matchList() = matchCollectionRef.get().await().map {
-        it.toObject(Match::class.java).setId(it.id)
-    }
-
 
     /**
      * Delete a match
@@ -174,7 +186,7 @@ class MatchRepository @Inject constructor(
         deleteMatchFromFirebase(match)
         emit(NetworkState.success(true))
     }.catch {
-        emit(NetworkState.failed(it.message.toString()))
+        emit(NetworkState.failed(it, it.message.toString()))
     }.flowOn(Dispatchers.IO)
 
     /**
