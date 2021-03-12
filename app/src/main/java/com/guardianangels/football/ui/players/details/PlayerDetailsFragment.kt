@@ -6,18 +6,25 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import coil.load
+import com.google.firebase.auth.FirebaseAuth
 import com.guardianangels.football.R
 import com.guardianangels.football.data.Player
 import com.guardianangels.football.data.PlayerType
 import com.guardianangels.football.databinding.PlayerDetailsFragmentBinding
 import com.guardianangels.football.util.Converters.Companion.getPlayerTypeString
+import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class PlayerDetailsFragment : Fragment(R.layout.player_details_fragment) {
 
     companion object {
         private const val TAG = "PlayerDetailsFragment"
     }
+
+    @Inject
+    lateinit var auth: FirebaseAuth
 
     /**
      * Can receive data from PlayerListFragment and AddPlayerFragment.
@@ -37,8 +44,12 @@ class PlayerDetailsFragment : Fragment(R.layout.player_details_fragment) {
         val categorySpecificTitle = binding.categorySpecifcTitle
         val categorySpecificScore = binding.totalCategorySpecificScore
 
-        binding.editButton.setOnClickListener {
-            findNavController().navigate(PlayerDetailsFragmentDirections.actionPlayerDetailsFragmentToAddPlayerFragment(playerModel))
+        if (auth.currentUser != null) {
+            binding.editButton.setOnClickListener {
+                findNavController().navigate(PlayerDetailsFragmentDirections.actionPlayerDetailsFragmentToAddPlayerFragment(playerModel))
+            }
+        } else {
+            binding.editButton.visibility = View.GONE
         }
 
         binding.playerImage.load(playerModel.remoteUri)

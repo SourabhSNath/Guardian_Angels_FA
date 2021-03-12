@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import coil.load
@@ -44,8 +45,11 @@ class MatchDetailsFragment : Fragment(R.layout.match_details_fragment) {
                 matchInfo = result
             }
 
-        binding.editButton.setOnClickListener {
-            navController.navigate(MatchDetailsFragmentDirections.actionMatchDetailsFragmentToAddUpcomingMatchFragment(matchInfo))
+        if (!viewModel.isUserLoggedIn) {
+            binding.editButton.visibility = View.GONE
+            binding.deleteButton.visibility = View.GONE
+        } else {
+            setupButtons(binding, navController, matchInfo)
         }
 
         val team1LogoLink = matchInfo.team1Logo
@@ -114,9 +118,6 @@ class MatchDetailsFragment : Fragment(R.layout.match_details_fragment) {
             }
         }
 
-        binding.deleteButton.setOnClickListener {
-            deleteConfirmation(matchInfo)
-        }
 
         viewModel.deleteState.observe(viewLifecycleOwner) {
             when (it) {
@@ -134,6 +135,20 @@ class MatchDetailsFragment : Fragment(R.layout.match_details_fragment) {
                     Toast.makeText(requireContext(), "Failed Deleting : ${it.message}", Toast.LENGTH_SHORT).show()
                 }
             }
+        }
+    }
+
+    private fun setupButtons(
+        binding: MatchDetailsFragmentBinding,
+        navController: NavController,
+        matchInfo: Match
+    ) {
+        binding.editButton.setOnClickListener {
+            navController.navigate(MatchDetailsFragmentDirections.actionMatchDetailsFragmentToAddUpcomingMatchFragment(matchInfo))
+        }
+
+        binding.deleteButton.setOnClickListener {
+            deleteConfirmation(matchInfo)
         }
     }
 

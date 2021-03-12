@@ -21,6 +21,8 @@ class MatchDetailsViewModel @Inject constructor(private val matchRepository: Mat
     private val _players = MutableLiveData<NetworkState<List<Player>>>()
     val players: LiveData<NetworkState<List<Player>>> get() = _players
 
+    val isUserLoggedIn: Boolean = matchRepository.auth.currentUser != null
+
     fun getPlayers(team1Ids: List<String>) {
         viewModelScope.launch {
             teamRepository.getPlayers(team1Ids).collect {
@@ -33,7 +35,7 @@ class MatchDetailsViewModel @Inject constructor(private val matchRepository: Mat
     val deleteState: LiveData<NetworkState<Boolean>> get() = _deleteState
     fun deleteMatch(match: Match) {
         viewModelScope.launch {
-            matchRepository.deleteMatch(match).collect{
+            matchRepository.deleteMatch(match).collect {
                 _deleteState.value = it
             }
         }
