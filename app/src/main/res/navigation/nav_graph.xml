@@ -19,6 +19,9 @@
         <action
             android:id="@+id/action_home_to_matchDetailsFragment"
             app:destination="@id/matchDetailsFragment" />
+        <action
+            android:id="@+id/action_home_to_addUpcomingMatchFragment"
+            app:destination="@id/addUpcomingMatchFragment" />
     </fragment>
 
     <fragment

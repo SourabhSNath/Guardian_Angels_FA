@@ -20,4 +20,7 @@ object Constants {
     const val PLAYER_SELECTED_KEY = "playerSelectedKey"
     const val MATCH_UPDATED_RESULT_KEY = "matchUpdatedKey"
     const val MATCH_DELETED_RESULT_KEY = "matchDeletedKey"
+
+    /*** For home fragment ***/
+    const val RELOAD_NEXT_UPCOMING_KEY = "reloadNextUpcomingWhenAddedDeletedUpadatedKey"
 }

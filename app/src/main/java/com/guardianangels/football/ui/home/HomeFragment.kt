@@ -11,6 +11,7 @@ import com.guardianangels.football.R
 import com.guardianangels.football.data.Match
 import com.guardianangels.football.databinding.HomeFragmentBinding
 import com.guardianangels.football.network.NetworkState
+import com.guardianangels.football.util.Constants.RELOAD_NEXT_UPCOMING_KEY
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 import java.time.Instant
@@ -31,8 +32,7 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
 
         val navController = findNavController()
 
-
-        observeViewModel(navController)
+        observeData(navController)
 
         /* Hide the login fragment behind the title. */
         binding.appTitle.setOnLongClickListener {
@@ -46,7 +46,19 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
 
     }
 
-    private fun observeViewModel(navController: NavController) {
+    private fun observeData(navController: NavController) {
+
+        /**
+         * Reload next upcoming match when a match is Added, Updated or Deleted.
+         */
+        navController.currentBackStackEntry?.savedStateHandle?.getLiveData<Boolean>(RELOAD_NEXT_UPCOMING_KEY)?.observe(viewLifecycleOwner) {
+            if (it) {
+                Timber.d("Reload UpcomingMatchCard")
+                viewModel.getNextUpcomingMatch()
+                navController.currentBackStackEntry?.savedStateHandle?.set(RELOAD_NEXT_UPCOMING_KEY, false)
+            }
+        }
+
         /**
          * Get the next upcoming match
          */
@@ -56,21 +68,24 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
                     Timber.d("Loading")
                     binding.loadingProgress.visibility = View.VISIBLE
                     binding.addAMatchTV.visibility = View.GONE
-                    setUpcomingViewsVisibiltiy(false)
+                    setUpcomingViewsVisibiltiy(View.GONE)
                 }
                 is NetworkState.Success -> {
                     setupUpComingMatchCard(it.data, navController)
                     binding.loadingProgress.visibility = View.GONE
                     binding.addAMatchTV.visibility = View.GONE
-                    setUpcomingViewsVisibiltiy(true)
+                    setUpcomingViewsVisibiltiy(View.VISIBLE)
                 }
                 is NetworkState.Failed -> {
                     Timber.d("${it.exception}, ${it.message}")
                     if (it.exception is IndexOutOfBoundsException) {
                         binding.loadingProgress.visibility = View.GONE
                         binding.addAMatchTV.visibility = View.VISIBLE
-                        binding.moreUpcomingTV.visibility = View.GONE
-                        setUpcomingViewsVisibiltiy(false)
+                        binding.upcomingMatchCard.setOnClickListener {
+                            Timber.d("Clicked Upcoming match card")
+                            navController.navigate(HomeFragmentDirections.actionHomeToAddUpcomingMatchFragment())
+                        }
+                        setUpcomingViewsVisibiltiy(View.GONE)
                     }
                 }
             }
@@ -117,8 +132,7 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
     /**
      * Control the visibility of the imageViews and text.
      */
-    private fun setUpcomingViewsVisibiltiy(visiblity: Boolean) {
-        val isVisible = if (visiblity) View.VISIBLE else View.GONE
+    private fun setUpcomingViewsVisibiltiy(isVisible: Int) {
         binding.bg.visibility = isVisible
         binding.team1Logo.visibility = isVisible
         binding.team2Logo.visibility = isVisible
@@ -127,6 +141,7 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
         binding.vs.visibility = isVisible
         binding.matchDate.visibility = isVisible
         binding.matchKickOffTime.visibility = isVisible
+        binding.moreUpcomingTV.visibility = isVisible
     }
 
     override fun onDestroyView() {

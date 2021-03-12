@@ -29,6 +29,7 @@ import com.guardianangels.football.network.NetworkState
 import com.guardianangels.football.util.Constants.BUNDLE_MATCH_UPLOAD_COMPLETE
 import com.guardianangels.football.util.Constants.MATCH_UPDATED_RESULT_KEY
 import com.guardianangels.football.util.Constants.PLAYER_SELECTED_KEY
+import com.guardianangels.football.util.Constants.RELOAD_NEXT_UPCOMING_KEY
 import com.guardianangels.football.util.Constants.REQUEST_MATCH_UPLOAD_COMPLETE_KEY
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
@@ -207,6 +208,7 @@ class AddUpcomingMatchFragment : Fragment(R.layout.add_upcoming_match_fragment) 
 
                     /* Send a message to matchListFragment that a player has been added, so that it can refresh the list */
                     setFragmentResult(REQUEST_MATCH_UPLOAD_COMPLETE_KEY, bundleOf(BUNDLE_MATCH_UPLOAD_COMPLETE to true))
+                    findNavController().getBackStackEntry(R.id.home).savedStateHandle.set(RELOAD_NEXT_UPCOMING_KEY, true)
                     showToast("Complete")
                 }
                 is NetworkState.Failed -> {
@@ -221,11 +223,12 @@ class AddUpcomingMatchFragment : Fragment(R.layout.add_upcoming_match_fragment) 
                 is NetworkState.Loading -> Timber.tag(TAG).d("Add result Loading")
                 is NetworkState.Success -> {
 
-                    /* Send a message to matchListFragment that a player has been added, so that it can refresh the list */
-                    /*setFragmentResult(REQUEST_MATCH_UPDATE_COMPLETE_KEY, bundleOf(BUNDLE_MATCH_UPDATE_COMPLETE to true))*/
-                    val navController = findNavController()
-                    navController.previousBackStackEntry?.savedStateHandle?.set(MATCH_UPDATED_RESULT_KEY, it.data)
-                    navController.popBackStack()
+                    /* Send a message to matchListFragment, homeFragment that a player has been added, so that it can refresh the list */
+                    findNavController().apply {
+                        previousBackStackEntry?.savedStateHandle?.set(MATCH_UPDATED_RESULT_KEY, it.data)
+                        getBackStackEntry(R.id.home).savedStateHandle.set(RELOAD_NEXT_UPCOMING_KEY, true)
+                        popBackStack()
+                    }
                     showToast("Complete")
                 }
                 is NetworkState.Failed -> {

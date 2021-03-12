@@ -16,6 +16,7 @@ import com.guardianangels.football.databinding.MatchDetailsFragmentBinding
 import com.guardianangels.football.network.NetworkState
 import com.guardianangels.football.util.Constants
 import com.guardianangels.football.util.Constants.MATCH_DELETED_RESULT_KEY
+import com.guardianangels.football.util.Constants.RELOAD_NEXT_UPCOMING_KEY
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 import java.time.Instant
@@ -124,6 +125,7 @@ class MatchDetailsFragment : Fragment(R.layout.match_details_fragment) {
                     Toast.makeText(requireContext(), "Match has been deleted", Toast.LENGTH_SHORT).show()
                     findNavController().apply {
                         previousBackStackEntry?.savedStateHandle?.set(MATCH_DELETED_RESULT_KEY, it.data)
+                        getBackStackEntry(R.id.home).savedStateHandle.set(RELOAD_NEXT_UPCOMING_KEY, true)
                         popBackStack()
                     }
                 }
