@@ -1,70 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:orientation="horizontal">
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/button"
-            style="@style/IconButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:drawableEnd="@drawable/ic_back_arrow"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_weight="1"
-            android:text="@string/upcoming"
-            android:textAppearance="@style/TitleTextStyle"
-            app:layout_constraintBaseline_toBaselineOf="@+id/button"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/button" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/editButton"
-            style="@style/IconButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:drawableEnd="@drawable/ic_edit"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/deleteButton"
-            style="@style/IconButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="24dp"
-            android:drawableEnd="@drawable/ic_delete" />
-
-    </LinearLayout>
-
+    android:layout_height="match_parent">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal"
+                app:layout_scrollFlags="scroll">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/backButton"
+                    style="@style/IconButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:drawableEnd="@drawable/ic_back_arrow"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_weight="1"
+                    android:text="@string/upcoming"
+                    android:textAppearance="@style/TitleTextStyle"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/button"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/button" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/editButton"
+                    style="@style/IconButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:drawableEnd="@drawable/ic_edit"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/deleteButton"
+                    style="@style/IconButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="24dp"
+                    android:drawableEnd="@drawable/ic_delete" />
+
+            </LinearLayout>
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/upcomingMatchCard"
@@ -126,11 +126,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppins_semibold"
+                        android:shadowColor="@color/white"
                         android:text="FRI 22 JAN"
                         android:textAlignment="center"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
                         android:textColor="@color/black"
-                        android:shadowColor="@color/white"
                         app:layout_constraintEnd_toStartOf="@+id/team2Logo"
                         app:layout_constraintHorizontal_bias="0.5"
                         app:layout_constraintStart_toEndOf="@+id/team1Logo"
@@ -284,9 +284,23 @@
                 android:layout_marginEnd="24dp"
                 android:clipToPadding="false"
                 android:nestedScrollingEnabled="false"
-                android:paddingBottom="56dp"
+                android:paddingBottom="70dp"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:listitem="@layout/match_selected_players" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
-</LinearLayout>
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/matchCompleteButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="24dp"
+        android:backgroundTint="@color/pink"
+        android:drawableEnd="@drawable/ic_done"
+        android:fontFamily="@font/poppins"
+        android:text="Match Complete"
+        android:textColor="@color/white"
+        tools:ignore="RtlHardcoded" />
+</FrameLayout>
