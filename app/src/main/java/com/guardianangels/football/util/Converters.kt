@@ -5,12 +5,6 @@ import com.guardianangels.football.data.PlayerType
 class Converters {
     companion object {
 
-        /**
-         * Get the number from a String without NumberFormatException.
-         */
-        fun String.toEmptySafeInt(): Int = if (this == "") 0 else this.toInt()
-        fun String.toEmptySafeFloat(): Float = if (this == "") 0f else this.toFloat()
-
         fun PlayerType.getPlayerTypeString(singular: Boolean = false): String {
             return when (this) {
                 PlayerType.GOAL_KEEPER -> if (!singular) "${Constants.GOAL_KEEPER}s" else Constants.GOAL_KEEPER
