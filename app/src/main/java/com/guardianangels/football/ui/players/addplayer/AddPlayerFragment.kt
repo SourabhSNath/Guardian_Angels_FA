@@ -19,14 +19,10 @@ import com.guardianangels.football.data.Player
 import com.guardianangels.football.data.PlayerType
 import com.guardianangels.football.databinding.AddPlayerFragmentBinding
 import com.guardianangels.football.network.NetworkState
+import com.guardianangels.football.util.*
 import com.guardianangels.football.util.Constants.BUNDLE_PLAYER_UPLOAD_COMPLETE
 import com.guardianangels.football.util.Constants.COACH
 import com.guardianangels.football.util.Constants.REQUEST_PLAYER_UPLOAD_COMPLETE_KEY
-import com.guardianangels.football.util.Converters.Companion.getPlayerType
-import com.guardianangels.football.util.Converters.Companion.getPlayerTypeString
-import com.guardianangels.football.util.Converters.Companion.toEmptySafeFloat
-import com.guardianangels.football.util.Converters.Companion.toEmptySafeInt
-import com.guardianangels.football.util.toStringOrEmpty
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 

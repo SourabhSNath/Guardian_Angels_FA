@@ -11,7 +11,7 @@ import com.guardianangels.football.R
 import com.guardianangels.football.data.Player
 import com.guardianangels.football.data.PlayerType
 import com.guardianangels.football.databinding.PlayerDetailsFragmentBinding
-import com.guardianangels.football.util.Converters.Companion.getPlayerTypeString
+import com.guardianangels.football.util.getPlayerTypeString
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 import javax.inject.Inject
