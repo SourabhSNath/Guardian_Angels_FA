@@ -7,7 +7,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.guardianangels.football.data.Player
 import com.guardianangels.football.data.SectionedPlayerRecyclerItem
 import com.guardianangels.football.network.NetworkState
-import com.guardianangels.football.util.Converters.Companion.getPlayerTypeString
+import com.guardianangels.football.util.getPlayerTypeString
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
