@@ -31,6 +31,7 @@ import com.guardianangels.football.util.Constants.MATCH_UPDATED_RESULT_KEY
 import com.guardianangels.football.util.Constants.PLAYER_SELECTED_KEY
 import com.guardianangels.football.util.Constants.RELOAD_NEXT_UPCOMING_KEY
 import com.guardianangels.football.util.Constants.REQUEST_MATCH_UPLOAD_COMPLETE_KEY
+import com.guardianangels.football.util.getString
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 import java.time.Instant
@@ -115,12 +116,12 @@ class AddUpcomingMatchFragment : Fragment(R.layout.add_upcoming_match_fragment) 
 
 
         binding.doneButton.setOnClickListener {
-            val team1Name = team1.text.toString().trim()
-            val team2Name = binding.team2NameET.text.toString().trim()
+            val team1Name = team1.getString()
+            val team2Name = binding.team2NameET.getString()
             val date = dateEditText.text.toString()
             val time = timeEditText.text.toString()
-            val tournamentName = binding.tournamentNameET.text.toString().trim()
-            val locationName = binding.locationET.text.toString().trim()
+            val tournamentName = binding.tournamentNameET.getString()
+            val locationName = binding.locationET.getString()
             Timber.d("Done Button clicked")
             if (team1Name.isNotEmpty()
                 && team2Name.isNotEmpty()
