@@ -80,12 +80,19 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
                     Timber.d("${it.exception}, ${it.message}")
                     if (it.exception is IndexOutOfBoundsException) {
                         binding.loadingProgress.visibility = View.GONE
-                        binding.addAMatchTV.visibility = View.VISIBLE
-                        binding.upcomingMatchCard.setOnClickListener {
-                            Timber.d("Clicked Upcoming match card")
-                            navController.navigate(HomeFragmentDirections.actionHomeToAddUpcomingMatchFragment())
+
+                        if (viewModel.isUserLoggedIn()) {
+                            binding.addAMatchTV.visibility = View.VISIBLE
+                            binding.upcomingMatchCard.setOnClickListener {
+                                Timber.d("Clicked Upcoming match card")
+                                navController.navigate(HomeFragmentDirections.actionHomeToAddUpcomingMatchFragment())
+                            }
+                            setUpcomingViewsVisibiltiy(View.GONE)
+                        } else {
+                            binding.upcomingMatchCard.visibility = View.GONE
+                            binding.upcomingTV.visibility = View.GONE
+                            binding.moreUpcomingTV.visibility = View.GONE
                         }
-                        setUpcomingViewsVisibiltiy(View.GONE)
                     }
                 }
             }

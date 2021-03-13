@@ -1,6 +1,9 @@
 package com.guardianangels.football.ui.home
 
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.guardianangels.football.data.Match
 import com.guardianangels.football.network.NetworkState
 import com.guardianangels.football.repository.MatchRepository
@@ -18,6 +21,8 @@ class HomeViewModel @Inject constructor(private val matchRepository: MatchReposi
     init {
         getNextUpcomingMatch()
     }
+
+    fun isUserLoggedIn() = matchRepository.auth.currentUser != null
 
     fun getNextUpcomingMatch() {
         viewModelScope.launch {
