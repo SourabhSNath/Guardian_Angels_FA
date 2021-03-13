@@ -8,3 +8,9 @@ fun Any?.toStringOrEmpty(): String {
     }
     return this?.toString() ?: ""
 }
+
+/**
+ * Get the number from a String without NumberFormatException.
+ */
+fun String.toEmptySafeInt(): Int = if (this == "") 0 else this.toInt()
+fun String.toEmptySafeFloat(): Float = if (this == "") 0f else this.toFloat()
