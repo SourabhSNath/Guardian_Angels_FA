@@ -1,5 +1,7 @@
 package com.guardianangels.football.util
 
+import android.widget.TextView
+
 fun Any?.toStringOrEmpty(): String {
     if (this is Number) {
         if (this == 0 || this == 0.0) {
@@ -8,6 +10,8 @@ fun Any?.toStringOrEmpty(): String {
     }
     return this?.toString() ?: ""
 }
+
+fun TextView.getString() = this.text.toString().trim()
 
 /**
  * Get the number from a String without NumberFormatException.
