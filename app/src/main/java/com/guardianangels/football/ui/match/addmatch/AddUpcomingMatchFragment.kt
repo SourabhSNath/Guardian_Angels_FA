@@ -108,7 +108,6 @@ class AddUpcomingMatchFragment : Fragment(R.layout.add_upcoming_match_fragment) 
                         visibility = View.VISIBLE
                         text = result.size.toString()
                     }
-                    Timber.d("${result.map { it.playerName }}")
                 }
                 adapter.submitList(result)
                 team = result
@@ -140,6 +139,7 @@ class AddUpcomingMatchFragment : Fragment(R.layout.add_upcoming_match_fragment) 
                 } else {
                     Timber.d("Done Button clicked: Add Mode")
                     viewModel.addMatchData(team1Name, team2Name, tournamentName, locationName, team)
+                    observeAddedResultLiveData()
                 }
             } else {
                 when {
@@ -185,20 +185,7 @@ class AddUpcomingMatchFragment : Fragment(R.layout.add_upcoming_match_fragment) 
         observeViewModel()
     }
 
-
-    private fun observeViewModel() {
-        viewModel.team1ImageUri.observe(viewLifecycleOwner) {
-            it?.let {
-                binding.team1Image.load(it)
-            }
-        }
-
-        viewModel.team2ImageUri.observe(viewLifecycleOwner) {
-            it?.let {
-                binding.team2Image.load(it)
-            }
-        }
-
+    private fun observeAddedResultLiveData() {
         viewModel.matchUploadResult.observe(viewLifecycleOwner) {
             when (it) {
                 is NetworkState.Loading -> Timber.tag(TAG).d("Add result Loading")
@@ -216,6 +203,21 @@ class AddUpcomingMatchFragment : Fragment(R.layout.add_upcoming_match_fragment) 
                     Timber.d(it.message)
                     showToast(it.message)
                 }
+            }
+        }
+    }
+
+
+    private fun observeViewModel() {
+        viewModel.team1ImageUri.observe(viewLifecycleOwner) {
+            it?.let {
+                binding.team1Image.load(it)
+            }
+        }
+
+        viewModel.team2ImageUri.observe(viewLifecycleOwner) {
+            it?.let {
+                binding.team2Image.load(it)
             }
         }
 
@@ -247,19 +249,15 @@ class AddUpcomingMatchFragment : Fragment(R.layout.add_upcoming_match_fragment) 
      */
     private fun setUpFields(match: Match? = null) {
 
-        if (match?.team1Logo.isNullOrEmpty()) {
+        if (match?.team1Logo.isNullOrEmpty())
             binding.team1Image.load(R.drawable.gaurdian_angels)
-        } else {
-            /*viewModel.team1Image(Uri.parse(match?.team1Logo))*/
+        else
             binding.team1Image.load(match?.team1Logo)
-        }
 
         if (match?.team2Logo.isNullOrEmpty())
             binding.team2Image.setImageDrawable(null)
-        else {
+        else
             binding.team2Image.load(match?.team2Logo)
-            /*viewModel.team2Image(Uri.parse(match?.team2Logo))*/
-        }
 
         val guardianAngels = getString(R.string.guardian_angels)
 
