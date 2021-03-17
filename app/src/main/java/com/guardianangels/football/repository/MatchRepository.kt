@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import timber.log.Timber
+import java.util.*
 import javax.inject.Inject
 
 class MatchRepository @Inject constructor(
@@ -55,26 +56,53 @@ class MatchRepository @Inject constructor(
 
         if (team1Logo != null) {
 
-            // Delete the previous team 1 logo from storage
             val remoteTeam1Logo = match.team1Logo!!
-            if (remoteTeam1Logo.isNotEmpty()) {
-                storage.getReferenceFromUrl(remoteTeam1Logo).delete().await()
-            }
             match.setTeam1ImageUrl(team1Logo)
+
+            if (remoteTeam1Logo.isNotEmpty()) {
+                /* Delete the previous team 1 logo from storage,
+                 * No check can be done to see if the logos are the same since different UUIDs are generated each time,
+                 * and a different file can have the same name. */
+                storage.getReferenceFromUrl(remoteTeam1Logo).delete().await()
+                Timber.d("Deleted Previous Team1 logo")
+            }
         }
 
         if (team2Logo != null) {
 
-            // Delete the previous team 2 logo from storage
             val remoteTeam2Logo = match.team2Logo!!
+            match.setTeam2ImageUrl(team2Logo)
+
             if (remoteTeam2Logo.isNotEmpty()) {
-                storage.getReferenceFromUrl(remoteTeam2Logo).delete().await()
-                Timber.d("Deleted Previous Team2 Image")
+                storage.getReferenceFromUrl(remoteTeam2Logo).delete().await() // Delete the previous team 2 logo from storage
+                Timber.d("Deleted Previous Team2 Logo")
             }
 
-            match.setTeam2ImageUrl(team2Logo)
         }
 
+        val matchModel: Match? = updateFirestoreMatch(match)
+        emit(NetworkState.success(matchModel!!))
+
+    }.catch {
+        emit(NetworkState.failed(it, it.message.toString()))
+    }.flowOn(Dispatchers.IO)
+
+    /**
+     * Update the match when it's over.
+     * Return the list of Team members, this will be used in the next step where there stats would be updated.
+     */
+    fun updateCompletedMatch(match: Match) = flow {
+        emit(NetworkState.loading())
+
+        val matchModel = updateFirestoreMatch(match)
+        emit(NetworkState.success(matchModel?.team1TeamIds))
+
+    }.catch {
+        emit(NetworkState.failed(it, it.message.toString()))
+    }.flowOn(Dispatchers.IO)
+
+
+    private suspend fun updateFirestoreMatch(match: Match): Match? {
         var matchModel: Match? = null
         matchCollectionRef.document(match.matchID!!).set(match).onSuccessTask {
             matchCollectionRef.document(match.matchID!!).get()
@@ -82,33 +110,27 @@ class MatchRepository @Inject constructor(
                     matchModel = it.toObject(Match::class.java)?.setId(it.id)!!
                 }
         }.await()
-
-        emit(NetworkState.success(matchModel!!))
-
-    }.catch {
-        emit(NetworkState.failed(it, it.message.toString()))
-    }.flowOn(Dispatchers.IO)
+        return matchModel
+    }
 
 
     /**
      * Set the image download url to the Upcoming Match model before uploading it to firestore.
      */
     private suspend inline fun Match.setTeam1ImageUrl(uri: Uri) {
-        val teamImageDownloadUrl = getUri(uri)
-        team1Logo = teamImageDownloadUrl
+        team1Logo = getUri(uri)
     }
 
     private suspend inline fun Match.setTeam2ImageUrl(uri: Uri) {
-        val teamImageDownloadUrl = getUri(uri)
-        team2Logo = teamImageDownloadUrl
+        team2Logo = getUri(uri)
     }
 
     /**
      * Set the image url after uploading it to storage.
      */
     private suspend fun getUri(uri: Uri): String {
-        Timber.d("Storage Team Image name: ${uri.lastPathSegment}")
-        val teamsImageStorageReference = storageReference.child("TeamsImage/${auth.currentUser?.uid}/${uri.lastPathSegment}")
+        val uuid = UUID.randomUUID()
+        val teamsImageStorageReference = storageReference.child("TeamsImage/${uuid}_${uri.lastPathSegment}")
 
         return teamsImageStorageReference.putFile(uri)
             .await()
@@ -205,13 +227,12 @@ class MatchRepository @Inject constructor(
      * Delete operation.
      */
     private suspend fun deleteMatchFromFirebase(match: Match) {
-        matchCollectionRef.document(match.matchID!!).delete().addOnSuccessListener {
-            val team1Logo = match.team1Logo!!
-            val team2Logo = match.team2Logo!!
+        val team1Logo = match.team1Logo!!
+        val team2Logo = match.team2Logo!!
 
+        matchCollectionRef.document(match.matchID!!).delete().addOnSuccessListener {
             if (team1Logo.isNotEmpty()) storage.getReferenceFromUrl(team1Logo).delete()
             if (team2Logo.isNotEmpty()) storage.getReferenceFromUrl(team2Logo).delete()
         }.await()
     }
-
 }
