@@ -27,10 +27,6 @@ class TeamRepository @Inject constructor(
     val auth: FirebaseAuth
 ) {
 
-    private companion object {
-        private const val TAG = "TeamRepository"
-    }
-
     /**
      * Reference to the players firestore collection
      */
@@ -181,7 +177,7 @@ class TeamRepository @Inject constructor(
         for (player in players) {
             playerCollectionRef.document(player.id!!).delete().onSuccessTask {
                 // When deleting the player is successful
-                Timber.tag(TAG).d("deleteMultiplePlayers: ${player.playerName} Deleted, continue with storage deletion")
+                Timber.d("deleteMultiplePlayers: ${player.playerName} Deleted, continue with storage deletion")
                 storage.getReferenceFromUrl(player.remoteUri!!).delete() // Delete using the url, since no direct path is available
             }.await()
         }
