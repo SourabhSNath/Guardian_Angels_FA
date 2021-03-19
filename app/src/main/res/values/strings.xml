@@ -23,4 +23,9 @@
     <string name="confirm">Confirm</string>
     <string name="games">GAMES</string>
     <string name="upcoming_matches">Upcoming Matches</string>
+    <string name="corners">Corners</string>
+    <string name="cards">Cards</string>
+    <string name="possesions">Possesions</string>
+    <string name="attack">Attack</string>
+    <string name="shooting">Shooting</string>
 </resources>

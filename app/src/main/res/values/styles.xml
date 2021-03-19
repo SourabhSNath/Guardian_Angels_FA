@@ -24,6 +24,7 @@
         <item name="popupMenuBackground">@drawable/custom_popup_bg</item>
 
         <item name="materialAlertDialogTheme">@style/ThemeOverlay.App.MaterialAlertDialog</item>
+        <item name="checkboxStyle">@style/Widget.App.CheckBox</item>
     </style>
 
     <!--==============================================================================================-->
@@ -83,6 +84,21 @@
     <style name="BottomRoundedShapeableImageView">
         <item name="cornerSizeBottomRight">16dp</item>
         <item name="cornerSizeBottomLeft">16dp</item>
+    </style>
+
+    <style name="RoundedCornerImageView">
+        <item name="cornerSize">16dp</item>
+    </style>
+
+
+
+    <style name="Widget.App.CheckBox" parent="Widget.MaterialComponents.CompoundButton.CheckBox">
+        <item name="materialThemeOverlay">@style/CheckboxStyle</item>
+    </style>
+
+    <style name="CheckboxStyle" parent="">
+        <item name="colorOnSurface">@color/colorPrimary</item>
+        <item name="colorSecondary">@color/pink</item>
     </style>
 
 

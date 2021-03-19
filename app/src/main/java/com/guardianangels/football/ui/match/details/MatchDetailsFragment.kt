@@ -48,6 +48,7 @@ class MatchDetailsFragment : Fragment(R.layout.match_details_fragment) {
         if (!viewModel.isUserLoggedIn) {
             binding.editButton.visibility = View.GONE
             binding.deleteButton.visibility = View.GONE
+            binding.matchCompleteButton.visibility = View.GONE
         } else {
             setupButtons(binding, navController, matchInfo)
         }
@@ -55,6 +56,7 @@ class MatchDetailsFragment : Fragment(R.layout.match_details_fragment) {
         val team1LogoLink = matchInfo.team1Logo
         if (team1LogoLink!!.isNotEmpty()) {
             binding.team1Logo.load(team1LogoLink)
+            Timber.d("$team1LogoLink")
         } else {
             binding.team1Logo.load(R.drawable.gaurdian_angels)
         }
@@ -136,6 +138,10 @@ class MatchDetailsFragment : Fragment(R.layout.match_details_fragment) {
                 }
             }
         }
+
+        binding.backButton.setOnClickListener {
+            navController.popBackStack()
+        }
     }
 
     private fun setupButtons(
@@ -149,6 +155,10 @@ class MatchDetailsFragment : Fragment(R.layout.match_details_fragment) {
 
         binding.deleteButton.setOnClickListener {
             deleteConfirmation(matchInfo)
+        }
+
+        binding.matchCompleteButton.setOnClickListener {
+            navController.navigate(MatchDetailsFragmentDirections.actionMatchDetailsFragmentToUpdateCompletedMatchFragment(matchInfo))
         }
     }
 

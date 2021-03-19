@@ -80,6 +80,20 @@ class TeamRepository @Inject constructor(
 
 
     /**
+     * Update a list of players
+     */
+    fun updatePlayers(players: List<Player>) = flow {
+        emit(NetworkState.loading())
+        players.forEach { player ->
+            playerCollectionRef.document(player.id!!).set(player).await()
+        }
+        emit(NetworkState.success(true))
+    }.catch {
+        emit(NetworkState.failed(it, it.message.toString()))
+    }.flowOn(Dispatchers.IO)
+
+
+    /**
      * Set the image url after uploading it to storage.
      */
     private suspend inline fun Player.setImage(uri: Uri) {

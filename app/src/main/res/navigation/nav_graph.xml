@@ -22,6 +22,9 @@
         <action
             android:id="@+id/action_home_to_addUpcomingMatchFragment"
             app:destination="@id/addUpcomingMatchFragment" />
+        <argument
+            android:name="is_match_completed"
+            app:argType="boolean" />
     </fragment>
 
     <fragment
@@ -86,9 +89,9 @@
             app:destination="@id/matchSelectPlayersFragment" />
         <argument
             android:name="matchData"
+            android:defaultValue="@null"
             app:argType="com.guardianangels.football.data.Match"
-            app:nullable="true"
-            android:defaultValue="@null" />
+            app:nullable="true" />
     </fragment>
 
     <fragment
@@ -112,6 +115,9 @@
         <action
             android:id="@+id/action_matchDetailsFragment_to_addUpcomingMatchFragment"
             app:destination="@id/addUpcomingMatchFragment" />
+        <action
+            android:id="@+id/action_matchDetailsFragment_to_updateCompletedMatchFragment"
+            app:destination="@id/updateCompletedMatchFragment" />
     </fragment>
 
     <fragment
@@ -125,6 +131,40 @@
         <action
             android:id="@+id/action_matchListFragment_to_matchDetailsFragment"
             app:destination="@id/matchDetailsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/updateCompletedMatchFragment"
+        android:name="com.guardianangels.football.ui.match.overview.UpdateCompletedMatchFragment"
+        android:label="UpdateCompletedMatchFragment"
+        tools:layout="@layout/update_completed_match_fragment">
+        <argument
+            android:name="match"
+            app:argType="com.guardianangels.football.data.Match" />
+        <action
+            android:id="@+id/action_updateCompletedMatchFragment_to_updateTeamPlayersFragment"
+            app:destination="@id/updateTeamPlayersFragment" />
+        <action
+            android:id="@+id/action_updateCompletedMatchFragment_to_home"
+            app:destination="@id/home"
+            app:popUpTo="@id/home" />
+    </fragment>
+    <fragment
+        android:id="@+id/updateTeamPlayersFragment"
+        android:name="com.guardianangels.football.ui.match.overview.UpdateTeamPlayersFragment"
+        android:label="UpdateTeamPlayersFragment"
+        tools:layout="@layout/update_team_players_fragment" >
+        <argument
+            android:name="ids"
+            app:argType="string[]" />
+        <action
+            android:id="@+id/action_updateTeamPlayersFragment_to_home"
+            app:destination="@id/home"
+            app:popUpTo="@id/home"
+            app:popUpToInclusive="true" />
+        <argument
+            android:name="isWin"
+            app:argType="boolean" />
     </fragment>
 
 </navigation>
