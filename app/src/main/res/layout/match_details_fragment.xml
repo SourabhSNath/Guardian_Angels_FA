@@ -120,7 +120,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppins_semibold"
                         android:shadowColor="@color/white"
-                        android:text="FRI 22 JAN"
+                        tools:text="FRI 22 JAN"
                         android:textAlignment="center"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
                         android:textColor="@color/black"
