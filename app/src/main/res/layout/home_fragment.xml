@@ -1,406 +1,458 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/appTitle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="24dp"
-        android:text="@string/app_name"
-        android:textAppearance="@style/TitleTextStyle"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <!--Upcoming Title-->
-    <TextView
-        android:id="@+id/upcomingTV"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="32dp"
-        android:fontFamily="@font/raleway"
-        android:text="@string/upcoming"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appTitle" />
-
-    <!-- Upcoming Match Card -->
-    <TextView
-        android:id="@+id/moreUpcomingTV"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/raleway"
-        android:gravity="center"
-        android:text="See More"
-        android:textSize="12sp"
-        app:drawableEndCompat="@drawable/ic_next"
-        app:layout_constraintBaseline_toBaselineOf="@+id/upcomingTV"
-        app:layout_constraintEnd_toEndOf="@+id/upcomingMatchCard" />
-
-
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/upcomingMatchCard"
-        android:layout_width="0dp"
-        android:layout_height="176dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="24dp"
-        app:cardCornerRadius="16dp"
-        app:cardElevation="4dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/upcomingTV">
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/bg"
-                android:layout_width="0dp"
-                android:layout_height="116dp"
-                android:background="@drawable/main_match_gradient"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:shapeAppearanceOverlay="@style/BottomRoundedShapeableImageView" />
-
-            <com.google.android.material.progressindicator.CircularProgressIndicator
-                android:id="@+id/loadingProgress"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:indeterminate="true"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:trackColor="@color/pink" />
+            android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/addAMatchTV"
+                android:id="@+id/appTitle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
-                android:layout_marginTop="32dp"
-                android:layout_marginEnd="32dp"
-                android:layout_marginBottom="32dp"
-                android:fontFamily="@font/poppins_semibold"
-                android:text="Add a Match"
-                android:textAlignment="center"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
-                android:textColor="@color/white"
-                android:visibility="gone"
-                app:drawableEndCompat="@drawable/ic_next"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:visibility="visible" />
-
-            <ImageView
-                android:id="@+id/team1Logo"
-                android:layout_width="56dp"
-                android:layout_height="56dp"
                 android:layout_marginStart="24dp"
-                android:contentDescription="Team 1 Logo"
-                app:layout_constraintBottom_toBottomOf="@+id/bg"
-                app:layout_constraintEnd_toStartOf="@+id/matchDate"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:src="@drawable/gaurdian_angels" />
-
-
-            <TextView
-                android:id="@+id/matchDate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/poppins_semibold"
-                android:textAlignment="center"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
-                android:textColor="@color/black"
-                app:layout_constraintEnd_toStartOf="@+id/team2Logo"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/team1Logo"
-                app:layout_constraintTop_toTopOf="@+id/team1Logo"
-                tools:text="FRI 22 JAN" />
-
-            <TextView
-                android:id="@+id/matchKickOffTime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/poppins"
-                android:textAlignment="center"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
-                android:textColor="@color/black"
-                app:layout_constraintBottom_toBottomOf="@+id/team1Logo"
-                app:layout_constraintEnd_toEndOf="@+id/matchDate"
-                app:layout_constraintStart_toStartOf="@+id/matchDate"
-                app:layout_constraintTop_toBottomOf="@+id/matchDate"
-                app:layout_constraintVertical_bias="0.25"
-                tools:text="KO: 1:30 PM" />
-
-
-            <!-- In case no logo is available for the opposing team -->
-
-            <ImageView
-                android:id="@+id/team2Logo"
-                android:layout_width="56dp"
-                android:layout_height="56dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginEnd="24dp"
-                app:layout_constraintBottom_toBottomOf="@+id/team1Logo"
-                app:layout_constraintEnd_toEndOf="@+id/bg"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/matchDate"
-                app:layout_constraintTop_toTopOf="@+id/team1Logo"
-                tools:src="@drawable/ic_football" />
-
-
-            <TextView
-                android:id="@+id/team1TV"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="24dp"
-                android:layout_marginBottom="24dp"
-                android:fontFamily="@font/poppins"
-                android:singleLine="true"
-                android:textAlignment="center"
-                android:textColor="@color/white"
-                android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/vs"
-                app:layout_constraintHorizontal_bias="0.5"
+                android:text="@string/app_name"
+                android:textAppearance="@style/TitleTextStyle"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/bg"
-                tools:text="@string/guardian_angels" />
+                app:layout_constraintTop_toTopOf="parent" />
 
+            <!--Upcoming Title-->
             <TextView
-                android:id="@+id/vs"
+                android:id="@+id/upcomingTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:fontFamily="@font/raleway_bold_italic"
-                android:text="VS"
-                android:textColor="@color/white"
-                android:textSize="18sp"
-                app:layout_constraintBaseline_toBaselineOf="@+id/team1TV"
-                app:layout_constraintEnd_toStartOf="@+id/team2TV"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/team1TV" />
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="32dp"
+                android:fontFamily="@font/raleway"
+                android:text="@string/upcoming"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/appTitle" />
+
+            <!-- Upcoming Match Card -->
+            <TextView
+                android:id="@+id/moreUpcomingTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/raleway"
+                android:gravity="center"
+                android:text="See More"
+                android:textSize="12sp"
+                app:drawableEndCompat="@drawable/ic_next"
+                app:layout_constraintBaseline_toBaselineOf="@+id/upcomingTV"
+                app:layout_constraintEnd_toEndOf="@+id/upcomingMatchCard" />
+
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/upcomingMatchCard"
+                android:layout_width="0dp"
+                android:layout_height="176dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="24dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="4dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/upcomingTV">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/bg"
+                        android:layout_width="0dp"
+                        android:layout_height="116dp"
+                        android:background="@drawable/main_match_gradient"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:shapeAppearanceOverlay="@style/BottomRoundedShapeableImageView" />
+
+                    <com.google.android.material.progressindicator.CircularProgressIndicator
+                        android:id="@+id/loadingProgress"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:indeterminate="true"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:trackColor="@color/pink" />
+
+                    <TextView
+                        android:id="@+id/addAMatchTV"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="32dp"
+                        android:layout_marginTop="32dp"
+                        android:layout_marginEnd="32dp"
+                        android:layout_marginBottom="32dp"
+                        android:fontFamily="@font/poppins_semibold"
+                        android:text="Add a Match"
+                        android:textAlignment="center"
+                        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
+                        android:textColor="@color/white"
+                        android:visibility="gone"
+                        app:drawableEndCompat="@drawable/ic_next"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/team1Logo"
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
+                        android:layout_marginStart="24dp"
+                        android:contentDescription="Team 1 Logo"
+                        app:layout_constraintBottom_toBottomOf="@+id/bg"
+                        app:layout_constraintEnd_toStartOf="@+id/matchDate"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:src="@drawable/gaurdian_angels" />
+
+
+                    <TextView
+                        android:id="@+id/matchDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_semibold"
+                        android:textAlignment="center"
+                        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                        android:textColor="@color/black"
+                        app:layout_constraintEnd_toStartOf="@+id/team2Logo"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/team1Logo"
+                        app:layout_constraintTop_toTopOf="@+id/team1Logo"
+                        tools:text="FRI 22 JAN" />
+
+                    <TextView
+                        android:id="@+id/matchKickOffTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins"
+                        android:textAlignment="center"
+                        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+                        android:textColor="@color/black"
+                        app:layout_constraintBottom_toBottomOf="@+id/team1Logo"
+                        app:layout_constraintEnd_toEndOf="@+id/matchDate"
+                        app:layout_constraintStart_toStartOf="@+id/matchDate"
+                        app:layout_constraintTop_toBottomOf="@+id/matchDate"
+                        app:layout_constraintVertical_bias="0.25"
+                        tools:text="KO: 1:30 PM" />
+
+
+                    <!-- In case no logo is available for the opposing team -->
+
+                    <ImageView
+                        android:id="@+id/team2Logo"
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
+                        android:layout_marginEnd="24dp"
+                        app:layout_constraintBottom_toBottomOf="@+id/team1Logo"
+                        app:layout_constraintEnd_toEndOf="@+id/bg"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/matchDate"
+                        app:layout_constraintTop_toTopOf="@+id/team1Logo"
+                        tools:src="@drawable/ic_football" />
+
+
+                    <TextView
+                        android:id="@+id/team1TV"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="24dp"
+                        android:layout_marginBottom="24dp"
+                        android:fontFamily="@font/poppins"
+                        android:singleLine="true"
+                        android:textAlignment="center"
+                        android:textColor="@color/white"
+                        android:textSize="14sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/vs"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/bg"
+                        tools:text="@string/guardian_angels" />
+
+                    <TextView
+                        android:id="@+id/vs"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:fontFamily="@font/raleway_bold_italic"
+                        android:text="VS"
+                        android:textColor="@color/white"
+                        android:textSize="18sp"
+                        app:layout_constraintBaseline_toBaselineOf="@+id/team1TV"
+                        app:layout_constraintEnd_toStartOf="@+id/team2TV"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/team1TV" />
+
+                    <TextView
+                        android:id="@+id/team2TV"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="16dp"
+                        android:fontFamily="@font/poppins"
+                        android:singleLine="true"
+                        android:textAlignment="center"
+                        android:textColor="@color/white"
+                        android:textSize="14sp"
+                        app:layout_constraintBaseline_toBaselineOf="@+id/team1TV"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/vs"
+                        tools:text="FC Barcelona" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.5" />
+
+            <!-- Stats -->
+            <TextView
+                android:id="@+id/statsTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="32dp"
+                android:fontFamily="@font/raleway"
+                android:text="Stats"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/upcomingMatchCard" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/gamesStatCard"
+                android:layout_width="0dp"
+                android:layout_height="160dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="12dp"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="8dp"
+                app:layout_constraintEnd_toStartOf="@+id/guideline"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/statsTV">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="16dp"
+                        android:text="@string/games"
+                        android:textAppearance="@style/MainTotalCardTextStyle"
+                        android:textColor="@color/mainStatGames" />
+
+                    <TextView
+                        android:id="@+id/gamesTV"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="8dp"
+                        android:gravity="bottom|end"
+                        android:textAppearance="@style/CountTextStyle"
+                        android:textColor="@color/mainStatGames"
+                        tools:text="69" />
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/wonStatCard"
+                android:layout_width="0dp"
+                android:layout_height="160dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="24dp"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/guideline"
+                app:layout_constraintTop_toBottomOf="@+id/statsTV">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="16dp"
+                        android:text="WON"
+                        android:textAppearance="@style/MainTotalCardTextStyle"
+                        android:textColor="@color/mainStatWon" />
+
+                    <TextView
+                        android:id="@+id/winsTV"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="8dp"
+                        android:gravity="bottom|end"
+                        android:textAppearance="@style/CountTextStyle"
+                        android:textColor="@color/mainStatWon"
+                        tools:text="59" />
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/gameStatCard"
+                android:layout_width="0dp"
+                android:layout_height="160dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="12dp"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="8dp"
+                app:layout_constraintEnd_toStartOf="@+id/guideline"
+                app:layout_constraintStart_toStartOf="@+id/gamesStatCard"
+                app:layout_constraintTop_toBottomOf="@+id/gamesStatCard">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="16dp"
+                        android:text="DRAW"
+                        android:textAppearance="@style/MainTotalCardTextStyle"
+                        android:textColor="@color/mainStatDraw" />
+
+                    <TextView
+                        android:id="@+id/drawsTV"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="8dp"
+                        android:gravity="bottom|end"
+                        android:textAppearance="@style/CountTextStyle"
+                        android:textColor="@color/mainStatDraw"
+                        tools:text="7" />
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/lostStatCard"
+                android:layout_width="0dp"
+                android:layout_height="160dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="24dp"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="8dp"
+                app:layout_constraintEnd_toEndOf="@+id/wonStatCard"
+                app:layout_constraintStart_toStartOf="@+id/guideline"
+                app:layout_constraintTop_toBottomOf="@+id/wonStatCard">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="16dp"
+                        android:text="LOST"
+                        android:textAppearance="@style/MainTotalCardTextStyle"
+                        android:textColor="@color/mainStatLost" />
+
+                    <TextView
+                        android:id="@+id/lossTV"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="8dp"
+                        android:gravity="bottom|end"
+                        android:textAppearance="@style/CountTextStyle"
+                        android:textColor="@color/mainStatLost"
+                        tools:text="3" />
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/editGameStatasButton"
+                style="@style/IconButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="24dp"
+                android:drawableEnd="@drawable/ic_edit"
+                app:layout_constraintBaseline_toBaselineOf="@+id/statsTV"
+                app:layout_constraintEnd_toEndOf="parent" />
+
 
             <TextView
-                android:id="@+id/team2TV"
+                android:id="@+id/previousMatchTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="32dp"
+                android:fontFamily="@font/raleway"
+                android:text="Previous Matches"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/gameStatCard" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerview"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:fontFamily="@font/poppins"
-                android:singleLine="true"
-                android:textAlignment="center"
-                android:textColor="@color/white"
-                android:textSize="14sp"
-                app:layout_constraintBaseline_toBaselineOf="@+id/team1TV"
+                android:layout_marginTop="16dp"
+                android:clipToPadding="false"
+                android:nestedScrollingEnabled="false"
+                android:paddingBottom="72dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/vs"
-                tools:text="FC Barcelona" />
-
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/previousMatchTitle"
+                tools:listitem="@layout/previous_match_result_item" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </com.google.android.material.card.MaterialCardView>
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.5" />
-
-    <!-- Stats -->
-    <TextView
-        android:id="@+id/statsTV"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
-        android:fontFamily="@font/raleway"
-        android:text="Stats"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
-
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/upcomingMatchCard" />
-
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/gamesStatCard"
-        android:layout_width="0dp"
-        android:layout_height="160dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="12dp"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="8dp"
-        app:layout_constraintEnd_toStartOf="@+id/guideline"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/statsTV">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:text="@string/games"
-                android:textAppearance="@style/MainTotalCardTextStyle"
-                android:textColor="@color/mainStatGames" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="8dp"
-                android:gravity="bottom|end"
-                android:text="69"
-                android:textAppearance="@style/CountTextStyle"
-                android:textColor="@color/mainStatGames" />
-        </LinearLayout>
-
-    </com.google.android.material.card.MaterialCardView>
-
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/wonStatCard"
-        android:layout_width="0dp"
-        android:layout_height="160dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="24dp"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toBottomOf="@+id/statsTV">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:text="WON"
-                android:textAppearance="@style/MainTotalCardTextStyle"
-                android:textColor="@color/mainStatWon" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="8dp"
-                android:gravity="bottom|end"
-                android:text="59"
-                android:textAppearance="@style/CountTextStyle"
-                android:textColor="@color/mainStatWon" />
-        </LinearLayout>
-
-    </com.google.android.material.card.MaterialCardView>
-
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/gameStatCard"
-        android:layout_width="0dp"
-        android:layout_height="160dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="12dp"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="8dp"
-        app:layout_constraintEnd_toStartOf="@+id/guideline"
-        app:layout_constraintStart_toStartOf="@+id/gamesStatCard"
-        app:layout_constraintTop_toBottomOf="@+id/gamesStatCard">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:text="DRAW"
-                android:textAppearance="@style/MainTotalCardTextStyle"
-                android:textColor="@color/mainStatDraw" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="8dp"
-                android:gravity="bottom|end"
-                android:text="7"
-                android:textAppearance="@style/CountTextStyle"
-                android:textColor="@color/mainStatDraw" />
-        </LinearLayout>
-
-    </com.google.android.material.card.MaterialCardView>
-
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/lostStatCard"
-        android:layout_width="0dp"
-        android:layout_height="160dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="24dp"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="8dp"
-        app:layout_constraintEnd_toEndOf="@+id/wonStatCard"
-        app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toBottomOf="@+id/wonStatCard">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:text="LOST"
-                android:textAppearance="@style/MainTotalCardTextStyle"
-                android:textColor="@color/mainStatLost" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="8dp"
-                android:gravity="bottom|end"
-                android:text="3"
-                android:textAppearance="@style/CountTextStyle"
-                android:textColor="@color/mainStatLost" />
-        </LinearLayout>
-
-    </com.google.android.material.card.MaterialCardView>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+</FrameLayout>

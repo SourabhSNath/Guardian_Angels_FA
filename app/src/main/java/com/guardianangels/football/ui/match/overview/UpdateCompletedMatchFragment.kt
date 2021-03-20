@@ -13,6 +13,7 @@ import com.guardianangels.football.R
 import com.guardianangels.football.data.Match
 import com.guardianangels.football.databinding.UpdateCompletedMatchFragmentBinding
 import com.guardianangels.football.network.NetworkState
+import com.guardianangels.football.util.Constants
 import com.guardianangels.football.util.getString
 import com.guardianangels.football.util.toEmptySafeInt
 import dagger.hilt.android.AndroidEntryPoint
@@ -65,6 +66,7 @@ class UpdateCompletedMatchFragment : Fragment(R.layout.update_completed_match_fr
 
                 Timber.d("$team1Score, $team2Score, $team1ShootingStats, $team2ShootingStats...")
 
+                viewModel.updateGameStats(team1Score, team2Score) // First update the Game Stats.
                 viewModel.updateMatch(
                     match,
                     team1Score, team2Score,
@@ -104,6 +106,19 @@ class UpdateCompletedMatchFragment : Fragment(R.layout.update_completed_match_fr
                     }
                 }
 
+                is NetworkState.Failed -> {
+                    Timber.d("${it.exception}, ${it.message}")
+                }
+            }
+        }
+
+        viewModel.updateGameStats.observe(viewLifecycleOwner) {
+            when (it) {
+                is NetworkState.Loading -> Timber.d("Loading")
+                is NetworkState.Success -> {
+                    navController.getBackStackEntry(R.id.home).savedStateHandle.set(Constants.RELOAD_GAME_STATS_KEY, true)
+                    Toast.makeText(requireContext(), "Updated Game Stats", Toast.LENGTH_SHORT).show()
+                }
                 is NetworkState.Failed -> {
                     Timber.d("${it.exception}, ${it.message}")
                 }

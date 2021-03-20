@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.guardianangels.football.data.Match
 import com.guardianangels.football.network.NetworkState
+import com.guardianangels.football.repository.GameStatsRepository
 import com.guardianangels.football.repository.MatchRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
@@ -13,10 +14,25 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class UpdateCompletedViewModel @Inject constructor(private val matchRepository: MatchRepository) : ViewModel() {
+class UpdateCompletedViewModel @Inject constructor(private val matchRepository: MatchRepository, private val gameStatsRepository: GameStatsRepository) :
+    ViewModel() {
 
     private val _listOfTeamIds = MutableLiveData<NetworkState<List<String>?>>()
     val listOfTeamIds: LiveData<NetworkState<List<String>?>> get() = _listOfTeamIds
+
+    private val _updateGameStat = MutableLiveData<NetworkState<Boolean>>()
+    val updateGameStats: LiveData<NetworkState<Boolean>> get() = _updateGameStat
+
+    /**
+     *  Update the Game Stats with the Match Result
+     */
+    fun updateGameStats(team1Score: Int, team2Score: Int) {
+        viewModelScope.launch {
+            gameStatsRepository.addGameStats(team1Score, team2Score).collect {
+                _updateGameStat.value = it
+            }
+        }
+    }
 
     fun updateMatch(
         match: Match,
@@ -46,6 +62,7 @@ class UpdateCompletedViewModel @Inject constructor(private val matchRepository: 
         )
 
         viewModelScope.launch {
+            /** Update the Match Stats */
             matchRepository.updateCompletedMatch(matchCompleteData).collect {
                 _listOfTeamIds.value = it
             }

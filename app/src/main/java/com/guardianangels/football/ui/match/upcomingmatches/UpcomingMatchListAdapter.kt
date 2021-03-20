@@ -9,21 +9,12 @@ import coil.load
 import com.guardianangels.football.R
 import com.guardianangels.football.data.Match
 import com.guardianangels.football.databinding.MatchListItemBinding
+import com.guardianangels.football.ui.match.MatchDiffItem
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
-class UpcomingMatchListAdapter(val clickListener: (Match) -> Unit) : ListAdapter<Match, UpcomingMatchListAdapter.ViewHolder>(DiffItem) {
-
-    companion object DiffItem : DiffUtil.ItemCallback<Match>() {
-        override fun areItemsTheSame(oldItem: Match, newItem: Match): Boolean {
-            return oldItem.matchID == newItem.matchID
-        }
-
-        override fun areContentsTheSame(oldItem: Match, newItem: Match): Boolean {
-            return oldItem == newItem
-        }
-    }
+class UpcomingMatchListAdapter(val clickListener: (Match) -> Unit) : ListAdapter<Match, UpcomingMatchListAdapter.ViewHolder>(MatchDiffItem) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder.from(parent, this)

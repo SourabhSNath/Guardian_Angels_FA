@@ -22,5 +22,6 @@ object Constants {
     const val MATCH_DELETED_RESULT_KEY = "matchDeletedKey"
 
     /*** For home fragment ***/
-    const val RELOAD_NEXT_UPCOMING_KEY = "reloadNextUpcomingWhenAddedDeletedUpadatedKey"
+    const val RELOAD_NEXT_UPCOMING_KEY = "reloadNextUpcomingWhenChangedKey"
+    const val RELOAD_GAME_STATS_KEY = "reloadStatsWhenChangedKey"
 }

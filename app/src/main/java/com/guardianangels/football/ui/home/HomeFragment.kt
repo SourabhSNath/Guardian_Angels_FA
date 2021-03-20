@@ -11,6 +11,7 @@ import com.guardianangels.football.R
 import com.guardianangels.football.data.Match
 import com.guardianangels.football.databinding.HomeFragmentBinding
 import com.guardianangels.football.network.NetworkState
+import com.guardianangels.football.util.Constants.RELOAD_GAME_STATS_KEY
 import com.guardianangels.football.util.Constants.RELOAD_NEXT_UPCOMING_KEY
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
@@ -32,8 +33,6 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
 
         val navController = findNavController()
 
-        observeData(navController)
-
         /* Hide the login fragment behind the title. */
         binding.appTitle.setOnLongClickListener {
             navController.navigate(HomeFragmentDirections.actionHomeToLoginFragment())
@@ -44,9 +43,17 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
             navController.navigate(HomeFragmentDirections.actionHomeToMatchListFragment())
         }
 
+        val adapter = PreviousMatchesAdapter(::onMatchClick)
+        binding.recyclerview.adapter = adapter
+
+        observeData(navController, adapter)
     }
 
-    private fun observeData(navController: NavController) {
+    private fun onMatchClick(match: Match) {
+        Timber.d("Names: [${match.team1Name}, ${match.team2Name}], Scores: [${match.team1Score}, ${match.team2Score}]")
+    }
+
+    private fun observeData(navController: NavController, adapter: PreviousMatchesAdapter) {
 
         /**
          * Reload next upcoming match when a match is Added, Updated or Deleted.
@@ -60,12 +67,23 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
         }
 
         /**
+         * Reload the game stats when the stats are Changed.
+         */
+        navController.currentBackStackEntry?.savedStateHandle?.getLiveData<Boolean>(RELOAD_GAME_STATS_KEY)?.observe(viewLifecycleOwner) {
+            if (it) {
+                Timber.d("Reload Game Stats")
+                viewModel.getGameStats()
+                navController.currentBackStackEntry?.savedStateHandle?.set(RELOAD_GAME_STATS_KEY, false)
+            }
+        }
+
+        /**
          * Get the next upcoming match
          */
         viewModel.upcomingMatch.observe(viewLifecycleOwner) {
             when (it) {
                 is NetworkState.Loading -> {
-                    Timber.d("Loading")
+                    Timber.tag("upcomingMatch").d("Loading")
                     binding.loadingProgress.visibility = View.VISIBLE
                     binding.addAMatchTV.visibility = View.GONE
                     setUpcomingViewsVisibiltiy(View.GONE)
@@ -77,7 +95,7 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
                     setUpcomingViewsVisibiltiy(View.VISIBLE)
                 }
                 is NetworkState.Failed -> {
-                    Timber.d("${it.exception}, ${it.message}")
+                    Timber.tag("upcomingMatch").d("${it.exception}, ${it.message}")
                     if (it.exception is IndexOutOfBoundsException) {
                         binding.loadingProgress.visibility = View.GONE
 
@@ -95,6 +113,35 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
                         }
                     }
                 }
+            }
+        }
+
+        /**
+         * Get the game stats
+         */
+        viewModel.gameStats.observe(viewLifecycleOwner) {
+            when (it) {
+                is NetworkState.Loading -> Timber.tag("gameStats").d("Loading")
+                is NetworkState.Success -> {
+                    binding.gamesTV.text = it.data.games!!.toString()
+                    binding.winsTV.text = it.data.wins!!.toString()
+                    binding.drawsTV.text = it.data.draws!!.toString()
+                    binding.lossTV.text = it.data.losses!!.toString()
+                }
+                is NetworkState.Failed -> Timber.tag("gameStats").d("${it.exception}")
+            }
+        }
+
+        /**
+         * Get the previous completed matches.
+         */
+        viewModel.previousCompletedMatches.observe(viewLifecycleOwner) {
+            when (it) {
+                is NetworkState.Loading -> Timber.tag("previousCompleted").d("Loading")
+                is NetworkState.Success -> {
+                    adapter.submitList(it.data)
+                }
+                is NetworkState.Failed -> Timber.tag("previousCompleted").d("${it.exception}")
             }
         }
     }
