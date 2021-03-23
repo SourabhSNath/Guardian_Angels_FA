@@ -11,8 +11,10 @@ import com.guardianangels.football.R
 import com.guardianangels.football.data.Match
 import com.guardianangels.football.databinding.HomeFragmentBinding
 import com.guardianangels.football.network.NetworkState
+import com.guardianangels.football.util.Constants
 import com.guardianangels.football.util.Constants.RELOAD_GAME_STATS_KEY
 import com.guardianangels.football.util.Constants.RELOAD_NEXT_UPCOMING_KEY
+import com.guardianangels.football.util.Constants.RELOAD_PREVIOUS_MATCHES_KEY
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 import java.time.Instant
@@ -46,34 +48,49 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
         val adapter = PreviousMatchesAdapter(::onMatchClick)
         binding.recyclerview.adapter = adapter
 
-        observeData(navController, adapter)
+        observeData(adapter, navController)
     }
 
+    /**
+     * Get the onClcik data from the previous matches list.
+     * Navigate to completedMatchFragment
+     */
     private fun onMatchClick(match: Match) {
         Timber.d("Names: [${match.team1Name}, ${match.team2Name}], Scores: [${match.team1Score}, ${match.team2Score}]")
+        findNavController().navigate(HomeFragmentDirections.actionHomeToCompletedMatchFragment(match))
     }
 
-    private fun observeData(navController: NavController, adapter: PreviousMatchesAdapter) {
+    private fun observeData(adapter: PreviousMatchesAdapter, navController: NavController) {
+
+        val savedStateHandle = navController.currentBackStackEntry?.savedStateHandle
 
         /**
          * Reload next upcoming match when a match is Added, Updated or Deleted.
          */
-        navController.currentBackStackEntry?.savedStateHandle?.getLiveData<Boolean>(RELOAD_NEXT_UPCOMING_KEY)?.observe(viewLifecycleOwner) {
+        savedStateHandle?.getLiveData<Boolean>(RELOAD_NEXT_UPCOMING_KEY)?.observe(viewLifecycleOwner) {
             if (it) {
                 Timber.d("Reload UpcomingMatchCard")
                 viewModel.getNextUpcomingMatch()
-                navController.currentBackStackEntry?.savedStateHandle?.set(RELOAD_NEXT_UPCOMING_KEY, false)
+                navController.currentBackStackEntry?.savedStateHandle?.set(RELOAD_NEXT_UPCOMING_KEY, false) // Reset to false.
             }
         }
 
         /**
          * Reload the game stats when the stats are Changed.
          */
-        navController.currentBackStackEntry?.savedStateHandle?.getLiveData<Boolean>(RELOAD_GAME_STATS_KEY)?.observe(viewLifecycleOwner) {
+        savedStateHandle?.getLiveData<Boolean>(RELOAD_GAME_STATS_KEY)?.observe(viewLifecycleOwner) {
             if (it) {
                 Timber.d("Reload Game Stats")
                 viewModel.getGameStats()
                 navController.currentBackStackEntry?.savedStateHandle?.set(RELOAD_GAME_STATS_KEY, false)
+            }
+        }
+
+        savedStateHandle?.getLiveData<Boolean>(RELOAD_PREVIOUS_MATCHES_KEY)?.observe(viewLifecycleOwner) {
+            if (it) {
+                Timber.d("Reload previous matches")
+                viewModel.getPreviousMatches()
+                navController.currentBackStackEntry?.savedStateHandle?.set(RELOAD_PREVIOUS_MATCHES_KEY, false)
             }
         }
 

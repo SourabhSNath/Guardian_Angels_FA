@@ -4,13 +4,17 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.guardianangels.football.data.GameResults
 import com.guardianangels.football.data.Match
 import com.guardianangels.football.network.NetworkState
 import com.guardianangels.football.repository.GameStatsRepository
 import com.guardianangels.football.repository.MatchRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,16 +28,50 @@ class UpdateCompletedViewModel @Inject constructor(private val matchRepository: 
     val updateGameStats: LiveData<NetworkState<Boolean>> get() = _updateGameStat
 
     /**
-     *  Update the Game Stats with the Match Result
+     *  Update the Game Stats according to the match result.
+     *  Returns the match with its match result set.
      */
-    fun updateGameStats(team1Score: Int, team2Score: Int) {
-        viewModelScope.launch {
-            gameStatsRepository.addGameStats(team1Score, team2Score).collect {
-                _updateGameStat.value = it
+    fun updateGameStats(team1Score: Int, team2Score: Int, match: Match): Match {
+
+        val previousResult = match.gameResult
+        return when {
+            team1Score > team2Score -> {
+                val result = GameResults.WIN
+                setScore(result, previousResult)
+                match.apply { gameResult = result }
+            }
+            team1Score < team2Score -> {
+                val result = GameResults.LOSS
+                setScore(result, previousResult)
+                match.apply { gameResult = result }
+            }
+            team1Score == team2Score -> {
+                val result = GameResults.DRAW
+                setScore(result, previousResult)
+                match.apply { gameResult = result }
+            }
+            else -> match
+        }
+    }
+
+    /**
+     * If the previous result is not the same as the new result, reset the previous game stats and then set the score
+     * else just update the score
+     */
+    private fun setScore(gameResult: GameResults, previousResult: GameResults? = null) {
+        viewModelScope.launch(Dispatchers.IO) {
+            Timber.d("Setting new game stats after resetting $previousResult.")
+            gameStatsRepository.setScore(gameResult, previousResult).collect { updateStat ->
+                _updateGameStat.postValue(updateStat)
             }
         }
     }
 
+    val completedMatch = MutableStateFlow(Match())
+
+    /**
+     * Update the Match Stats
+     */
     fun updateMatch(
         match: Match,
         team1Score: Int, team2Score: Int,
@@ -61,8 +99,9 @@ class UpdateCompletedViewModel @Inject constructor(private val matchRepository: 
             matchNotes = notes
         )
 
+        completedMatch.value = matchCompleteData
+
         viewModelScope.launch {
-            /** Update the Match Stats */
             matchRepository.updateCompletedMatch(matchCompleteData).collect {
                 _listOfTeamIds.value = it
             }

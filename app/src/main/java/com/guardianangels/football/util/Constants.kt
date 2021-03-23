@@ -24,4 +24,5 @@ object Constants {
     /*** For home fragment ***/
     const val RELOAD_NEXT_UPCOMING_KEY = "reloadNextUpcomingWhenChangedKey"
     const val RELOAD_GAME_STATS_KEY = "reloadStatsWhenChangedKey"
+    const val RELOAD_PREVIOUS_MATCHES_KEY = "reloadPreviousMatchesWhenChangeKey"
 }

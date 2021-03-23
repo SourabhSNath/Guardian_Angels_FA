@@ -10,8 +10,10 @@ import com.guardianangels.football.network.NetworkState
 import com.guardianangels.football.repository.GameStatsRepository
 import com.guardianangels.football.repository.MatchRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,9 +26,12 @@ class HomeViewModel @Inject constructor(
     val upcomingMatch: LiveData<NetworkState<Match>> get() = _upcomingMatch
 
     init {
-        getNextUpcomingMatch()
-        getGameStats()
-        getPreviousMatches()
+        viewModelScope.launch {
+            getNextUpcomingMatch()
+            delay(100) // Prevents a crash due to the everything being called at the same time.
+            getGameStats()
+            getPreviousMatches()
+        }
     }
 
     fun isUserLoggedIn() = matchRepository.auth.currentUser != null
@@ -34,7 +39,8 @@ class HomeViewModel @Inject constructor(
     fun getNextUpcomingMatch() {
         viewModelScope.launch {
             matchRepository.getNextUpcomingMatch().collect {
-                _upcomingMatch.postValue(it)
+                Timber.d("Get upcoming match")
+                _upcomingMatch.value = it
             }
         }
     }
@@ -45,7 +51,8 @@ class HomeViewModel @Inject constructor(
     fun getGameStats() {
         viewModelScope.launch {
             gameStatsRepository.getGameStats().collect {
-                _gameStats.postValue(it)
+                Timber.d("Get game stats")
+                _gameStats.value = it
             }
         }
     }
@@ -55,7 +62,8 @@ class HomeViewModel @Inject constructor(
     fun getPreviousMatches() {
         viewModelScope.launch {
             matchRepository.getCompletedMatches().collect {
-                _previousCompletedMatches.postValue(it)
+                Timber.d("Get Previous matches")
+                _previousCompletedMatches.value = it
             }
         }
     }

@@ -19,10 +19,10 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
 @AndroidEntryPoint
-class CompletedMatchFragment : Fragment(R.layout.completed_match_details_fragment) {
+class CompletedMatchDetailsFragment : Fragment(R.layout.completed_match_details_fragment) {
 
-    private val viewModel: CompletedMatchViewModel by viewModels()
-    private val args: CompletedMatchFragmentArgs by navArgs()
+    private val detailsViewModel: CompletedMatchDetailsViewModel by viewModels()
+    private val args: CompletedMatchDetailsFragmentArgs by navArgs()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -174,7 +174,7 @@ class CompletedMatchFragment : Fragment(R.layout.completed_match_details_fragmen
 
         val team1Ids = match.team1TeamIds!!
         if (team1Ids.isNotEmpty()) {
-            viewModel.getPlayers(team1Ids)
+            detailsViewModel.getPlayers(team1Ids)
         } else {
             binding.teamTitle.visibility = View.GONE
         }
@@ -187,7 +187,7 @@ class CompletedMatchFragment : Fragment(R.layout.completed_match_details_fragmen
         /**
          * Get the match players
          */
-        viewModel.players.observe(viewLifecycleOwner) {
+        detailsViewModel.players.observe(viewLifecycleOwner) {
             when (it) {
                 is NetworkState.Loading -> Timber.d("Loading")
                 is NetworkState.Success -> {
@@ -204,7 +204,7 @@ class CompletedMatchFragment : Fragment(R.layout.completed_match_details_fragmen
         /**
          * Observe to check if match has been deleted
          */
-        viewModel.isMatchDeleted.observe(viewLifecycleOwner) {
+        detailsViewModel.isMatchDeleted.observe(viewLifecycleOwner) {
             when (it) {
                 is NetworkState.Loading -> Timber.d("Loading")
                 is NetworkState.Success -> {
@@ -228,11 +228,11 @@ class CompletedMatchFragment : Fragment(R.layout.completed_match_details_fragmen
         }
 
         binding.editButton.setOnClickListener {
-            navController.navigate(CompletedMatchFragmentDirections.actionCompletedMatchFragmentToUpdateCompletedMatchFragment(args.match))
+            navController.navigate(CompletedMatchDetailsFragmentDirections.actionCompletedMatchFragmentToUpdateCompletedMatchFragment(args.match))
         }
 
         binding.deleteButton.setOnClickListener {
-            viewModel.deleteMatch(args.match)
+            detailsViewModel.deleteMatch(args.match)
         }
     }
 }

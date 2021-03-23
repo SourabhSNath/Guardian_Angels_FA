@@ -21,35 +21,36 @@ class GameStatsRepository @Inject constructor(firestore: FirebaseFirestore) {
     private val matchStatsRef = firestore.collection("match_stats")
 
     /**
-     * Add the game stats.
-     * The team scores are checked here and the Result is passed to setScore()
+     * Set Score.
+     * Takes a new result and the previous result if it exists.
+     * Uses a custom document id, to maintain a single document for the stats in firestore.
+     *
+     * The previousResult only comes if a completed match's scores are being changed.
      */
-    fun addGameStats(team1Score: Int, team2Score: Int) = flow {
+    suspend fun setScore(result: GameResults, previousResult: GameResults?) = flow {
         emit(NetworkState.loading())
-        when {
-            team1Score > team2Score -> setScore(GameResults.WIN)
-            team1Score < team2Score -> setScore(GameResults.LOSS)
-            team1Score == team2Score -> setScore(GameResults.DRAW)
-        }
-        emit(NetworkState.success(true))
-    }.catch {
-        emit(NetworkState.failed(it, it.message.toString()))
-    }.flowOn(Dispatchers.IO)
+        val gameStats = getGameStatsFromFirestore().also { Timber.d("Previous Game Stats-> G ${it.games}, W ${it.wins}, D ${it.draws}, L ${it.losses}") }
 
-    /**
-     * Get the previous results, and increment the values according to the Match Result.
-     */
-    private suspend fun setScore(result: GameResults) {
-        val gameStats = getGameStatsFromFirestore().also { Timber.d("Previous-> G ${it.games}, W ${it.wins}, D ${it.draws}, L ${it.losses}") }
+        if (previousResult != null) {
+            Timber.d("Reset previous stats for Updating.")
+            when (previousResult) {
+                GameResults.WIN -> if (gameStats.wins!! > 0) gameStats.wins = gameStats.wins!!.dec()
+                GameResults.LOSS -> if (gameStats.losses!! > 0) gameStats.losses = gameStats.losses!!.dec()
+                GameResults.DRAW -> if (gameStats.draws!! > 0) gameStats.draws = gameStats.draws!!.dec()
+            }
+        }
 
         when (result) {
             GameResults.WIN -> gameStats.wins = gameStats.wins!!.inc()
             GameResults.LOSS -> gameStats.losses = gameStats.losses!!.inc()
             GameResults.DRAW -> gameStats.draws = gameStats.draws!!.inc()
         }
-        gameStats.games = gameStats.games!!.inc()
+        if (previousResult == null) gameStats.games = gameStats.games!!.inc()
 
         matchStatsRef.document(DOC_ID).set(gameStats).await()
+        emit(NetworkState.success(true))
+    }.catch {
+        emit(NetworkState.failed(it, it.message.toString()))
     }
 
     /**

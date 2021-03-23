@@ -2,6 +2,7 @@ package com.guardianangels.football.ui.match.overview
 
 import android.os.Bundle
 import android.view.View
+import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -32,14 +33,22 @@ class UpdateCompletedMatchFragment : Fragment(R.layout.update_completed_match_fr
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val match = args.match
+        var match = args.match
         _binding = UpdateCompletedMatchFragmentBinding.bind(view)
         val doneButton = binding.gotoPlayerStatsButton
 
+        val navController = findNavController()
+        val isPreviousCompletedMatchFragment = navController.previousBackStackEntry?.destination?.id == R.id.completedMatchDetailsFragment
+        val done = getString(R.string.done)
+        if (isPreviousCompletedMatchFragment) {
+            doneButton.text = done
+        }
+
         setLogos(match)
+        setDataForUpdate(match)
 
         if (match.team1TeamIds.isNullOrEmpty()) {
-            doneButton.text = getString(R.string.done)
+            doneButton.text = done
         }
 
         doneButton.setOnClickListener {
@@ -66,7 +75,10 @@ class UpdateCompletedMatchFragment : Fragment(R.layout.update_completed_match_fr
 
                 Timber.d("$team1Score, $team2Score, $team1ShootingStats, $team2ShootingStats...")
 
-                viewModel.updateGameStats(team1Score, team2Score) // First update the Game Stats.
+                /** First update the Game Stats and then return the match after setting the match result. */
+                match = viewModel.updateGameStats(team1Score, team2Score, match)
+                Timber.d("Match result: ${match.gameResult}")
+
                 viewModel.updateMatch(
                     match,
                     team1Score, team2Score,
@@ -82,30 +94,41 @@ class UpdateCompletedMatchFragment : Fragment(R.layout.update_completed_match_fr
             }
         }
 
-        val navController = findNavController()
         binding.backButton.setOnClickListener { navController.popBackStack() }
-        observeViewModel(navController)
+        observeViewModel(navController, isPreviousCompletedMatchFragment)
     }
 
 
-    private fun observeViewModel(navController: NavController) {
+    private fun observeViewModel(navController: NavController, isPreviousCompletedMatchDetailsFragment: Boolean) {
         viewModel.listOfTeamIds.observe(viewLifecycleOwner) {
             when (it) {
                 is NetworkState.Loading -> Timber.d("Loading")
                 is NetworkState.Success -> {
-                    val ids = it.data!!
-                    if (!ids.isNullOrEmpty()) {
-                        Timber.d("Not empty, moving to update players fragment")
-                        val isWin = binding.team1ScoreET.getString().toInt() > binding.team2ScoreET.getString().toInt()
+                    /** If the previous fragment is CompletedMatchDetailsFragment, do nothing an and popBack to it.*/
+                    if (isPreviousCompletedMatchDetailsFragment) {
                         navController.navigate(
-                            UpdateCompletedMatchFragmentDirections.actionUpdateCompletedMatchFragmentToUpdateTeamPlayersFragment(ids.toTypedArray(), isWin)
+                            UpdateCompletedMatchFragmentDirections.actionUpdateCompletedMatchFragmentToCompletedMatchDetailsFragment(
+                                viewModel.completedMatch.value
+                            )
                         )
                     } else {
-                        Timber.d("Go back to home fragment and reload completed matches and scores")
-                        navController.navigate(UpdateCompletedMatchFragmentDirections.actionUpdateCompletedMatchFragmentToHome(true))
+                        val ids = it.data!!
+                        if (!ids.isNullOrEmpty()) {
+                            Timber.d("Not empty, moving to update players fragment")
+                            val isWin = binding.team1ScoreET.getString().toInt() > binding.team2ScoreET.getString().toInt()
+                            navController.navigate(
+                                UpdateCompletedMatchFragmentDirections.actionUpdateCompletedMatchFragmentToUpdateTeamPlayersFragment(
+                                    ids.toTypedArray(),
+                                    isWin
+                                )
+                            )
+                        } else {
+                            Timber.d("Go back to home fragment and reload completed matches and scores")
+                            navController.navigate(UpdateCompletedMatchFragmentDirections.actionUpdateCompletedMatchFragmentToHome(true))
+                        }
                     }
+                    navController.getBackStackEntry(R.id.home).savedStateHandle.set(Constants.RELOAD_PREVIOUS_MATCHES_KEY, true)
                 }
-
                 is NetworkState.Failed -> {
                     Timber.d("${it.exception}, ${it.message}")
                 }
@@ -123,6 +146,24 @@ class UpdateCompletedMatchFragment : Fragment(R.layout.update_completed_match_fr
                     Timber.d("${it.exception}, ${it.message}")
                 }
             }
+        }
+    }
+
+    private fun setDataForUpdate(match: Match) {
+        if (match.team1Score != null && match.team2Score != null) {
+            binding.team1ScoreET.setNumber(match.team1Score)
+            binding.team2ScoreET.setNumber(match.team2Score)
+            binding.matchNotesET.setText(match.matchNotes)
+            binding.shootingET.setNumber(match.team1ShootingStats)
+            binding.shootingET2.setNumber(match.team2ShootingStats)
+            binding.attackET.setNumber(match.team1AttactStats)
+            binding.attackET2.setNumber(match.team2AttackStats)
+            binding.possesionsET.setNumber(match.team1PossesionStats)
+            binding.possesionsET2.setNumber(match.team2PossesionStats)
+            binding.cardsET.setNumber(match.team1CardStats)
+            binding.cardsET2.setNumber(match.team2CardStats)
+            binding.cornersET.setNumber(match.team1CornerStats)
+            binding.cornersET2.setNumber(match.team2CornerStats)
         }
     }
 
@@ -146,6 +187,12 @@ class UpdateCompletedMatchFragment : Fragment(R.layout.update_completed_match_fr
             binding.team1Logo.load(R.drawable.gaurdian_angels)
         } else {
             binding.team1Logo.load(R.drawable.ic_football)
+        }
+    }
+
+    private fun EditText.setNumber(number: Int?) {
+        number?.let {
+            this.setText(number.toString())
         }
     }
 
