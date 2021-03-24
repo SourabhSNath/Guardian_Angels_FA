@@ -20,6 +20,10 @@ import com.guardianangels.football.util.toEmptySafeInt
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
+/**
+ * Fragment where the match is set as Completed with aditional information.
+ * This fragment can be called again from CompletedMatchDetailsFragment for editing the values.
+ */
 @AndroidEntryPoint
 class UpdateCompletedMatchFragment : Fragment(R.layout.update_completed_match_fragment) {
 
@@ -139,6 +143,9 @@ class UpdateCompletedMatchFragment : Fragment(R.layout.update_completed_match_fr
             when (it) {
                 is NetworkState.Loading -> Timber.d("Loading")
                 is NetworkState.Success -> {
+                    /* TODO: Not working as intended. It may not be set at all when the match is edited and updated a second time.
+                         Prevents loading GameStats on HomeFragment without restart.*/
+                    Timber.tag("Observe updateGameStats").d("RELOAD_GAME_STATS_KEY set to true.")
                     navController.getBackStackEntry(R.id.home).savedStateHandle.set(Constants.RELOAD_GAME_STATS_KEY, true)
                     Toast.makeText(requireContext(), "Updated Game Stats", Toast.LENGTH_SHORT).show()
                 }
