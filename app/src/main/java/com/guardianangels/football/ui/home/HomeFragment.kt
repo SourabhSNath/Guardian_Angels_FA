@@ -34,7 +34,7 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
 
         val navController = findNavController()
 
-        /* Hide the login fragment behind the title. */
+        /* The login fragment is accessed through the title. */
         binding.appTitle.setOnLongClickListener {
             navController.navigate(HomeFragmentDirections.actionHomeToLoginFragment())
             false
