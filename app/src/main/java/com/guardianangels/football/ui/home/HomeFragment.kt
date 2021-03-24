@@ -11,7 +11,6 @@ import com.guardianangels.football.R
 import com.guardianangels.football.data.Match
 import com.guardianangels.football.databinding.HomeFragmentBinding
 import com.guardianangels.football.network.NetworkState
-import com.guardianangels.football.util.Constants
 import com.guardianangels.football.util.Constants.RELOAD_GAME_STATS_KEY
 import com.guardianangels.football.util.Constants.RELOAD_NEXT_UPCOMING_KEY
 import com.guardianangels.football.util.Constants.RELOAD_PREVIOUS_MATCHES_KEY
