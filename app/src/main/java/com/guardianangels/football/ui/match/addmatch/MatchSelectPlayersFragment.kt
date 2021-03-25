@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.guardianangels.football.R
@@ -13,6 +14,8 @@ import com.guardianangels.football.ui.base.SectionedPlayerListAdapter
 import com.guardianangels.football.ui.base.ToolbarState
 import com.guardianangels.football.util.Constants.PLAYER_SELECTED_KEY
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 @AndroidEntryPoint
@@ -43,8 +46,12 @@ class MatchSelectPlayersFragment : BasePlayerListFragment() {
      * Take the previously selected list of players and set it as the currently selected players
      */
     override fun listenForFragmentResult() {
-        val players = args.playerList
-        viewModel.multiSelectionHandler.setSelectedPlayers(players)
+        lifecycleScope.launch {
+            /* Delay for reducing lag during fragment transition animation */
+            delay(200)
+            val players = args.playerList
+            viewModel.multiSelectionHandler.setSelectedPlayers(players)
+        }
     }
 
     override fun playerItemClickListener(player: Player) {

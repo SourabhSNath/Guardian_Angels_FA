@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -20,6 +21,8 @@ import com.guardianangels.football.util.Constants
 import com.guardianangels.football.util.Constants.MATCH_DELETED_RESULT_KEY
 import com.guardianangels.football.util.Constants.RELOAD_NEXT_UPCOMING_KEY
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.time.Instant
 import java.time.ZoneId
@@ -111,8 +114,12 @@ class MatchDetailsFragment : Fragment(R.layout.match_details_fragment) {
             when (it) {
                 is NetworkState.Loading -> Timber.d("Loading")
                 is NetworkState.Success -> {
-                    Timber.d("Success")
-                    adapter.submitList(it.data)
+                    lifecycleScope.launch {
+                        /* Delay for reducing lag during fragment transition animation */
+                        delay(200)
+                        Timber.d("Success")
+                        adapter.submitList(it.data)
+                    }
                 }
                 is NetworkState.Failed -> {
                     Timber.d(it.message)

@@ -5,6 +5,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import coil.load
@@ -14,6 +15,8 @@ import com.guardianangels.football.network.NetworkState
 import com.guardianangels.football.ui.match.MatchTeamListAdapter
 import com.guardianangels.football.util.Constants.RELOAD_PREVIOUS_MATCHES_KEY
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.time.Instant
 import java.time.ZoneId
@@ -192,8 +195,11 @@ class CompletedMatchDetailsFragment : Fragment(R.layout.completed_match_details_
             when (it) {
                 is NetworkState.Loading -> Timber.d("Loading")
                 is NetworkState.Success -> {
-                    Timber.d("Success")
-                    adapter.submitList(it.data)
+                    lifecycleScope.launch {
+                        Timber.d("Success")
+                        delay(200)
+                        adapter.submitList(it.data)
+                    }
                 }
                 is NetworkState.Failed -> {
                     Timber.d("${it.exception} ${it.message}")
