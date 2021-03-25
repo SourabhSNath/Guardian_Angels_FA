@@ -12,6 +12,7 @@ import com.guardianangels.football.R
 import com.guardianangels.football.databinding.CompletedMatchDetailsFragmentBinding
 import com.guardianangels.football.network.NetworkState
 import com.guardianangels.football.ui.match.MatchTeamListAdapter
+import com.guardianangels.football.util.Constants.RELOAD_PREVIOUS_MATCHES_KEY
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 import java.time.Instant
@@ -209,7 +210,10 @@ class CompletedMatchDetailsFragment : Fragment(R.layout.completed_match_details_
                 is NetworkState.Loading -> Timber.d("Loading")
                 is NetworkState.Success -> {
                     Toast.makeText(requireContext(), "Match deleted", Toast.LENGTH_SHORT).show()
-                    findNavController().popBackStack()
+                    findNavController().apply {
+                        previousBackStackEntry?.savedStateHandle?.set(RELOAD_PREVIOUS_MATCHES_KEY, true)
+                        popBackStack()
+                    }
                 }
                 is NetworkState.Failed -> {
                     Timber.d("${it.exception} ${it.message}")
