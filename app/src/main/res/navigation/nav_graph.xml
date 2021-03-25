@@ -15,20 +15,52 @@
             app:destination="@id/loginFragment" />
         <action
             android:id="@+id/action_home_to_matchListFragment"
-            app:destination="@id/matchListFragment" />
+            app:destination="@id/matchListFragment"
+
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
+        <!-- To see the next upcoming match -->
         <action
             android:id="@+id/action_home_to_matchDetailsFragment"
-            app:destination="@id/matchDetailsFragment" />
+            app:destination="@id/matchDetailsFragment"
+
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+
+        <!-- When there is no next upcoming match, the option leads to AddUpcomingMatchFragment. -->
         <action
             android:id="@+id/action_home_to_addUpcomingMatchFragment"
-            app:destination="@id/addUpcomingMatchFragment" />
+            app:destination="@id/addUpcomingMatchFragment"
+
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
         <argument
             android:name="is_match_completed"
             app:argType="boolean" />
+
+        <!-- Go to Completed Match Details. -->
         <action
             android:id="@+id/action_home_to_completedMatchFragment"
-            app:destination="@id/completedMatchDetailsFragment" />
+            app:destination="@id/completedMatchDetailsFragment"
+
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.guardianangels.football.ui.login.LoginFragment"
+        android:label="LoginFragment"
+        tools:layout="@layout/login_fragment" />
 
     <fragment
         android:id="@+id/players"
@@ -37,10 +69,38 @@
         tools:layout="@layout/player_list_fragment">
         <action
             android:id="@+id/action_players_to_addPlayerFragment"
-            app:destination="@id/addPlayerFragment" />
+            app:destination="@id/addPlayerFragment"
+
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
         <action
             android:id="@+id/action_players_to_playerDetailsFragment"
-            app:destination="@id/playerDetailsFragment" />
+            app:destination="@id/playerDetailsFragment"
+
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/playerDetailsFragment"
+        android:name="com.guardianangels.football.ui.players.details.PlayerDetailsFragment"
+        android:label="PlayerDetailsFragment"
+        tools:layout="@layout/player_details_fragment">
+        <argument
+            android:name="playerModel"
+            app:argType="com.guardianangels.football.data.Player" />
+        <action
+            android:id="@+id/action_playerDetailsFragment_to_addPlayerFragment"
+            app:destination="@id/addPlayerFragment"
+
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
 
     <fragment
@@ -53,7 +113,6 @@
             android:defaultValue="@null"
             app:argType="com.guardianangels.football.data.Player"
             app:nullable="true" />
-
         <!--
           * This is to pass the updated player back to details fragment when navigating back
         -->
@@ -61,25 +120,12 @@
             android:id="@+id/action_addPlayerFragment_to_playerDetailsFragment"
             app:destination="@id/playerDetailsFragment"
             app:popUpTo="@id/playerDetailsFragment"
-            app:popUpToInclusive="true" />
-    </fragment>
+            app:popUpToInclusive="true"
 
-    <fragment
-        android:id="@+id/loginFragment"
-        android:name="com.guardianangels.football.ui.login.LoginFragment"
-        android:label="LoginFragment"
-        tools:layout="@layout/login_fragment" />
-    <fragment
-        android:id="@+id/playerDetailsFragment"
-        android:name="com.guardianangels.football.ui.players.details.PlayerDetailsFragment"
-        android:label="PlayerDetailsFragment"
-        tools:layout="@layout/player_details_fragment">
-        <argument
-            android:name="playerModel"
-            app:argType="com.guardianangels.football.data.Player" />
-        <action
-            android:id="@+id/action_playerDetailsFragment_to_addPlayerFragment"
-            app:destination="@id/addPlayerFragment" />
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
 
     <fragment
@@ -89,7 +135,12 @@
         tools:layout="@layout/add_upcoming_match_fragment">
         <action
             android:id="@+id/action_addUpcomingMatchFragment_to_matchPlayerListFragment"
-            app:destination="@id/matchSelectPlayersFragment" />
+            app:destination="@id/matchSelectPlayersFragment"
+
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
         <argument
             android:name="matchData"
             android:defaultValue="@null"
@@ -104,7 +155,12 @@
         tools:layout="@layout/player_list_fragment">
         <argument
             android:name="playerList"
-            app:argType="com.guardianangels.football.data.Player[]" />
+            app:argType="com.guardianangels.football.data.Player[]"
+
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
 
     <fragment
@@ -117,10 +173,20 @@
             app:argType="com.guardianangels.football.data.Match" />
         <action
             android:id="@+id/action_matchDetailsFragment_to_addUpcomingMatchFragment"
-            app:destination="@id/addUpcomingMatchFragment" />
+            app:destination="@id/addUpcomingMatchFragment"
+
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
         <action
             android:id="@+id/action_matchDetailsFragment_to_updateCompletedMatchFragment"
-            app:destination="@id/updateCompletedMatchFragment" />
+            app:destination="@id/updateCompletedMatchFragment"
+
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
 
     <fragment
@@ -130,10 +196,20 @@
         tools:layout="@layout/match_list_fragment">
         <action
             android:id="@+id/action_matchListFragment_to_addUpcomingMatchFragment"
-            app:destination="@id/addUpcomingMatchFragment" />
+            app:destination="@id/addUpcomingMatchFragment"
+
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
         <action
             android:id="@+id/action_matchListFragment_to_matchDetailsFragment"
-            app:destination="@id/matchDetailsFragment" />
+            app:destination="@id/matchDetailsFragment"
+
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
 
     <fragment
@@ -146,18 +222,34 @@
             app:argType="com.guardianangels.football.data.Match" />
         <action
             android:id="@+id/action_updateCompletedMatchFragment_to_updateTeamPlayersFragment"
-            app:destination="@id/updateTeamPlayersFragment" />
+            app:destination="@id/updateTeamPlayersFragment"
+
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
         <action
             android:id="@+id/action_updateCompletedMatchFragment_to_home"
             app:destination="@id/home"
             app:popUpTo="@id/home"
-            app:popUpToInclusive="true" />
+            app:popUpToInclusive="true"
+
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
         <action
             android:id="@+id/action_updateCompletedMatchFragment_to_completedMatchDetailsFragment"
             app:destination="@id/completedMatchDetailsFragment"
             app:popUpTo="@id/completedMatchDetailsFragment"
-            app:popUpToInclusive="true" />
+            app:popUpToInclusive="true"
+
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
+
     <fragment
         android:id="@+id/updateTeamPlayersFragment"
         android:name="com.guardianangels.football.ui.match.overview.UpdateTeamPlayersFragment"
@@ -170,11 +262,17 @@
             android:id="@+id/action_updateTeamPlayersFragment_to_home"
             app:destination="@id/home"
             app:popUpTo="@id/home"
-            app:popUpToInclusive="true" />
+            app:popUpToInclusive="true"
+
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
         <argument
             android:name="isWin"
             app:argType="boolean" />
     </fragment>
+
     <fragment
         android:id="@+id/completedMatchDetailsFragment"
         android:name="com.guardianangels.football.ui.match.completedmatches.CompletedMatchDetailsFragment"
@@ -183,9 +281,16 @@
         <argument
             android:name="match"
             app:argType="com.guardianangels.football.data.Match" />
+
+        <!-- For Editing.-->
         <action
             android:id="@+id/action_completedMatchFragment_to_updateCompletedMatchFragment"
-            app:destination="@id/updateCompletedMatchFragment" />
+            app:destination="@id/updateCompletedMatchFragment"
+
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
 
 </navigation>
