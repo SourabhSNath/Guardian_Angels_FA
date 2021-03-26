@@ -3,6 +3,7 @@ package com.guardianangels.football.ui.base
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -83,12 +84,18 @@ abstract class BasePlayerListFragment : Fragment(R.layout.player_list_fragment) 
          */
         viewModel.sectionedPlayerResultLiveData.observe(viewLifecycleOwner) {
             when (it) {
-                is NetworkState.Loading -> Timber.tag(TAG).d("observeViewModel: Loading")
+                is NetworkState.Loading -> {
+                    Timber.tag(TAG).d("observeViewModel: Loading")
+                    binding.progressBar.visibility = View.VISIBLE
+                }
                 is NetworkState.Success -> {
+                    binding.progressBar.visibility = View.GONE
                     adapter.submitList(it.data)
                 }
                 is NetworkState.Failed -> {
-                    Timber.tag(TAG).d("onViewCreated: ${it.message}")
+                    binding.progressBar.visibility = View.GONE
+                    Timber.tag(TAG).d("onViewCreated: ${it.exception} ${it.message}")
+                    Toast.makeText(requireContext(), it.message, Toast.LENGTH_LONG).show()
                 }
             }
         }

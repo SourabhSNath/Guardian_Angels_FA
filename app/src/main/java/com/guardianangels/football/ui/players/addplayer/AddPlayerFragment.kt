@@ -154,13 +154,18 @@ class AddPlayerFragment : Fragment(R.layout.add_player_fragment) {
 
         viewModel.playerAddedRef.observe(viewLifecycleOwner) {
             when (it) {
-                is NetworkState.Loading -> Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT).show()
+                is NetworkState.Loading -> {
+                    binding.loadingProgress.visibility = View.VISIBLE
+                    Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT).show()
+                }
                 is NetworkState.Success -> {
+                    binding.loadingProgress.visibility = View.GONE
                     Toast.makeText(requireContext(), "Success", Toast.LENGTH_SHORT).show()
                     setFragmentResult(REQUEST_PLAYER_UPLOAD_COMPLETE_KEY, bundleOf(BUNDLE_PLAYER_UPLOAD_COMPLETE to true))
                     resetFields()
                 }
                 is NetworkState.Failed -> {
+                    binding.loadingProgress.visibility = View.GONE
                     Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
                 }
             }
