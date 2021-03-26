@@ -237,12 +237,17 @@ class CompletedMatchDetailsFragment : Fragment(R.layout.completed_match_details_
             navController.popBackStack()
         }
 
-        binding.editButton.setOnClickListener {
-            navController.navigate(CompletedMatchDetailsFragmentDirections.actionCompletedMatchFragmentToUpdateCompletedMatchFragment(args.match))
-        }
+        if (detailsViewModel.isUserLoggedIn){
+            binding.editButton.setOnClickListener {
+                navController.navigate(CompletedMatchDetailsFragmentDirections.actionCompletedMatchFragmentToUpdateCompletedMatchFragment(args.match))
+            }
 
-        binding.deleteButton.setOnClickListener {
-            detailsViewModel.deleteMatch(args.match)
+            binding.deleteButton.setOnClickListener {
+                detailsViewModel.deleteMatch(args.match)
+            }
+        } else {
+            binding.editButton.visibility = View.GONE
+            binding.deleteButton.visibility = View.GONE
         }
     }
 }

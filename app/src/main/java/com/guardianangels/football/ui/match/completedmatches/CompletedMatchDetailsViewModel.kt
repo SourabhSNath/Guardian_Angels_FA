@@ -15,10 +15,15 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class CompletedMatchDetailsViewModel @Inject constructor(private val teamRepository: TeamRepository, private val matchRepository: MatchRepository) : ViewModel() {
+class CompletedMatchDetailsViewModel @Inject constructor(
+    private val teamRepository: TeamRepository,
+    private val matchRepository: MatchRepository
+) : ViewModel() {
 
     private val _players = MutableLiveData<NetworkState<List<Player>>>()
     val players: LiveData<NetworkState<List<Player>>> get() = _players
+
+    val isUserLoggedIn: Boolean = matchRepository.auth.currentUser != null
 
     fun getPlayers(team1Ids: List<String>) {
         viewModelScope.launch {
