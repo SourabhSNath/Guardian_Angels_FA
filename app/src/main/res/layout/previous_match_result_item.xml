@@ -2,13 +2,17 @@
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/card"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginStart="24dp"
     android:layout_marginEnd="24dp"
     android:layout_marginBottom="24dp"
+    app:cardBackgroundColor="#151515"
     app:cardCornerRadius="16dp"
-    app:cardElevation="8dp">
+    app:cardElevation="8dp"
+    app:strokeColor="@color/mainStatWon"
+    app:strokeWidth="2dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -17,8 +21,8 @@
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/team1Logo"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
             android:layout_marginTop="24dp"
             android:scaleType="centerCrop"
             app:layout_constraintEnd_toEndOf="@+id/team1"
@@ -30,8 +34,8 @@
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/team2Logo"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
             android:scaleType="centerCrop"
             app:layout_constraintEnd_toEndOf="@+id/team2"
             app:layout_constraintStart_toStartOf="@+id/team2"
@@ -44,7 +48,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             android:fontFamily="@font/raleway_semibold"
             android:gravity="center"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
@@ -77,7 +81,7 @@
             android:layout_marginEnd="16dp"
             android:fontFamily="@font/raleway_semibold"
             android:gravity="center"
-            android:text="X-MEn"
+            tools:text="X-MEn"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
             app:layout_constraintBaseline_toBaselineOf="@+id/team1"
             app:layout_constraintEnd_toEndOf="parent"
@@ -95,7 +99,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/team1"
             app:layout_constraintStart_toStartOf="@+id/team1"
-            app:layout_constraintTop_toBottomOf="@+id/team1"
+            app:layout_constraintTop_toBottomOf="@+id/barrier3"
             tools:text="8" />
 
         <TextView
@@ -118,6 +122,14 @@
             app:layout_constraintBaseline_toBaselineOf="@+id/team1Score"
             app:layout_constraintEnd_toEndOf="@+id/vs"
             app:layout_constraintStart_toStartOf="@+id/vs" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/barrier3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="bottom"
+            app:constraint_referenced_ids="team1,team2,vs"
+            tools:layout_editor_absoluteY="82dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
