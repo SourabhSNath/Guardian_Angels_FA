@@ -66,7 +66,7 @@
                 android:layout_height="72dp"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="40dp"
-                android:src="@drawable/gaurdian_angels"
+                tools:src="@drawable/gaurdian_angels"
                 app:layout_constraintEnd_toStartOf="@+id/team1Score"
                 app:layout_constraintStart_toStartOf="@+id/shapeableImageView2"
                 app:layout_constraintTop_toTopOf="@+id/shapeableImageView2" />
@@ -79,7 +79,7 @@
                 app:layout_constraintEnd_toEndOf="@+id/shapeableImageView2"
                 app:layout_constraintStart_toEndOf="@+id/team2Score"
                 app:layout_constraintTop_toTopOf="@+id/team1Logo"
-                app:srcCompat="@drawable/ic_football" />
+                tools:srcCompat="@drawable/ic_football" />
 
             <TextView
                 android:id="@+id/team1Score"
@@ -208,14 +208,6 @@
                 app:layout_constraintStart_toStartOf="@+id/locationTitle"
                 app:layout_constraintTop_toBottomOf="@+id/locationTitle"
                 tools:text="Bengaluru" />
-
-            <androidx.constraintlayout.widget.Barrier
-                android:id="@+id/barrier2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:barrierDirection="bottom"
-                app:constraint_referenced_ids="team1Score,team1Name,team2Name"
-                tools:layout_editor_absoluteY="82dp" />
 
             <TextView
                 android:id="@+id/summaryTitle"
@@ -454,6 +446,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/teamTitle"
+                app:layout_constraintVertical_bias="0.0"
                 tools:listitem="@layout/match_selected_players" />
 
             <TextView
