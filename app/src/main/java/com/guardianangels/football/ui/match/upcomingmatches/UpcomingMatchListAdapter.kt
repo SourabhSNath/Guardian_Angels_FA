@@ -2,11 +2,8 @@ package com.guardianangels.football.ui.match.upcomingmatches
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import coil.load
-import com.guardianangels.football.R
 import com.guardianangels.football.data.Match
 import com.guardianangels.football.databinding.MatchListItemBinding
 import com.guardianangels.football.ui.match.MatchDiffItem
