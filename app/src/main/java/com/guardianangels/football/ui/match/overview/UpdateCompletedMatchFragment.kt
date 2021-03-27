@@ -79,8 +79,11 @@ class UpdateCompletedMatchFragment : Fragment(R.layout.update_completed_match_fr
 
                 Timber.d("$team1Score, $team2Score, $team1ShootingStats, $team2ShootingStats...")
 
-                /** First update the Game Stats and then return the match after setting the match result. */
-                match = viewModel.updateGameStats(team1Score, team2Score, match)
+                /** First update the Game Stats and then return the match after setting the match result. Check if one of the team is GA.*/
+                if (match.team1Name == getString(R.string.guardian_angels) || match.team2Name == getString(R.string.guardian_angels)) {
+                    match = viewModel.updateGameStats(team1Score, team2Score, match)
+                }
+
                 Timber.d("Match result: ${match.gameResult}")
 
                 viewModel.updateMatch(
@@ -106,8 +109,12 @@ class UpdateCompletedMatchFragment : Fragment(R.layout.update_completed_match_fr
     private fun observeViewModel(navController: NavController, isPreviousCompletedMatchDetailsFragment: Boolean) {
         viewModel.listOfTeamIds.observe(viewLifecycleOwner) {
             when (it) {
-                is NetworkState.Loading -> Timber.d("Loading")
+                is NetworkState.Loading -> {
+                    binding.loadingProgress.visibility = View.VISIBLE
+                    Timber.d("Loading")
+                }
                 is NetworkState.Success -> {
+                    binding.loadingProgress.visibility = View.GONE
                     /** If the previous fragment is CompletedMatchDetailsFragment, do nothing an and popBack to it.*/
                     if (isPreviousCompletedMatchDetailsFragment) {
                         navController.navigate(
@@ -127,6 +134,7 @@ class UpdateCompletedMatchFragment : Fragment(R.layout.update_completed_match_fr
                                 )
                             )
                         } else {
+                            binding.loadingProgress.visibility = View.GONE
                             Timber.d("Go back to home fragment and reload completed matches and scores")
                             navController.navigate(UpdateCompletedMatchFragmentDirections.actionUpdateCompletedMatchFragmentToHome(true))
                         }
@@ -134,7 +142,9 @@ class UpdateCompletedMatchFragment : Fragment(R.layout.update_completed_match_fr
                     navController.getBackStackEntry(R.id.home).savedStateHandle.set(Constants.RELOAD_PREVIOUS_MATCHES_KEY, true)
                 }
                 is NetworkState.Failed -> {
+                    binding.loadingProgress.visibility = View.GONE
                     Timber.d("${it.exception}, ${it.message}")
+                    Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
                 }
             }
         }

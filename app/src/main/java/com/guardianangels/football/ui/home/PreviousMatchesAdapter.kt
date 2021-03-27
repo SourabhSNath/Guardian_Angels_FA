@@ -1,11 +1,16 @@
 package com.guardianangels.football.ui.home
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.annotation.ColorRes
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import com.google.android.material.card.MaterialCardView
 import com.guardianangels.football.R
+import com.guardianangels.football.data.GameResults
 import com.guardianangels.football.data.Match
 import com.guardianangels.football.databinding.PreviousMatchResultItemBinding
 import com.guardianangels.football.ui.match.MatchDiffItem
@@ -14,7 +19,7 @@ private typealias ClickListener = (Match) -> Unit
 
 class PreviousMatchesAdapter(val clickListener: ClickListener) : ListAdapter<Match, PreviousMatchesAdapter.ViewHolder>(MatchDiffItem) {
 
-    class ViewHolder(private val binding: PreviousMatchResultItemBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ViewHolder(private val binding: PreviousMatchResultItemBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Match) {
 
             val context = binding.root.context
@@ -42,6 +47,17 @@ class PreviousMatchesAdapter(val clickListener: ClickListener) : ListAdapter<Mat
 
             binding.team1Score.text = item.team1Score!!.toString()
             binding.team2Score.text = item.team2Score!!.toString()
+
+            val cardView = binding.card
+            when (item.gameResult) {
+                GameResults.WIN -> cardView.setCardStroke(context, R.color.mainStatWon)
+                GameResults.LOSS -> cardView.setCardStroke(context, R.color.mainStatLost)
+                GameResults.DRAW -> cardView.setCardStroke(context, R.color.mainStatDraw)
+            }
+        }
+
+        private fun MaterialCardView.setCardStroke(context: Context, @ColorRes color: Int) {
+            strokeColor = ContextCompat.getColor(context, color)
         }
     }
 

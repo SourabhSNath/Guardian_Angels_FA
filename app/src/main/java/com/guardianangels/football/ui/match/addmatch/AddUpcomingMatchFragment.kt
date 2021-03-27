@@ -188,9 +188,13 @@ class AddUpcomingMatchFragment : Fragment(R.layout.add_upcoming_match_fragment) 
     private fun observeAddedResultLiveData() {
         viewModel.matchUploadResult.observe(viewLifecycleOwner) {
             when (it) {
-                is NetworkState.Loading -> Timber.tag(TAG).d("Add result Loading")
+                is NetworkState.Loading -> {
+                    Timber.tag(TAG).d("Add result Loading")
+                    setProgressVisibility(View.VISIBLE)
+                }
                 is NetworkState.Success -> {
                     setUpFields()
+                    setProgressVisibility(View.GONE)
                     team = emptyList() // Drop previous team
                     adapter.submitList(team)
 
@@ -200,6 +204,7 @@ class AddUpcomingMatchFragment : Fragment(R.layout.add_upcoming_match_fragment) 
                     showToast("Complete")
                 }
                 is NetworkState.Failed -> {
+                    setProgressVisibility(View.GONE)
                     Timber.d(it.message)
                     showToast(it.message)
                 }
@@ -223,9 +228,12 @@ class AddUpcomingMatchFragment : Fragment(R.layout.add_upcoming_match_fragment) 
 
         viewModel.matchUpdateResult.observe(viewLifecycleOwner) {
             when (it) {
-                is NetworkState.Loading -> Timber.tag(TAG).d("Add result Loading")
+                is NetworkState.Loading -> {
+                    Timber.tag(TAG).d("Add result Loading")
+                    setProgressVisibility(View.VISIBLE)
+                }
                 is NetworkState.Success -> {
-
+                    setProgressVisibility(View.GONE)
                     /* Send a message to matchListFragment, homeFragment that a player has been added, so that it can refresh the list */
                     findNavController().apply {
                         previousBackStackEntry?.savedStateHandle?.set(MATCH_UPDATED_RESULT_KEY, it.data)
@@ -235,11 +243,16 @@ class AddUpcomingMatchFragment : Fragment(R.layout.add_upcoming_match_fragment) 
                     showToast("Complete")
                 }
                 is NetworkState.Failed -> {
+                    setProgressVisibility(View.GONE)
                     Timber.d(it.message)
                     showToast(it.message)
                 }
             }
         }
+    }
+
+    private fun setProgressVisibility(visibility: Int) {
+        binding.progressBar.visibility = visibility
     }
 
     /**

@@ -2,6 +2,7 @@ package com.guardianangels.football.ui.match.overview
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -52,11 +53,19 @@ class UpdateTeamPlayersFragment : Fragment(R.layout.update_team_players_fragment
 
         viewModel.playersUpdated.observe(viewLifecycleOwner) {
             when (it) {
-                is NetworkState.Loading -> Timber.d("Loading")
+                is NetworkState.Loading -> {
+                    binding.loadingProgress.visibility = View.VISIBLE
+                    Timber.d("Loading")
+                }
                 is NetworkState.Success -> {
+                    binding.loadingProgress.visibility = View.GONE
                     findNavController().navigate(UpdateTeamPlayersFragmentDirections.actionUpdateTeamPlayersFragmentToHome(true))
                 }
-                is NetworkState.Failed -> Timber.d("$it, ${it.message}")
+                is NetworkState.Failed -> {
+                    binding.loadingProgress.visibility = View.GONE
+                    Timber.d("$it, ${it.message}")
+                    Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }

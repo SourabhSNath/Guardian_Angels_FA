@@ -35,9 +35,16 @@
                 android:layout_weight="1"
                 android:text="Update Player Stats"
                 android:textAppearance="@style/TitleTextStyle" />
-
         </LinearLayout>
     </com.google.android.material.appbar.AppBarLayout>
+
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/loadingProgress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:indeterminate="true" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/playerRecyclerView"
