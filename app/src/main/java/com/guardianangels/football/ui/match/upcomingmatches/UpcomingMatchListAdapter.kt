@@ -10,6 +10,7 @@ import com.guardianangels.football.R
 import com.guardianangels.football.data.Match
 import com.guardianangels.football.databinding.MatchListItemBinding
 import com.guardianangels.football.ui.match.MatchDiffItem
+import com.guardianangels.football.util.setTeamLogo
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -45,15 +46,10 @@ class UpcomingMatchListAdapter(val clickListener: (Match) -> Unit) : ListAdapter
         }
 
         fun bind(item: Match) {
-            if (item.team1Logo!!.isNotEmpty()) {
-                binding.team1Logo.load(item.team1Logo)
-            } else {
-                binding.team1Logo.load(R.drawable.gaurdian_angels)
-            }
-            binding.team2Logo.load(item.team2Logo)
+            binding.team1Logo.setTeamLogo(item.team1Logo!!, item.team1Name!!)
+            binding.team2Logo.setTeamLogo(item.team2Logo!!, item.team2Name!!)
             binding.team1TV.text = item.team1Name
             binding.team2TV.text = item.team2Name
-
 
             val zonedDateTime = Instant.ofEpochSecond(item.dateAndTime!!).atZone(ZoneId.systemDefault())
             val date = zonedDateTime.toLocalDate()

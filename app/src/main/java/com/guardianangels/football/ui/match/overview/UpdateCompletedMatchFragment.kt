@@ -9,13 +9,13 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import coil.load
 import com.guardianangels.football.R
 import com.guardianangels.football.data.Match
 import com.guardianangels.football.databinding.UpdateCompletedMatchFragmentBinding
 import com.guardianangels.football.network.NetworkState
 import com.guardianangels.football.util.Constants
 import com.guardianangels.football.util.getString
+import com.guardianangels.football.util.setTeamLogo
 import com.guardianangels.football.util.toEmptySafeInt
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
@@ -48,7 +48,10 @@ class UpdateCompletedMatchFragment : Fragment(R.layout.update_completed_match_fr
             doneButton.text = done
         }
 
-        setLogos(match)
+        /* Set the team logos */
+        binding.team1Logo.setTeamLogo(match.team1Logo!!, match.team1Name!!)
+        binding.team2Logo.setTeamLogo(match.team2Logo!!, match.team1Name!!)
+
         setDataForUpdate(match)
 
         if (match.team1TeamIds.isNullOrEmpty()) {
@@ -181,29 +184,6 @@ class UpdateCompletedMatchFragment : Fragment(R.layout.update_completed_match_fr
             binding.cardsET2.setNumber(match.team2CardStats)
             binding.cornersET.setNumber(match.team1CornerStats)
             binding.cornersET2.setNumber(match.team2CornerStats)
-        }
-    }
-
-
-    private fun setLogos(match: Match) {
-        val team1Logo = match.team1Logo
-        val team2Logo = match.team2Logo
-        if (team1Logo!!.isNotEmpty())
-            binding.team1Logo.load(team1Logo)
-        else
-            setNoLogo(match.team1Name!!)
-
-        if (team2Logo!!.isNotEmpty())
-            binding.team2Logo.load(team2Logo)
-        else
-            setNoLogo(match.team2Name!!)
-    }
-
-    private fun setNoLogo(teamName: String) {
-        if (teamName == getString(R.string.guardian_angels)) {
-            binding.team1Logo.load(R.drawable.gaurdian_angels)
-        } else {
-            binding.team1Logo.load(R.drawable.ic_football)
         }
     }
 

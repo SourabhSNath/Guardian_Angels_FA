@@ -10,7 +10,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import coil.load
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.guardianangels.football.R
 import com.guardianangels.football.data.Match
@@ -20,6 +19,7 @@ import com.guardianangels.football.ui.match.MatchTeamListAdapter
 import com.guardianangels.football.util.Constants
 import com.guardianangels.football.util.Constants.MATCH_DELETED_RESULT_KEY
 import com.guardianangels.football.util.Constants.RELOAD_NEXT_UPCOMING_KEY
+import com.guardianangels.football.util.setTeamLogo
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -57,20 +57,8 @@ class MatchDetailsFragment : Fragment(R.layout.match_details_fragment) {
             setupButtons(binding, navController, matchInfo)
         }
 
-        val team1LogoLink = matchInfo.team1Logo
-        if (team1LogoLink!!.isNotEmpty()) {
-            binding.team1Logo.load(team1LogoLink)
-            Timber.d("$team1LogoLink")
-        } else {
-            binding.team1Logo.load(R.drawable.gaurdian_angels)
-        }
-
-        val team2LogoLink = matchInfo.team2Logo
-        if (team2LogoLink!!.isNotEmpty()) {
-            binding.team2Logo.load(team2LogoLink)
-        } else {
-            binding.team2Logo.load(R.drawable.ic_football)
-        }
+        binding.team1Logo.setTeamLogo(matchInfo.team1Logo!!, matchInfo.team1Name!!)
+        binding.team2Logo.setTeamLogo(matchInfo.team2Logo!!, matchInfo.team2Name!!)
 
         binding.team1TV.text = matchInfo.team1Name
         binding.team2TV.text = matchInfo.team2Name

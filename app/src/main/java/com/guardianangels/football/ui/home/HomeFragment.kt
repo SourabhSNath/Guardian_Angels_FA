@@ -7,7 +7,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
-import coil.load
 import com.guardianangels.football.R
 import com.guardianangels.football.data.Match
 import com.guardianangels.football.databinding.HomeFragmentBinding
@@ -15,6 +14,7 @@ import com.guardianangels.football.network.NetworkState
 import com.guardianangels.football.util.Constants.RELOAD_GAME_STATS_KEY
 import com.guardianangels.football.util.Constants.RELOAD_NEXT_UPCOMING_KEY
 import com.guardianangels.football.util.Constants.RELOAD_PREVIOUS_MATCHES_KEY
+import com.guardianangels.football.util.setTeamLogo
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 import java.time.Instant
@@ -172,19 +172,8 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
      * Setup the upcoming match card and set the clickListener on the card to navigate to detailsFragment.
      */
     private fun setupUpComingMatchCard(matchInfo: Match, navController: NavController) {
-        val team1LogoLink = matchInfo.team1Logo
-        if (team1LogoLink!!.isNotEmpty()) {
-            binding.team1Logo.load(team1LogoLink)
-        } else {
-            binding.team1Logo.load(R.drawable.gaurdian_angels)
-        }
-
-        val team2LogoLink = matchInfo.team2Logo
-        if (team2LogoLink!!.isNotEmpty()) {
-            binding.team2Logo.load(team2LogoLink)
-        } else {
-            binding.team2Logo.load(R.drawable.ic_football)
-        }
+        binding.team1Logo.setTeamLogo(matchInfo.team1Logo!!, matchInfo.team1Name!!)
+        binding.team2Logo.setTeamLogo(matchInfo.team2Logo!!, matchInfo.team2Name!!)
 
         binding.team1TV.text = matchInfo.team1Name
         binding.team2TV.text = matchInfo.team2Name
