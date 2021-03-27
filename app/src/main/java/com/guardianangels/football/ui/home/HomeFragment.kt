@@ -2,6 +2,7 @@ package com.guardianangels.football.ui.home
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
@@ -155,9 +156,14 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
             when (it) {
                 is NetworkState.Loading -> Timber.tag("previousCompleted").d("Loading")
                 is NetworkState.Success -> {
-                    adapter.submitList(it.data)
+                    if (it.data.isNotEmpty()) adapter.submitList(it.data)
+                    else binding.previousMatchTitle.visibility = View.GONE
                 }
-                is NetworkState.Failed -> Timber.tag("previousCompleted").d("${it.exception}")
+                is NetworkState.Failed -> {
+                    Timber.tag("previousCompleted").d("${it.exception}")
+                    Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
+                    binding.previousMatchTitle.visibility = View.GONE
+                }
             }
         }
     }
