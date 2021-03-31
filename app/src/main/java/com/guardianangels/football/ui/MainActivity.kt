@@ -1,13 +1,17 @@
 package com.guardianangels.football.ui
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupWithNavController
 import com.guardianangels.football.R
 import com.guardianangels.football.databinding.ActivityMainBinding
+import com.guardianangels.football.util.NetworkConnectionLiveData
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -19,6 +23,27 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = ActivityMainBinding.inflate(layoutInflater)
+
+        var isConnectionLost = false
+        NetworkConnectionLiveData(this).observe(this) {
+            isConnectionLost = if (it == false) {
+                Toast.makeText(this, "Please check your internet.", Toast.LENGTH_LONG).show()
+                true
+            } else {
+                if (isConnectionLost) Toast.makeText(this, "Internet Connected.", Toast.LENGTH_SHORT).show()
+                false
+            }
+        }
+
+        /*binding.loginButton.apply {
+            setBackgroundColor(Color.GRAY)
+            isEnabled = false
+        }*/
+        /*binding.loginButton.apply {
+                       setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.colorPrimary))
+                       isEnabled = false
+                   }*/
+
         val bottomNavigationBar = binding.bottomNavigation
 
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
