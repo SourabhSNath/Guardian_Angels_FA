@@ -54,18 +54,17 @@ class LoginFragment : Fragment(R.layout.login_fragment) {
 
         viewModel.loginState.observe(viewLifecycleOwner) {
             when (it) {
-                is NetworkState.Loading -> {
-                    // TODO: Add loading state
-                }
-
+                is NetworkState.Loading -> binding.progressBar.visibility = View.VISIBLE
                 is NetworkState.Success -> {
                     Toast.makeText(requireContext(), "Successful Login", Toast.LENGTH_SHORT).show()
                     loginAction(loginTV, passwordTextField, loginButton, logoutButton)
+                    binding.progressBar.visibility = View.GONE
                 }
 
                 is NetworkState.Failed -> {
                     Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
                     passwordEditText.error = it.message
+                    binding.progressBar.visibility = View.GONE
                 }
             }
         }
