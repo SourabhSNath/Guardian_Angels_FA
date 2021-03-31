@@ -62,8 +62,8 @@
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="24dp"
+                app:cardElevation="8dp"
                 app:cardCornerRadius="16dp"
-                app:cardElevation="4dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/upcomingTV">
@@ -72,15 +72,121 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                    <com.google.android.material.imageview.ShapeableImageView
+                    <com.google.android.material.card.MaterialCardView
                         android:id="@+id/bg"
                         android:layout_width="0dp"
                         android:layout_height="116dp"
-                        android:background="@drawable/main_match_gradient"
+                        app:cardBackgroundColor="#151515"
+                        app:cardCornerRadius="16dp"
+                        app:cardElevation="0dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:shapeAppearanceOverlay="@style/BottomRoundedShapeableImageView" />
+                        app:strokeColor="@color/colorPrimary"
+                        app:strokeWidth="2dp" />
+
+                    <ImageView
+                        android:id="@+id/team1Logo"
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
+                        android:layout_marginStart="24dp"
+                        android:contentDescription="Team 1 Logo"
+                        app:layout_constraintBottom_toBottomOf="@+id/bg"
+                        app:layout_constraintEnd_toStartOf="@+id/matchDate"
+                        app:layout_constraintHorizontal_bias="0.6"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/bg"
+                        tools:src="@drawable/gaurdian_angels" />
+
+                    <TextView
+                        android:id="@+id/matchDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:fontFamily="@font/poppins_semibold"
+                        android:textAlignment="center"
+                        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                        android:textColor="@color/colorPrimary"
+                        app:layout_constraintEnd_toStartOf="@+id/team2Logo"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/team1Logo"
+                        app:layout_constraintTop_toTopOf="@+id/team1Logo"
+                        tools:text="FRI 22 JAN" />
+
+                    <TextView
+                        android:id="@+id/matchKickOffTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins"
+                        android:textAlignment="center"
+                        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+                        android:textColor="@color/white"
+                        app:layout_constraintBottom_toBottomOf="@+id/team1Logo"
+                        app:layout_constraintEnd_toEndOf="@+id/matchDate"
+                        app:layout_constraintStart_toStartOf="@+id/matchDate"
+                        app:layout_constraintTop_toBottomOf="@+id/matchDate"
+                        app:layout_constraintVertical_bias="0.25"
+                        tools:text="KO: 1:30 PM" />
+
+                    <ImageView
+                        android:id="@+id/team2Logo"
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
+                        android:layout_marginEnd="24dp"
+                        app:layout_constraintBottom_toBottomOf="@+id/team1Logo"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/matchDate"
+                        app:layout_constraintTop_toTopOf="@+id/team1Logo"
+                        tools:src="@drawable/ic_football" />
+
+                    <TextView
+                        android:id="@+id/team1TV"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:fontFamily="@font/raleway_semibold"
+                        android:gravity="center"
+                        android:singleLine="true"
+                        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/vs"
+                        app:layout_constraintHorizontal_chainStyle="spread"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/bg"
+                        tools:text="@string/guardian_angels" />
+
+                    <TextView
+                        android:id="@+id/vs"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:fontFamily="@font/raleway_bold_italic"
+                        android:gravity="center"
+                        android:minEms="2"
+                        android:text="VS"
+                        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+                        app:layout_constraintBaseline_toBaselineOf="@+id/team1TV"
+                        app:layout_constraintEnd_toStartOf="@+id/team2TV"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/team1TV" />
+
+                    <TextView
+                        android:id="@+id/team2TV"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="16dp"
+                        android:fontFamily="@font/raleway_semibold"
+                        android:gravity="center"
+                        android:singleLine="true"
+                        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+                        app:layout_constraintBaseline_toBaselineOf="@+id/team1TV"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/vs"
+                        tools:text="X-MEn" />
 
                     <com.google.android.material.progressindicator.CircularProgressIndicator
                         android:id="@+id/loadingProgress"
@@ -91,8 +197,7 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.5"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:trackColor="@color/pink" />
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
                         android:id="@+id/addAMatchTV"
@@ -115,117 +220,6 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         tools:visibility="visible" />
-
-                    <ImageView
-                        android:id="@+id/team1Logo"
-                        android:layout_width="56dp"
-                        android:layout_height="56dp"
-                        android:layout_marginStart="24dp"
-                        android:contentDescription="Team 1 Logo"
-                        app:layout_constraintBottom_toBottomOf="@+id/bg"
-                        app:layout_constraintEnd_toStartOf="@+id/matchDate"
-                        app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        tools:src="@drawable/gaurdian_angels" />
-
-
-                    <TextView
-                        android:id="@+id/matchDate"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:textAlignment="center"
-                        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
-                        android:textColor="@color/black"
-                        app:layout_constraintEnd_toStartOf="@+id/team2Logo"
-                        app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toEndOf="@+id/team1Logo"
-                        app:layout_constraintTop_toTopOf="@+id/team1Logo"
-                        tools:text="FRI 22 JAN" />
-
-                    <TextView
-                        android:id="@+id/matchKickOffTime"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/poppins"
-                        android:textAlignment="center"
-                        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
-                        android:textColor="@color/black"
-                        app:layout_constraintBottom_toBottomOf="@+id/team1Logo"
-                        app:layout_constraintEnd_toEndOf="@+id/matchDate"
-                        app:layout_constraintStart_toStartOf="@+id/matchDate"
-                        app:layout_constraintTop_toBottomOf="@+id/matchDate"
-                        app:layout_constraintVertical_bias="0.25"
-                        tools:text="KO: 1:30 PM" />
-
-
-                    <!-- In case no logo is available for the opposing team -->
-
-                    <ImageView
-                        android:id="@+id/team2Logo"
-                        android:layout_width="56dp"
-                        android:layout_height="56dp"
-                        android:layout_marginEnd="24dp"
-                        app:layout_constraintBottom_toBottomOf="@+id/team1Logo"
-                        app:layout_constraintEnd_toEndOf="@+id/bg"
-                        app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toEndOf="@+id/matchDate"
-                        app:layout_constraintTop_toTopOf="@+id/team1Logo"
-                        tools:src="@drawable/ic_football" />
-
-
-                    <TextView
-                        android:id="@+id/team1TV"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="24dp"
-                        android:layout_marginBottom="24dp"
-                        android:fontFamily="@font/poppins"
-                        android:singleLine="true"
-                        android:textAlignment="center"
-                        android:textColor="@color/white"
-                        android:textSize="14sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/vs"
-                        app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/bg"
-                        tools:text="@string/guardian_angels" />
-
-                    <TextView
-                        android:id="@+id/vs"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginEnd="16dp"
-                        android:fontFamily="@font/raleway_bold_italic"
-                        android:text="VS"
-                        android:textColor="@color/white"
-                        android:textSize="18sp"
-                        app:layout_constraintBaseline_toBaselineOf="@+id/team1TV"
-                        app:layout_constraintEnd_toStartOf="@+id/team2TV"
-                        app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toEndOf="@+id/team1TV" />
-
-                    <TextView
-                        android:id="@+id/team2TV"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="16dp"
-                        android:fontFamily="@font/poppins"
-                        android:singleLine="true"
-                        android:textAlignment="center"
-                        android:textColor="@color/white"
-                        android:textSize="14sp"
-                        app:layout_constraintBaseline_toBaselineOf="@+id/team1TV"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toEndOf="@+id/vs"
-                        tools:text="FC Barcelona" />
-
-
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
 
