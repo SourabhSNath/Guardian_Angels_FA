@@ -35,15 +35,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        /*binding.loginButton.apply {
-            setBackgroundColor(Color.GRAY)
-            isEnabled = false
-        }*/
-        /*binding.loginButton.apply {
-                       setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.colorPrimary))
-                       isEnabled = false
-                   }*/
-
         val bottomNavigationBar = binding.bottomNavigation
 
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
