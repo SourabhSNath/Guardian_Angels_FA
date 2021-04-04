@@ -1,6 +1,7 @@
 package com.guardianangels.football.data
 
 import android.os.Parcelable
+import androidx.annotation.Keep
 import com.google.firebase.firestore.Exclude
 import kotlinx.parcelize.Parcelize
 
@@ -15,6 +16,7 @@ enum class PlayerType {
 /**
  * All are Nullable since firestore requires an empty constructor
  */
+@Keep
 @Parcelize
 data class Player(
 
