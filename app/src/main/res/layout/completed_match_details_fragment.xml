@@ -14,21 +14,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/shapeableImageView2"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="24dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/stadium_bg"
-                app:layout_constraintBottom_toBottomOf="@+id/team1Name"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tournamentTV"
-                app:shapeAppearanceOverlay="@style/RoundedCornerImageView" />
-
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/backButton"
                 style="@style/IconButton"
@@ -60,16 +45,32 @@
                 app:layout_constraintBaseline_toBaselineOf="@+id/backButton"
                 app:layout_constraintEnd_toEndOf="parent" />
 
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/shapeableImageView2"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="8dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/stadium_bg"
+                app:layout_constraintBottom_toBottomOf="@+id/team1Name"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tournamentTV"
+                app:shapeAppearanceOverlay="@style/RoundedCornerImageView" />
+
+
             <ImageView
                 android:id="@+id/team1Logo"
                 android:layout_width="72dp"
                 android:layout_height="72dp"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="40dp"
-                tools:src="@drawable/gaurdian_angels"
                 app:layout_constraintEnd_toStartOf="@+id/team1Score"
                 app:layout_constraintStart_toStartOf="@+id/shapeableImageView2"
-                app:layout_constraintTop_toTopOf="@+id/shapeableImageView2" />
+                app:layout_constraintTop_toTopOf="@+id/shapeableImageView2"
+                tools:src="@drawable/gaurdian_angels" />
 
             <ImageView
                 android:id="@+id/team2Logo"
@@ -232,6 +233,13 @@
                 app:layout_constraintTop_toBottomOf="@+id/summaryTitle"
                 tools:text="The game came the day after Bamford was left out of Gareth Southgate's squad for the first World Cup qualifiers. Fulham, meanwhile, missed the chance to move out of the Premier League relegation zone with a third defeat in four games." />
 
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.5" />
+
             <TextView
                 android:id="@+id/detailsTitle"
                 android:layout_width="wrap_content"
@@ -243,18 +251,27 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/summaryBody" />
 
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guideline3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.5" />
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/detailsCard"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="24dp"
+                android:layout_marginBottom="24dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="#1E1E1E"
+                app:layout_constraintBottom_toTopOf="@+id/teamTitle"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/detailsTitle"/>
 
             <TextView
                 android:id="@+id/shootingTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="48dp"
                 android:fontFamily="@font/raleway_semibold"
                 android:text="Shooting"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
@@ -425,7 +442,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="48dp"
                 android:fontFamily="@font/raleway"
                 android:text="Team"
                 app:layout_constraintStart_toStartOf="parent"

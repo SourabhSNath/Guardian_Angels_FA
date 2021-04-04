@@ -22,6 +22,9 @@ import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
+/**
+ * Shows the details for a completed match.
+ */
 @AndroidEntryPoint
 class CompletedMatchDetailsFragment : Fragment(R.layout.completed_match_details_fragment) {
 
@@ -181,6 +184,7 @@ class CompletedMatchDetailsFragment : Fragment(R.layout.completed_match_details_
             detailsViewModel.getPlayers(team1Ids)
         } else {
             binding.teamTitle.visibility = View.GONE
+            binding.detailsCard.visibility = View.GONE // Hides the details background card, since it isn't constrained to teamTitle anymore.
         }
 
         observeData(adapter)
