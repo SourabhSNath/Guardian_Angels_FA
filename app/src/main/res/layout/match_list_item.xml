@@ -10,7 +10,9 @@
     android:layout_marginEnd="24dp"
     android:layout_marginBottom="16dp"
     app:cardCornerRadius="16dp"
-    app:cardElevation="8dp">
+    app:cardElevation="8dp"
+    app:strokeColor="@color/colorPrimary"
+    app:strokeWidth="1dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -20,6 +22,7 @@
             android:id="@+id/team1Logo"
             android:layout_width="56dp"
             android:layout_height="56dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="24dp"
             android:contentDescription="Team 1 Logo"
             android:src="@drawable/gaurdian_angels"
@@ -32,9 +35,9 @@
             android:id="@+id/dateTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
+            android:layout_marginEnd="16dp"
             android:fontFamily="@font/poppins_semibold"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
@@ -64,6 +67,7 @@
             android:id="@+id/team2Logo"
             android:layout_width="56dp"
             android:layout_height="56dp"
+            android:layout_marginEnd="16dp"
             android:src="@drawable/ic_football"
             app:layout_constraintBottom_toBottomOf="@+id/team1Logo"
             app:layout_constraintEnd_toEndOf="parent"
@@ -75,17 +79,19 @@
             android:id="@+id/team1TV"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="24dp"
             android:layout_marginBottom="24dp"
-            android:fontFamily="@font/poppins"
+            android:fontFamily="@font/raleway_semibold"
+            android:gravity="center"
             android:singleLine="true"
-            android:textAlignment="textStart"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
             android:textColor="@color/white"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/vs"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="@+id/team1Logo"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/team1Logo"
             tools:text="@string/guardian_angels" />
 
@@ -96,30 +102,30 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:fontFamily="@font/raleway_bold_italic"
+            android:gravity="center"
+            android:minEms="2"
             android:text="VS"
-            android:textColor="@color/white"
-            android:textSize="18sp"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
             app:layout_constraintBaseline_toBaselineOf="@+id/team1TV"
             app:layout_constraintEnd_toStartOf="@+id/team2TV"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/team1TV" />
 
+
         <TextView
             android:id="@+id/team2TV"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="2dp"
-            android:fontFamily="@font/poppins"
+            android:layout_marginEnd="16dp"
+            android:fontFamily="@font/raleway_semibold"
+            android:gravity="center"
             android:singleLine="true"
-            android:textAlignment="textEnd"
-            android:textColor="@color/white"
-            android:textSize="14sp"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
             app:layout_constraintBaseline_toBaselineOf="@+id/team1TV"
-            app:layout_constraintEnd_toEndOf="@+id/team2Logo"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/vs"
-            tools:text="FC Barcelona" />
-
+            tools:text="X-MEn" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>
