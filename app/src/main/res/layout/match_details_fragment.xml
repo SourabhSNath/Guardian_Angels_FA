@@ -28,7 +28,7 @@
                     style="@style/IconButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="24dp"
+                    android:layout_marginStart="8dp"
                     android:drawableEnd="@drawable/ic_back_arrow" />
 
                 <TextView
@@ -54,19 +54,15 @@
                     style="@style/IconButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="24dp"
+                    android:layout_marginEnd="8dp"
                     android:drawableEnd="@drawable/ic_delete" />
 
             </LinearLayout>
 
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/upcomingMatchCard"
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="24dp"
-                app:cardCornerRadius="16dp">
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -77,10 +73,11 @@
                         android:layout_width="0dp"
                         android:layout_height="0dp"
                         android:scaleType="centerCrop"
-                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintBottom_toBottomOf="@+id/team1TV"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
+                        app:shapeAppearanceOverlay="@style/RoundedCornerImageView"
                         app:srcCompat="@drawable/stadium_bg" />
 
                     <View
@@ -88,29 +85,24 @@
                         android:layout_width="0dp"
                         android:layout_height="0dp"
                         android:background="@drawable/match_detail_gradient"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintBottom_toBottomOf="@+id/bg"
+                        app:layout_constraintEnd_toEndOf="@+id/bg"
+                        app:layout_constraintStart_toStartOf="@+id/bg"
+                        app:layout_constraintTop_toTopOf="@+id/bg" />
 
-                    <androidx.constraintlayout.widget.Guideline
-                        android:id="@+id/guideline"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        app:layout_constraintGuide_begin="236dp" />
 
                     <ImageView
                         android:id="@+id/team1Logo"
-                        android:layout_width="56dp"
-                        android:layout_height="56dp"
+                        android:layout_width="72dp"
+                        android:layout_height="72dp"
                         android:layout_marginStart="24dp"
+                        android:layout_marginTop="24dp"
                         android:contentDescription="Team 1 Logo"
-                        app:layout_constraintBottom_toBottomOf="@id/guideline"
+                        app:layout_constraintBottom_toTopOf="@+id/team1Name"
                         app:layout_constraintEnd_toStartOf="@+id/matchDate"
                         app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/bg"
+                        app:layout_constraintTop_toTopOf="@+id/bg"
                         tools:src="@drawable/gaurdian_angels" />
 
                     <TextView
@@ -118,16 +110,21 @@
                         style="@style/ShadowTextStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="24dp"
+                        android:layout_marginEnd="8dp"
                         android:fontFamily="@font/poppins_semibold"
                         android:shadowColor="@color/white"
-                        tools:text="FRI 22 JAN"
                         android:textAlignment="center"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
                         android:textColor="@color/black"
+                        app:layout_constraintBottom_toTopOf="@+id/matchKickOffTime"
                         app:layout_constraintEnd_toStartOf="@+id/team2Logo"
                         app:layout_constraintHorizontal_bias="0.5"
                         app:layout_constraintStart_toEndOf="@+id/team1Logo"
-                        app:layout_constraintTop_toTopOf="@+id/team1Logo" />
+                        app:layout_constraintTop_toTopOf="@+id/team1Logo"
+                        app:layout_constraintVertical_bias="0.41000003"
+                        tools:text="FRI 22 JAN" />
 
                     <TextView
                         android:id="@+id/matchKickOffTime"
@@ -138,19 +135,16 @@
                         android:textAlignment="center"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
                         android:textColor="#FFEB3B"
-                        app:layout_constraintBottom_toBottomOf="@+id/team1Logo"
                         app:layout_constraintEnd_toEndOf="@+id/matchDate"
+                        app:layout_constraintHorizontal_bias="0.5"
                         app:layout_constraintStart_toStartOf="@+id/matchDate"
                         app:layout_constraintTop_toBottomOf="@+id/matchDate"
-                        app:layout_constraintVertical_bias="0.25"
                         tools:text="1:30 PM" />
 
-
-                    <!-- In case no logo is available for the opposing team -->
                     <ImageView
                         android:id="@+id/team2Logo"
-                        android:layout_width="56dp"
-                        android:layout_height="56dp"
+                        android:layout_width="72dp"
+                        android:layout_height="72dp"
                         android:layout_marginEnd="24dp"
                         app:layout_constraintBottom_toBottomOf="@+id/team1Logo"
                         app:layout_constraintEnd_toEndOf="@+id/bg"
@@ -164,56 +158,41 @@
                         style="@style/ShadowTextStyle"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="24dp"
-                        android:layout_marginBottom="24dp"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:singleLine="true"
+                        android:layout_marginTop="16dp"
+                        android:ellipsize="end"
+                        android:fontFamily="@font/raleway_semibold"
+                        android:maxLines="2"
+                        android:paddingBottom="40dp"
+                        android:shadowColor="@color/black"
                         android:textAlignment="center"
+                        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
                         android:textColor="@color/white"
-                        android:textSize="14sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/vs"
+                        app:layout_constraintEnd_toEndOf="@+id/team1Logo"
                         app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/guideline"
+                        app:layout_constraintStart_toStartOf="@+id/team1Logo"
+                        app:layout_constraintTop_toBottomOf="@+id/team1Logo"
                         tools:text="@string/guardian_angels" />
-
-                    <TextView
-                        android:id="@+id/vs"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginEnd="16dp"
-                        android:fontFamily="@font/raleway_bold_italic"
-                        android:text="VS"
-                        android:textColor="@color/white"
-                        android:textSize="18sp"
-                        app:layout_constraintBaseline_toBaselineOf="@+id/team1TV"
-                        app:layout_constraintEnd_toStartOf="@+id/team2TV"
-                        app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toEndOf="@+id/team1TV" />
 
                     <TextView
                         android:id="@+id/team2TV"
                         style="@style/ShadowTextStyle"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="16dp"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:singleLine="true"
+                        android:ellipsize="end"
+                        android:fontFamily="@font/raleway_semibold"
+                        android:maxLines="2"
+                        android:paddingBottom="24dp"
+                        android:shadowColor="@color/black"
                         android:textAlignment="center"
+                        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
                         android:textColor="@color/white"
-                        android:textSize="14sp"
                         app:layout_constraintBaseline_toBaselineOf="@+id/team1TV"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toEndOf="@+id/vs"
-                        tools:text="FC Barcelona" />
-
+                        app:layout_constraintEnd_toEndOf="@+id/team2Logo"
+                        app:layout_constraintStart_toStartOf="@+id/team2Logo"
+                        tools:text="Manchester United" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
-            </com.google.android.material.card.MaterialCardView>
+            </FrameLayout>
 
             <TextView
                 android:id="@+id/tournamentTItle"
