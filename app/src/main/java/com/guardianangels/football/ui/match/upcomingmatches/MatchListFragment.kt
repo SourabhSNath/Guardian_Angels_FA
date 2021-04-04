@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.guardianangels.football.R
@@ -16,6 +17,8 @@ import com.guardianangels.football.util.Constants.BUNDLE_MATCH_UPLOAD_COMPLETE
 import com.guardianangels.football.util.Constants.MATCH_DELETED_RESULT_KEY
 import com.guardianangels.football.util.Constants.REQUEST_MATCH_UPLOAD_COMPLETE_KEY
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 @AndroidEntryPoint
@@ -44,24 +47,32 @@ class MatchListFragment : Fragment(R.layout.match_list_fragment) {
             }
         }
 
-        observeViewModel(adapter)
+        observeViewModel(adapter, binding)
     }
 
     private fun navigateToDetailsFragment(match: Match) {
         findNavController().navigate(MatchListFragmentDirections.actionMatchListFragmentToMatchDetailsFragment(match))
     }
 
-    private fun observeViewModel(adapter: UpcomingMatchListAdapter) {
-
-        viewModel.upcomingMatch.observe(viewLifecycleOwner) {
-            when (it) {
-                is NetworkState.Loading -> showToast("Loading")
-                is NetworkState.Success -> {
-                    adapter.submitList(it.data)
-                }
-                is NetworkState.Failed -> {
-                    showToast(it.message)
-                    Timber.d(it.message)
+    private fun observeViewModel(adapter: UpcomingMatchListAdapter, binding: MatchListFragmentBinding) {
+        // Delay to wait for fragment transition.
+        lifecycleScope.launch {
+            delay(200)
+            Timber.d("Load Matches after 200 ms")
+            viewModel.upcomingMatch.observe(viewLifecycleOwner) {
+                when (it) {
+                    is NetworkState.Loading -> {
+                        binding.progressBar.show()
+                    }
+                    is NetworkState.Success -> {
+                        binding.progressBar.hide()
+                        adapter.submitList(it.data)
+                    }
+                    is NetworkState.Failed -> {
+                        binding.progressBar.hide()
+                        showToast(it.message)
+                        Timber.d(it.message)
+                    }
                 }
             }
         }
