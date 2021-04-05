@@ -180,8 +180,9 @@ class AddPlayerFragment : Fragment(R.layout.add_player_fragment) {
 
         viewModel.playerUpdatedResult.observe(viewLifecycleOwner) {
             when (it) {
-                is NetworkState.Loading -> Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT).show()
+                is NetworkState.Loading -> binding.loadingProgress.visibility = View.VISIBLE
                 is NetworkState.Success -> {
+                    binding.loadingProgress.visibility = View.GONE
                     Toast.makeText(requireContext(), "Success", Toast.LENGTH_SHORT).show()
 
                     /* Passing this to PlayerListFragment to reload the list after a player gets updated. */
@@ -191,6 +192,7 @@ class AddPlayerFragment : Fragment(R.layout.add_player_fragment) {
                     findNavController().navigate(AddPlayerFragmentDirections.actionAddPlayerFragmentToPlayerDetailsFragment(it.data!!))
                 }
                 is NetworkState.Failed -> {
+                    binding.loadingProgress.visibility = View.GONE
                     Timber.tag(TAG).d("updatePlayer: ${it.message}")
                     Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
                 }

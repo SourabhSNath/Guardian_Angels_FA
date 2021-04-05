@@ -137,7 +137,6 @@ class UpdateCompletedMatchFragment : Fragment(R.layout.update_completed_match_fr
                                 )
                             )
                         } else {
-                            binding.loadingProgress.visibility = View.GONE
                             Timber.d("Go back to home fragment and reload completed matches and scores")
                             navController.navigate(UpdateCompletedMatchFragmentDirections.actionUpdateCompletedMatchFragmentToHome(true))
                         }

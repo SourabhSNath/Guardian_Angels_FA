@@ -35,15 +35,22 @@ class UpdateTeamPlayersFragment : Fragment(R.layout.update_team_players_fragment
 
         viewModel.playersLiveData.observe(viewLifecycleOwner) {
             when (it) {
-                is NetworkState.Loading -> Timber.d("Loading")
+                is NetworkState.Loading -> {
+                    Timber.d("Loading")
+                    binding.loadingProgress.visibility = View.VISIBLE
+                }
                 is NetworkState.Success -> {
+                    binding.loadingProgress.visibility = View.GONE
                     lifecycleScope.launch {
                         /* Delay to wait for fragment transition animation, prevents lag.*/
                         delay(200)
                         adapter.submitList(it.data)
                     }
                 }
-                is NetworkState.Failed -> Timber.d("Failed, ${it.exception}, ${it.message}")
+                is NetworkState.Failed -> {
+                    binding.loadingProgress.visibility = View.GONE
+                    Timber.d("Failed, ${it.exception}, ${it.message}")
+                }
             }
         }
 

@@ -112,10 +112,9 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
                     setUpcomingViewsVisibiltiy(View.VISIBLE)
                 }
                 is NetworkState.Failed -> {
-                    Timber.tag("upcomingMatch").d("${it.exception}, ${it.message}")
+                    Timber.tag("upcomingMatch").d("${it.exception}, ${it.message}, Hide everything")
+                    binding.loadingProgress.visibility = View.GONE
                     if (it.exception is IndexOutOfBoundsException) {
-                        binding.loadingProgress.visibility = View.GONE
-
                         if (viewModel.isUserLoggedIn()) {
                             binding.addAMatchTV.visibility = View.VISIBLE
                             binding.upcomingMatchCard.setOnClickListener {
@@ -124,10 +123,11 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
                             }
                             setUpcomingViewsVisibiltiy(View.GONE)
                         } else {
-                            binding.upcomingMatchCard.visibility = View.GONE
-                            binding.upcomingTV.visibility = View.GONE
-                            binding.moreUpcomingTV.visibility = View.GONE
+                            hideUpcoming()
                         }
+                    } else {
+                        hideUpcoming()
+                        Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
                     }
                 }
             }
@@ -166,6 +166,12 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
                 }
             }
         }
+    }
+
+    private fun hideUpcoming() {
+        binding.upcomingMatchCard.visibility = View.GONE
+        binding.upcomingTV.visibility = View.GONE
+        binding.moreUpcomingTV.visibility = View.GONE
     }
 
     /**
