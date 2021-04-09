@@ -428,6 +428,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:clipToPadding="false"
+                android:splitMotionEvents="false"
                 android:nestedScrollingEnabled="false"
                 android:paddingBottom="72dp"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"

@@ -73,6 +73,7 @@
         android:layout_marginStart="12dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="12dp"
+        android:splitMotionEvents="false"
         android:clipToPadding="false"
         android:paddingBottom="68dp"
         app:layout_constraintBottom_toBottomOf="parent"
