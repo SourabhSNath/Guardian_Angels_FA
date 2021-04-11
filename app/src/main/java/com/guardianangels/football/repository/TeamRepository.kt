@@ -33,10 +33,7 @@ class TeamRepository @Inject constructor(
     private val playerCollectionRef = firestore.collection("players")
     private val storageReference = storage.reference
 
-    /**
-     * Add players to firebase cloud firestore.
-     * Emitting a reference to the document along with network states.
-     */
+
     fun addPlayer(player: Player, uri: Uri) = flow {
         emit(NetworkState.loading())
 
@@ -51,7 +48,7 @@ class TeamRepository @Inject constructor(
 
 
     /**
-     * Update the player.
+     * Update a player.
      */
     fun updatePlayer(player: Player, uri: Uri?) = flow {
         emit(NetworkState.loading())
@@ -107,7 +104,7 @@ class TeamRepository @Inject constructor(
 
 
     /**
-     * Get a list of all Players
+     * Get a list of all Players sorted by the type. The list is used for the sectioned grid recyclerView.
      */
     fun getPlayers() = flow<NetworkState<List<SectionedPlayerRecyclerItem>>> {
         emit(NetworkState.loading())

@@ -28,10 +28,7 @@ class MatchRepository @Inject constructor(
     private val matchCollectionRef = firestore.collection("matches")
     private val storageReference = storage.reference
 
-    /**
-     * Add Match to firebase cloud firestore.
-     * Emitting a reference to the document along with network states.
-     */
+
     fun addMatchData(match: Match, team1Logo: Uri?, team2Logo: Uri) = flow {
         emit(NetworkState.loading())
 
@@ -48,9 +45,6 @@ class MatchRepository @Inject constructor(
     }.flowOn(Dispatchers.IO)
 
 
-    /**
-     * Update the match data.
-     */
     fun updateMatchData(match: Match, team1Logo: Uri?, team2Logo: Uri?) = flow {
         emit(NetworkState.loading())
 
@@ -140,9 +134,7 @@ class MatchRepository @Inject constructor(
             .toString()
     }
 
-    /**
-     * Get all upcoming matches
-     */
+
     fun getAllUpcomingMatches() = flow {
         emit(NetworkState.loading())
 
@@ -223,9 +215,7 @@ class MatchRepository @Inject constructor(
         return this
     }
 
-    /**
-     * Delete operation.
-     */
+
     private suspend fun deleteMatchFromFirebase(match: Match) {
         val team1Logo = match.team1Logo!!
         val team2Logo = match.team2Logo!!
