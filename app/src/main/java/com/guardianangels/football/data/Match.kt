@@ -38,5 +38,5 @@ data class Match(
     var gameResult: GameResults? = null,
 
     @get:Exclude // Exclude the id since it's only set at the time of download
-    var matchID: String? = "",
+    var matchID: String? = ""
 ) : Parcelable
