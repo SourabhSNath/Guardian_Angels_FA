@@ -2,13 +2,13 @@
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/upcomingMatchCard"
+    android:id="@+id/card"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="136dp"
     android:layout_marginStart="24dp"
-    android:layout_marginTop="8dp"
     android:layout_marginEnd="24dp"
-    android:layout_marginBottom="16dp"
+    android:layout_marginBottom="24dp"
+    app:cardBackgroundColor="#151515"
     app:cardCornerRadius="16dp"
     app:cardElevation="8dp"
     app:strokeColor="@color/colorPrimary"
@@ -18,33 +18,44 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/team1Logo"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:layout_marginStart="16dp"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:layout_marginStart="24dp"
             android:layout_marginTop="24dp"
-            android:contentDescription="Team 1 Logo"
-            android:src="@drawable/gaurdian_angels"
+            android:scaleType="centerCrop"
             app:layout_constraintEnd_toStartOf="@+id/dateTV"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
+            tools:src="@drawable/gaurdian_angels" />
+
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/team2Logo"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:layout_marginEnd="24dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/dateTV"
+            app:layout_constraintTop_toTopOf="@+id/team1Logo"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
+            tools:src="@drawable/gaurdian_angels" />
 
         <TextView
             android:id="@+id/dateTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
             android:fontFamily="@font/poppins_semibold"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
             android:textColor="@color/white"
-            app:layout_constraintEnd_toStartOf="@+id/team2Logo"
+            app:layout_constraintEnd_toEndOf="@+id/vs"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/team1Logo"
+            app:layout_constraintStart_toStartOf="@+id/vs"
             app:layout_constraintTop_toTopOf="@+id/team1Logo"
             tools:text="FRI 22 JAN" />
 
@@ -63,20 +74,9 @@
             app:layout_constraintVertical_bias="0.25"
             tools:text="1:30 PM" />
 
-        <ImageView
-            android:id="@+id/team2Logo"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:layout_marginEnd="16dp"
-            android:src="@drawable/ic_football"
-            app:layout_constraintBottom_toBottomOf="@+id/team1Logo"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/dateTV"
-            app:layout_constraintTop_toTopOf="@+id/team1Logo" />
-
 
         <TextView
-            android:id="@+id/team1TV"
+            android:id="@+id/team1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -84,13 +84,11 @@
             android:layout_marginBottom="24dp"
             android:fontFamily="@font/raleway_semibold"
             android:gravity="center"
-            android:singleLine="true"
+            android:maxLines="1"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
-            android:textColor="@color/white"
-            android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/vs"
-            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="spread"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/team1Logo"
             tools:text="@string/guardian_angels" />
@@ -106,26 +104,26 @@
             android:minEms="2"
             android:text="VS"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
-            app:layout_constraintBaseline_toBaselineOf="@+id/team1TV"
-            app:layout_constraintEnd_toStartOf="@+id/team2TV"
+            app:layout_constraintBaseline_toBaselineOf="@+id/team1"
+            app:layout_constraintEnd_toStartOf="@+id/team2"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/team1TV" />
-
+            app:layout_constraintStart_toEndOf="@+id/team1" />
 
         <TextView
-            android:id="@+id/team2TV"
+            android:id="@+id/team2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:fontFamily="@font/raleway_semibold"
             android:gravity="center"
-            android:singleLine="true"
+            android:maxLines="1"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
-            app:layout_constraintBaseline_toBaselineOf="@+id/team1TV"
+            app:layout_constraintBaseline_toBaselineOf="@+id/team1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/vs"
             tools:text="X-MEn" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </com.google.android.material.card.MaterialCardView>
