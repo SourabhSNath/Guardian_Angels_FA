@@ -45,8 +45,8 @@ class UpcomingMatchListAdapter(val clickListener: (Match) -> Unit) : ListAdapter
         fun bind(item: Match) {
             binding.team1Logo.setTeamLogo(item.team1Logo!!, item.team1Name!!)
             binding.team2Logo.setTeamLogo(item.team2Logo!!, item.team2Name!!)
-            binding.team1TV.text = item.team1Name
-            binding.team2TV.text = item.team2Name
+            binding.team1.text = item.team1Name
+            binding.team2.text = item.team2Name
 
             val zonedDateTime = Instant.ofEpochSecond(item.dateAndTime!!).atZone(ZoneId.systemDefault())
             val date = zonedDateTime.toLocalDate()
