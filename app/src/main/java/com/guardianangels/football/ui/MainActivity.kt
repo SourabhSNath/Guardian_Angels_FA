@@ -59,7 +59,7 @@ class MainActivity : AppCompatActivity() {
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.home, R.id.players, R.id.matchListFragment -> bottomNavigationBar.visibility = View.VISIBLE
+                R.id.home, R.id.players, R.id.matchListFragment, R.id.gallery -> bottomNavigationBar.visibility = View.VISIBLE
                 else -> bottomNavigationBar.visibility = View.GONE
             }
         }
