@@ -146,8 +146,9 @@ class MatchRepository @Inject constructor(
     }.flowOn(Dispatchers.Default)
 
     /**
-     * Get nextUpcomingMatch, to be displayed in HomeFragment
+     * nextUpcomingMatch and the previousMatch for HomeFragment cards
      */
+
     fun getNextUpcomingMatch() = flow {
         emit(NetworkState.loading())
         val match = getUpcomingMatchList()[0]
@@ -156,21 +157,23 @@ class MatchRepository @Inject constructor(
         emit(NetworkState.failed(it, it.message.toString()))
     }.flowOn(Dispatchers.Default)
 
+    fun getPreviousMatch() = flow {
+        emit(NetworkState.loading())
 
-    /**
-     * Get a list of first 10 completed matches.
-     */
+        val match = getCompletedMatchList().first()
+
+        emit(NetworkState.success(match))
+    }.catch {
+        emit(NetworkState.failed(it, it.message.toString()))
+    }.flowOn(Dispatchers.Default)
+
+
     fun getCompletedMatches() = flow {
         emit(NetworkState.loading())
 
-        /* Get top 10 matches after deleting older matches */
-        val matches: List<Match> = getMatchList()
-            .filter { it.isCompleted == true }
-            .sortedByDescending { it.dateAndTime }
-            .deleteOlderCompletedMatches()
+        val matches: List<Match> = getCompletedMatchList()
 
         emit(NetworkState.success(matches))
-
     }.catch {
         emit(NetworkState.failed(it, it.message.toString()))
     }.flowOn(Dispatchers.Default)
@@ -183,9 +186,12 @@ class MatchRepository @Inject constructor(
     }
 
     /**
-     * Get upcoming matches
+     * Get upcoming and completed matches
      */
     private suspend fun getUpcomingMatchList() = getMatchList().filter { it.isCompleted == null || it.isCompleted == false }.sortedBy { it.dateAndTime }
+
+    private suspend fun getCompletedMatchList() = getMatchList().filter { it.isCompleted == true }.sortedByDescending { it.dateAndTime }
+        .deleteOlderCompletedMatches() // Get top 10 matches after deleting older matches
 
     private fun Match.setId(id: String): Match {
         this.matchID = id
