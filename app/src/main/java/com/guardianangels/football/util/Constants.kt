@@ -21,8 +21,16 @@ object Constants {
     const val MATCH_UPDATED_RESULT_KEY = "matchUpdatedKey"
     const val MATCH_DELETED_RESULT_KEY = "matchDeletedKey"
 
+    const val PREVIOUS_MATCH_DELETED_RESULT_KEY = "previousMatchDeletedKey"
+
     /*** For home fragment ***/
     const val RELOAD_NEXT_UPCOMING_KEY = "reloadNextUpcomingWhenChangedKey"
     const val RELOAD_GAME_STATS_KEY = "reloadStatsWhenChangedKey"
     const val RELOAD_PREVIOUS_MATCHES_KEY = "reloadPreviousMatchesWhenChangeKey"
+
+    /** For Gallery */
+    const val REQUEST_GALLERY_IMAGE_UPLOAD_COMPLETE_KEY = "imageUploadedCheckKey"
+    const val BUNDLE_GALLERY_IMAGE_UPLOAD_COMPLETE = "bundleImageUpload"
+    const val REQUEST_GALLERY_IMAGE_DELETE_COMPLETE_KEY = "imgaeDeletetCheckKey"
+    const val BUNDLE_GALLERY_IMAGE_DELETE_COMPLETE = "bundleImageDelete"
 }
