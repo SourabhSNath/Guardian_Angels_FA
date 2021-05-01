@@ -7,19 +7,24 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import coil.load
+import com.google.android.material.card.MaterialCardView
 import com.guardianangels.football.R
+import com.guardianangels.football.data.GameResults
 import com.guardianangels.football.data.Match
 import com.guardianangels.football.databinding.HomeFragmentBinding
 import com.guardianangels.football.network.NetworkState
 import com.guardianangels.football.util.Constants.RELOAD_GAME_STATS_KEY
 import com.guardianangels.football.util.Constants.RELOAD_NEXT_UPCOMING_KEY
 import com.guardianangels.football.util.Constants.RELOAD_PREVIOUS_MATCHES_KEY
+import com.guardianangels.football.util.setCardStroke
 import com.guardianangels.football.util.setTeamLogo
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.util.*
 
 @AndroidEntryPoint
 class HomeFragment : Fragment(R.layout.home_fragment) {
@@ -45,23 +50,14 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
             navController.navigate(HomeFragmentDirections.actionHomeToMatchListFragment())
         }
 
-        val adapter = PreviousMatchesAdapter(::onMatchClick)
-        binding.recyclerview.adapter = adapter
+        binding.morePreviousTV.setOnClickListener {
+            navController.navigate(HomeFragmentDirections.actionHomeToPreviousMatchListFragment())
+        }
 
-        observeData(adapter, navController)
+        observeData(navController)
     }
 
-    /**
-     * Get the onClcik data from the previous matches list.
-     * Navigate to completedMatchFragment
-     */
-    private fun onMatchClick(match: Match) {
-        Timber.d("Names: [${match.team1Name}, ${match.team2Name}], Scores: [${match.team1Score}, ${match.team2Score}]")
-        findNavController().navigate(HomeFragmentDirections.actionHomeToCompletedMatchFragment(match))
-    }
-
-    private fun observeData(adapter: PreviousMatchesAdapter, navController: NavController) {
-
+    private fun observeData(navController: NavController) {
         val savedStateHandle = navController.currentBackStackEntry?.savedStateHandle
 
         /**
@@ -86,10 +82,13 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
             }
         }
 
+        /**
+         * Reload previous match when a completed match is added, updated or deleted.
+         */
         savedStateHandle?.getLiveData<Boolean>(RELOAD_PREVIOUS_MATCHES_KEY)?.observe(viewLifecycleOwner) {
             if (it) {
                 Timber.d("Reload previous matches")
-                viewModel.getPreviousMatches()
+                viewModel.getPreviousMatch()
                 navController.currentBackStackEntry?.savedStateHandle?.set(RELOAD_PREVIOUS_MATCHES_KEY, false)
             }
         }
@@ -129,6 +128,8 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
                         hideUpcoming()
                         Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
                     }
+                    // Show this if it fails to get the data. EmptyEvents Card is supposed to be shown when both upcoming and previous matches are empty
+                    binding.emptyEventsCard.visibility = View.VISIBLE
                 }
             }
         }
@@ -145,27 +146,39 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
                     binding.drawsTV.text = it.data.draws!!.toString()
                     binding.lossTV.text = it.data.losses!!.toString()
                 }
-                is NetworkState.Failed -> Timber.tag("gameStats").d("${it.exception}")
+                is NetworkState.Failed -> {
+                    Timber.tag("gameStats").d("${it.exception}")
+                    Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
+                }
             }
         }
 
-        /**
-         * Get the previous completed matches.
-         */
-        viewModel.previousCompletedMatches.observe(viewLifecycleOwner) {
+
+        viewModel.previousMatch.observe(viewLifecycleOwner) {
             when (it) {
                 is NetworkState.Loading -> Timber.tag("previousCompleted").d("Loading")
                 is NetworkState.Success -> {
-                    if (it.data.isNotEmpty()) adapter.submitList(it.data)
-                    else binding.previousMatchTitle.visibility = View.GONE
+                    // Hide the emptyEvents card if success. EmptyEvents Card is supposed to be shown when both upcoming and previous matches are empty
+                    binding.emptyEventsCard.visibility = View.GONE
+
+                    val item = it.data
+                    val cardView = binding.previousMatchCard.card
+                    setupPreviousMatchCard(item, cardView)
+
+                    cardView.setOnClickListener {
+                        navController.navigate(HomeFragmentDirections.actionHomeToCompletedMatchFragment(item))
+                    }
                 }
                 is NetworkState.Failed -> {
-                    Timber.tag("previousCompleted").d("${it.exception}")
-                    Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
                     binding.previousMatchTitle.visibility = View.GONE
+                    binding.morePreviousTV.visibility = View.GONE
+                    binding.previousMatchCard.card.visibility = View.GONE
+                    Timber.tag("previousCompleted").d("${it.exception}")
+                    if (it.exception !is NoSuchElementException) Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
                 }
             }
         }
+
     }
 
     private fun hideUpcoming() {
@@ -197,6 +210,38 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
 
         binding.upcomingMatchCard.setOnClickListener {
             navController.navigate(HomeFragmentDirections.actionHomeToMatchDetailsFragment(matchInfo))
+        }
+    }
+
+    private fun setupPreviousMatchCard(item: Match, cardView: MaterialCardView) {
+        binding.previousMatchCard.team1.text = item.team1Name
+        binding.previousMatchCard.team2.text = item.team2Name
+
+        if (item.team1Logo!!.isNotEmpty()) {
+            binding.previousMatchCard.team1Logo.load(item.team1Logo)
+        } else {
+            if (item.team1Name == requireContext().getString(R.string.guardian_angels))
+                binding.previousMatchCard.team1Logo.load(R.drawable.gaurdian_angels)
+            else
+                binding.previousMatchCard.team1Logo.load(R.drawable.ic_football)
+        }
+
+        if (item.team2Logo!!.isNotEmpty()) {
+            binding.previousMatchCard.team2Logo.load(item.team2Logo)
+        } else {
+            if (item.team2Name == requireContext().getString(R.string.guardian_angels))
+                binding.previousMatchCard.team2Logo.load(R.drawable.gaurdian_angels)
+            else
+                binding.previousMatchCard.team2Logo.load(R.drawable.ic_football)
+        }
+
+        binding.previousMatchCard.team1Score.text = item.team1Score!!.toString()
+        binding.previousMatchCard.team2Score.text = item.team2Score!!.toString()
+
+        when (item.gameResult) {
+            GameResults.WIN -> cardView.setCardStroke(requireContext(), R.color.mainStatWon)
+            GameResults.LOSS -> cardView.setCardStroke(requireContext(), R.color.mainStatLost)
+            GameResults.DRAW -> cardView.setCardStroke(requireContext(), R.color.mainStatDraw)
         }
     }
 

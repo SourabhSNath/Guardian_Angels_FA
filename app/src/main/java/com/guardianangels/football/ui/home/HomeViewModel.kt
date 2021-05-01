@@ -30,7 +30,7 @@ class HomeViewModel @Inject constructor(
             getNextUpcomingMatch()
             delay(100) // Prevents a crash due to the everything being called at the same time.
             getGameStats()
-            getPreviousMatches()
+            getPreviousMatch()
         }
     }
 
@@ -57,13 +57,13 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private val _previousCompletedMatches = MutableLiveData<NetworkState<List<Match>>>()
-    val previousCompletedMatches: LiveData<NetworkState<List<Match>>> get() = _previousCompletedMatches
-    fun getPreviousMatches() {
+    private val _previousMatch = MutableLiveData<NetworkState<Match>>()
+    val previousMatch: LiveData<NetworkState<Match>> get() = _previousMatch
+
+    fun getPreviousMatch() {
         viewModelScope.launch {
-            matchRepository.getCompletedMatches().collect {
-                Timber.d("Get Previous matches")
-                _previousCompletedMatches.value = it
+            matchRepository.getPreviousMatch().collect {
+                _previousMatch.value = it
             }
         }
     }
