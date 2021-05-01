@@ -11,7 +11,7 @@
     <color name="white">#FFFFFFFF</color>
 
     <!-- Main Layout Background Colours -->
-    <color name="layoutGradientStart">#000000</color>
+    <color name="layoutGradientStart">#040013</color>
     <color name="layoutGradientEnd">#0A0B15</color>
 
     <color name="mainUpcomingGradientStart">#FBC02D</color>
