@@ -109,6 +109,7 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
                     binding.loadingProgress.visibility = View.GONE
                     binding.addAMatchTV.visibility = View.GONE
                     setUpcomingViewsVisibiltiy(View.VISIBLE)
+                    hideEmptyUpcomingEventsMessageCard(false) // Hide No Events message card
                 }
                 is NetworkState.Failed -> {
                     Timber.tag("upcomingMatch").d("${it.exception}, ${it.message}, Hide everything")
@@ -129,7 +130,7 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
                         Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
                     }
                     // Show this if it fails to get the data. EmptyEvents Card is supposed to be shown when both upcoming and previous matches are empty
-                    binding.emptyEventsCard.visibility = View.VISIBLE
+                    hideEmptyUpcomingEventsMessageCard(true)
                 }
             }
         }
@@ -159,7 +160,7 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
                 is NetworkState.Loading -> Timber.tag("previousCompleted").d("Loading")
                 is NetworkState.Success -> {
                     // Hide the emptyEvents card if success. EmptyEvents Card is supposed to be shown when both upcoming and previous matches are empty
-                    binding.emptyEventsCard.visibility = View.GONE
+                    hideEmptyUpcomingEventsMessageCard(false)
 
                     val item = it.data
                     val cardView = binding.previousMatchCard.card
@@ -185,6 +186,16 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
         binding.upcomingMatchCard.visibility = View.GONE
         binding.upcomingTV.visibility = View.GONE
         binding.moreUpcomingTV.visibility = View.GONE
+    }
+
+    private fun hideEmptyUpcomingEventsMessageCard(visible: Boolean) {
+        binding.emptyEventsCard.visibility = if (visible) {
+            Timber.d("Show No events card")
+            View.VISIBLE
+        } else {
+            Timber.d("Hide No events card")
+            View.GONE
+        }
     }
 
     /**
