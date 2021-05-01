@@ -1,8 +1,12 @@
 package com.guardianangels.football.util
 
+import android.content.Context
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.ColorRes
+import androidx.core.content.ContextCompat
 import coil.load
+import com.google.android.material.card.MaterialCardView
 import com.guardianangels.football.R
 import timber.log.Timber
 
@@ -39,4 +43,8 @@ fun ImageView.setTeamLogo(logoLink: String, teamName: String) {
             load(R.drawable.ic_football)
         }
     }
+}
+
+fun MaterialCardView.setCardStroke(context: Context, @ColorRes color: Int) {
+    strokeColor = ContextCompat.getColor(context, color)
 }
