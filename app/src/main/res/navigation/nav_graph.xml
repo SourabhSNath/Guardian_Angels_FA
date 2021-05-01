@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/home">
+    app:startDestination="@id/players">
 
     <fragment
         android:id="@+id/home"
@@ -30,7 +30,7 @@
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"/>
+            app:popExitAnim="@anim/slide_out_right" />
 
         <!-- When there is no next upcoming match, the option leads to AddUpcomingMatchFragment. -->
         <action
@@ -40,7 +40,7 @@
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"/>
+            app:popExitAnim="@anim/slide_out_right" />
         <argument
             android:name="is_match_completed"
             app:argType="boolean" />
@@ -53,7 +53,15 @@
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"/>
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_home_to_previousMatchListFragment"
+            app:destination="@id/previousMatchListFragment"
+
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
 
     <fragment
@@ -119,13 +127,14 @@
         <action
             android:id="@+id/action_addPlayerFragment_to_playerDetailsFragment"
             app:destination="@id/playerDetailsFragment"
-            app:popUpTo="@id/playerDetailsFragment"
-            app:popUpToInclusive="true"
 
             app:enterAnim="@anim/slide_in_left"
             app:exitAnim="@anim/slide_out_right"
             app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
+            app:popExitAnim="@anim/slide_out_right"
+
+            app:popUpTo="@id/playerDetailsFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
@@ -140,7 +149,7 @@
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"/>
+            app:popExitAnim="@anim/slide_out_right" />
         <argument
             android:name="matchData"
             android:defaultValue="@null"
@@ -160,7 +169,7 @@
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"/>
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
 
     <fragment
@@ -178,7 +187,7 @@
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"/>
+            app:popExitAnim="@anim/slide_out_right" />
         <action
             android:id="@+id/action_matchDetailsFragment_to_updateCompletedMatchFragment"
             app:destination="@id/updateCompletedMatchFragment"
@@ -186,7 +195,7 @@
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"/>
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
 
     <fragment
@@ -201,7 +210,7 @@
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"/>
+            app:popExitAnim="@anim/slide_out_right" />
         <action
             android:id="@+id/action_matchListFragment_to_matchDetailsFragment"
             app:destination="@id/matchDetailsFragment"
@@ -209,7 +218,7 @@
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"/>
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
 
     <fragment
@@ -227,27 +236,29 @@
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"/>
+            app:popExitAnim="@anim/slide_out_right" />
         <action
             android:id="@+id/action_updateCompletedMatchFragment_to_home"
             app:destination="@id/home"
-            app:popUpTo="@id/home"
-            app:popUpToInclusive="true"
 
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"/>
+            app:popExitAnim="@anim/slide_out_right"
+
+            app:popUpTo="@id/home"
+            app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_updateCompletedMatchFragment_to_completedMatchDetailsFragment"
             app:destination="@id/completedMatchDetailsFragment"
-            app:popUpTo="@id/completedMatchDetailsFragment"
-            app:popUpToInclusive="true"
 
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"/>
+            app:popExitAnim="@anim/slide_out_right"
+
+            app:popUpTo="@id/completedMatchDetailsFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
@@ -261,13 +272,14 @@
         <action
             android:id="@+id/action_updateTeamPlayersFragment_to_home"
             app:destination="@id/home"
-            app:popUpTo="@id/home"
-            app:popUpToInclusive="true"
 
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"/>
+            app:popExitAnim="@anim/slide_out_right"
+
+            app:popUpTo="@id/home"
+            app:popUpToInclusive="true" />
         <argument
             android:name="isWin"
             app:argType="boolean" />
@@ -275,7 +287,7 @@
 
     <fragment
         android:id="@+id/completedMatchDetailsFragment"
-        android:name="com.guardianangels.football.ui.match.completedmatches.CompletedMatchDetailsFragment"
+        android:name="com.guardianangels.football.ui.match.details.CompletedMatchDetailsFragment"
         android:label="CompletedMatchDetailsFragment"
         tools:layout="@layout/completed_match_details_fragment">
         <argument
@@ -290,7 +302,65 @@
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"/>
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/previousMatchListFragment"
+        android:name="com.guardianangels.football.ui.match.previousmatches.PreviousMatchListFragment"
+        android:label="PreviousMatchListFragment"
+        tools:layout="@layout/previous_match_list_fragment">
+        <action
+            android:id="@+id/action_previousMatchListFragment_to_completedMatchDetailsFragment"
+            app:destination="@id/completedMatchDetailsFragment"
+
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/gallery"
+        android:name="com.guardianangels.football.ui.gallery.GalleryFragment"
+        android:label="GalleryFragment"
+        tools:layout="@layout/gallery_fragment">
+        <action
+            android:id="@+id/action_gallery_to_addGalleryImagesFragment"
+            app:destination="@id/addGalleryImagesFragment"
+
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_gallery_to_pictureDisplayFragment"
+            app:destination="@id/pictureDisplayFragment"
+
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/addGalleryImagesFragment"
+        android:name="com.guardianangels.football.ui.gallery.addimages.AddGalleryImagesFragment"
+        android:label="AddGalleryImagesFragment"
+        tools:layout="@layout/add_gallery_images_fragment">
+        <argument
+            android:name="pictures"
+            app:argType="android.net.Uri[]" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/pictureDisplayFragment"
+        android:name="com.guardianangels.football.ui.gallery.picture.PictureDisplayFragment"
+        android:label="PictureDisplayFragment"
+        tools:layout="@layout/gallery_picture_display_fragment">
+        <argument
+            android:name="picture"
+            app:argType="com.guardianangels.football.data.Picture" />
     </fragment>
 
 </navigation>
