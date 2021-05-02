@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.graphics.drawable.InsetDrawable
 import android.util.TypedValue
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.setFragmentResultListener
@@ -78,8 +79,10 @@ class PlayerListFragment : BasePlayerListFragment() {
         viewModel.multiSelectionHandler.deletedState.observe(viewLifecycleOwner) {
             when (it) {
                 is NetworkState.Loading -> {
+                    binding.progressBar.visibility = View.VISIBLE
                 }
                 is NetworkState.Success -> {
+                    binding.progressBar.visibility = View.GONE
                     Timber.tag(TAG).d("observeViewModel: Success ${it.data}")
                     viewModel.multiSelectionHandler.clearSelectedList()
                     viewModel.multiSelectionHandler.setToolbarState(ToolbarState.NormalState)
@@ -87,7 +90,9 @@ class PlayerListFragment : BasePlayerListFragment() {
                     viewModel.getSectionedPlayerResultLiveData()
                 }
                 is NetworkState.Failed -> {
+                    binding.progressBar.visibility = View.GONE
                     Timber.tag(TAG).d("observeViewModel: Failed: ${it.message}")
+                    Toast.makeText(requireContext(), "Delete Failed. ${it.message}", Toast.LENGTH_SHORT).show()
                 }
             }
         }
