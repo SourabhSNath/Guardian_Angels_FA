@@ -30,7 +30,7 @@
             app:layout_constraintTop_toTopOf="@+id/playerTypeTV"
             app:layout_constraintVertical_bias="0.0"
             app:shapeAppearanceOverlay="@style/RoundedCornerImageView"
-            tools:srcCompat="@drawable/manchester_player" />
+            tools:srcCompat="@drawable/football_player" />
 
         <TextView
             android:id="@+id/playerName"

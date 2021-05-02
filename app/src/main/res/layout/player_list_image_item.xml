@@ -19,7 +19,7 @@
         android:layout_height="match_parent"
         android:contentDescription="Player Image"
         android:scaleType="centerCrop"
-        tools:src="@drawable/manchester_player" />
+        tools:src="@drawable/football_player" />
 
     <LinearLayout
         android:id="@+id/container"

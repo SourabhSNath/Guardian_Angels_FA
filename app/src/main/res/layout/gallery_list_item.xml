@@ -17,6 +17,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
-        tools:srcCompat="@drawable/manchester_player" />
+        tools:srcCompat="@drawable/football_player" />
 
 </com.google.android.material.card.MaterialCardView>

@@ -15,7 +15,7 @@
         android:layout_marginEnd="12dp"
         android:layout_marginBottom="16dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/manchester_player"
+        tools:src="@drawable/football_player"
         app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent" />
 
     <TextView
