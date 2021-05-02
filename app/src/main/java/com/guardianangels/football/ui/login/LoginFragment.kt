@@ -2,18 +2,17 @@ package com.guardianangels.football.ui.login
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
-import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.button.MaterialButton
-import com.google.android.material.textfield.TextInputLayout
+import com.google.android.material.snackbar.Snackbar
 import com.guardianangels.football.R
 import com.guardianangels.football.databinding.LoginFragmentBinding
 import com.guardianangels.football.network.NetworkState
+import com.guardianangels.football.util.getString
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
 class LoginFragment : Fragment(R.layout.login_fragment) {
@@ -24,32 +23,44 @@ class LoginFragment : Fragment(R.layout.login_fragment) {
         super.onViewCreated(view, savedInstanceState)
         val binding = LoginFragmentBinding.bind(view)
 
-        val loginTV = binding.loginTV
-        val backButton = binding.backButton
-        val passwordEditText = binding.passwordEditText
-        val passwordTextField = binding.passwordTF
-        val loginButton = binding.loginButton
-        val logoutButton = binding.logoutButton
-
         if (viewModel.checkLogin()) {
-            loginAction(loginTV, passwordTextField, loginButton, logoutButton)
+            Timber.d("Login: ${viewModel.checkLogin()}")
+            setupLoginOrLogout(true, binding)
         } else {
             viewModel.logout()
-            logoutAction(loginTV, passwordTextField, loginButton, logoutButton)
+            Timber.d("Logout: ${viewModel.checkLogin()}")
+            setupLoginOrLogout(false, binding)
         }
 
-        loginButton.setOnClickListener {
-            val password = passwordEditText.text.toString()
-            if (password.isNotBlank()) viewModel.login(password)
+        binding.loginButton.setOnClickListener {
+            val password = binding.passwordEditText.getString()
+            val email = binding.emailET.getString()
+            if (password.isNotBlank()) viewModel.login(email, password)
         }
 
-        logoutButton.setOnClickListener {
+        binding.logoutButton.setOnClickListener {
             viewModel.logout()
-            logoutAction(loginTV, passwordTextField, loginButton, logoutButton)
+            setupLoginOrLogout(false, binding)
         }
 
-        backButton.setOnClickListener {
+        binding.backButton.setOnClickListener {
             findNavController().popBackStack()
+        }
+
+        binding.forgotPasswordTV.setOnClickListener {
+            setupPasswordResetState(true, binding)
+        }
+
+        binding.passwordResetButton.setOnClickListener {
+            val email = binding.emailET.getString()
+            if (email.isNotEmpty())
+                viewModel.forgotPassword(email)
+            else
+                binding.emailTF.error = "Please enter an email address"
+        }
+
+        binding.cancelPasswordResetButton.setOnClickListener {
+            setupPasswordResetState(false, binding)
         }
 
         viewModel.loginState.observe(viewLifecycleOwner) {
@@ -57,44 +68,54 @@ class LoginFragment : Fragment(R.layout.login_fragment) {
                 is NetworkState.Loading -> binding.progressBar.visibility = View.VISIBLE
                 is NetworkState.Success -> {
                     Toast.makeText(requireContext(), "Successful Login", Toast.LENGTH_SHORT).show()
-                    loginAction(loginTV, passwordTextField, loginButton, logoutButton)
                     binding.progressBar.visibility = View.GONE
+                    setupLoginOrLogout(true, binding)
                 }
 
                 is NetworkState.Failed -> {
-                    Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
-                    passwordEditText.error = it.message
+                    Timber.d("$it")
+                    if (it.exception is IllegalArgumentException) {
+                        Snackbar.make(view, "Something went wrong. Please check your email or password.", Snackbar.LENGTH_LONG).show()
+                    } else {
+                        Snackbar.make(view, it.message, Snackbar.LENGTH_LONG).show()
+                    }
+
                     binding.progressBar.visibility = View.GONE
                 }
             }
         }
 
-
+        viewModel.isMailSent.observe(viewLifecycleOwner) {
+            when (it) {
+                is NetworkState.Loading -> binding.progressBar.visibility = View.VISIBLE
+                is NetworkState.Success -> {
+                    Snackbar.make(view, "Password reset link sent to your email.", Snackbar.LENGTH_LONG).show()
+                    binding.progressBar.visibility = View.GONE
+                    setupPasswordResetState(false, binding) // Go back to normal state
+                }
+                is NetworkState.Failed -> {
+                    Snackbar.make(view, it.message, Snackbar.LENGTH_LONG).show()
+                    binding.progressBar.visibility = View.GONE
+                }
+            }
+        }
     }
 
-    private fun logoutAction(
-        loginTV: TextView,
-        passwordEditText: TextInputLayout,
-        loginButton: MaterialButton,
-        logoutButton: Button
-    ) {
-        loginTV.text = "Log in"
-        passwordEditText.visibility = View.VISIBLE
-        loginButton.visibility = View.VISIBLE
-        logoutButton.visibility = View.GONE
+    private fun setupPasswordResetState(isPasswordResetState: Boolean, binding: LoginFragmentBinding) {
+        binding.forgotPasswordTitle.visibility = if (isPasswordResetState) View.VISIBLE else View.GONE
+        binding.loginTV.visibility = if (isPasswordResetState) View.INVISIBLE else View.VISIBLE
+        binding.passwordTF.visibility = if (isPasswordResetState) View.GONE else View.VISIBLE
+        binding.passwordResetButton.visibility = if (isPasswordResetState) View.VISIBLE else View.GONE
+        binding.cancelPasswordResetButton.visibility = if (isPasswordResetState) View.VISIBLE else View.GONE
+        binding.forgotPasswordTV.visibility = if (isPasswordResetState) View.GONE else View.VISIBLE
     }
 
-    private fun loginAction(
-        loginTV: TextView,
-        passwordEditText: TextInputLayout,
-        loginButton: MaterialButton,
-        logoutButton: Button
-    ) {
-        loginTV.text = "Log out"
-        passwordEditText.visibility = View.GONE
-        loginButton.visibility = View.GONE
-        logoutButton.visibility = View.VISIBLE
+    private fun setupLoginOrLogout(isLogin: Boolean, binding: LoginFragmentBinding) {
+        binding.loginTV.text = if (isLogin) "Log out" else "Log in"
+        binding.passwordTF.visibility = if (isLogin) View.GONE else View.VISIBLE
+        binding.emailTF.visibility = if (isLogin) View.GONE else View.VISIBLE
+        binding.loginButton.visibility = if (isLogin) View.GONE else View.VISIBLE
+        binding.logoutButton.visibility = if (isLogin) View.VISIBLE else View.GONE
     }
-
 
 }

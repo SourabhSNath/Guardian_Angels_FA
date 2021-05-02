@@ -18,24 +18,19 @@ class LoginViewModel @Inject constructor(
     private val auth: FirebaseAuth
 ) : ViewModel() {
 
-    companion object {
-        /* This is the only email allowed to login. The user will not have the ability to create a new account. */
-        private const val EMAIL = "admin@guardian.angels"
-    }
-
     fun checkLogin() = auth.currentUser != null
 
     private val _loginState = MutableLiveData<NetworkState<Boolean>>()
     val loginState: LiveData<NetworkState<Boolean>> get() = _loginState
 
 
-    fun login(password: String) {
+    fun login(email: String, password: String) {
         viewModelScope.launch(Dispatchers.IO) {
 
             _loginState.postValue(NetworkState.loading())
 
             try {
-                auth.signInWithEmailAndPassword(EMAIL, password).await()
+                auth.signInWithEmailAndPassword(email, password).await()
 
                 // Check if the user has logged in successfully
                 if (checkLogin()) {
@@ -54,5 +49,27 @@ class LoginViewModel @Inject constructor(
 
     fun logout() {
         auth.signOut()
+    }
+
+    private val _isMailSent = MutableLiveData<NetworkState<Boolean>>()
+    val isMailSent: LiveData<NetworkState<Boolean>> get() = _isMailSent
+
+    fun forgotPassword(email: String) {
+        Timber.d("Attempting to reset password.")
+        viewModelScope.launch(Dispatchers.IO) {
+            _isMailSent.postValue(NetworkState.loading())
+            auth.sendPasswordResetEmail(email).addOnCompleteListener {
+                if (it.isSuccessful) {
+                    _isMailSent.postValue(NetworkState.success(true))
+                } else {
+                    _isMailSent.postValue(
+                        NetworkState.failed(
+                            it.exception ?: Exception("Failed"),
+                            it.exception?.message ?: "Failed to reset password"
+                        )
+                    )
+                }
+            }
+        }
     }
 }
