@@ -109,6 +109,7 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
                     binding.loadingProgress.visibility = View.GONE
                     binding.addAMatchTV.visibility = View.GONE
                     setUpcomingViewsVisibiltiy(View.VISIBLE)
+                    hideOrShowUpcoming(hide = false)
                     hideEmptyUpcomingEventsMessageCard(false) // Hide No Events message card
                 }
                 is NetworkState.Failed -> {
@@ -122,11 +123,12 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
                                 navController.navigate(HomeFragmentDirections.actionHomeToAddUpcomingMatchFragment())
                             }
                             setUpcomingViewsVisibiltiy(View.GONE)
+                            hideOrShowUpcoming(hide = false)
                         } else {
-                            hideUpcoming()
+                            hideOrShowUpcoming(true)
                         }
                     } else {
-                        hideUpcoming()
+                        hideOrShowUpcoming(true)
                         Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
                     }
                     // Show this if it fails to get the data. EmptyEvents Card is supposed to be shown when both upcoming and previous matches are empty
@@ -162,6 +164,10 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
                     // Hide the emptyEvents card if success. EmptyEvents Card is supposed to be shown when both upcoming and previous matches are empty
                     hideEmptyUpcomingEventsMessageCard(false)
 
+                    binding.previousMatchTitle.visibility = View.VISIBLE
+                    binding.previousMatchCard.root.visibility = View.VISIBLE
+                    binding.morePreviousTV.visibility = View.VISIBLE
+
                     val item = it.data
                     val cardView = binding.previousMatchCard.card
                     setupPreviousMatchCard(item, cardView)
@@ -182,10 +188,10 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
 
     }
 
-    private fun hideUpcoming() {
-        binding.upcomingMatchCard.visibility = View.GONE
-        binding.upcomingTV.visibility = View.GONE
-        binding.moreUpcomingTV.visibility = View.GONE
+    private fun hideOrShowUpcoming(hide: Boolean) {
+        binding.upcomingMatchCard.visibility = if (hide) View.GONE else View.VISIBLE
+        binding.upcomingTV.visibility = if (hide) View.GONE else View.VISIBLE
+        binding.moreUpcomingTV.visibility = if (hide) View.GONE else View.VISIBLE
     }
 
     private fun hideEmptyUpcomingEventsMessageCard(visible: Boolean) {

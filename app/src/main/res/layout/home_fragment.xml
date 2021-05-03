@@ -38,8 +38,10 @@
                 android:fontFamily="@font/raleway"
                 android:text="@string/upcoming"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+                android:visibility="gone"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/appTitle" />
+                app:layout_constraintTop_toBottomOf="@+id/appTitle"
+                tools:visibility="visible" />
 
             <!-- Upcoming Match Card -->
             <TextView
@@ -50,9 +52,11 @@
                 android:gravity="center"
                 android:text="See More"
                 android:textSize="12sp"
+                android:visibility="gone"
                 app:drawableEndCompat="@drawable/ic_next"
                 app:layout_constraintBaseline_toBaselineOf="@+id/upcomingTV"
-                app:layout_constraintEnd_toEndOf="@+id/upcomingMatchCard" />
+                app:layout_constraintEnd_toEndOf="@+id/upcomingMatchCard"
+                tools:visibility="visible" />
 
 
             <com.google.android.material.card.MaterialCardView
@@ -62,11 +66,13 @@
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="24dp"
+                android:visibility="gone"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/upcomingTV">
+                app:layout_constraintTop_toBottomOf="@+id/upcomingTV"
+                tools:visibility="visible">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -417,15 +423,15 @@
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="32dp"
                 android:layout_marginEnd="24dp"
+                android:layout_marginBottom="80dp"
+                android:visibility="gone"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="8dp"
-                android:visibility="gone"
-                android:layout_marginBottom="80dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintVertical_bias="0.0"
-                app:layout_constraintTop_toBottomOf="@+id/gameStatCard">
+                app:layout_constraintTop_toBottomOf="@+id/gameStatCard"
+                app:layout_constraintVertical_bias="0.0">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -447,8 +453,10 @@
                 android:fontFamily="@font/raleway"
                 android:text="Previous Matches"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+                android:visibility="gone"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/gameStatCard" />
+                app:layout_constraintTop_toBottomOf="@+id/gameStatCard"
+                tools:visibility="visible" />
 
             <TextView
                 android:id="@+id/morePreviousTV"
@@ -459,9 +467,11 @@
                 android:gravity="center"
                 android:text="See More"
                 android:textSize="12sp"
+                android:visibility="gone"
                 app:drawableEndCompat="@drawable/ic_next"
                 app:layout_constraintBaseline_toBaselineOf="@+id/previousMatchTitle"
-                app:layout_constraintEnd_toEndOf="parent" />
+                app:layout_constraintEnd_toEndOf="parent"
+                tools:visibility="visible" />
 
             <include
                 android:id="@+id/previousMatchCard"
@@ -472,11 +482,13 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="24dp"
                 android:layout_marginBottom="80dp"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/previousMatchTitle"
-                app:layout_constraintVertical_bias="0.0" />
+                app:layout_constraintVertical_bias="0.0"
+                tools:visibility="visible" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
