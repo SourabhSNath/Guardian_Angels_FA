@@ -98,7 +98,6 @@
                         android:layout_marginStart="24dp"
                         android:layout_marginTop="24dp"
                         android:contentDescription="Team 1 Logo"
-                        app:layout_constraintBottom_toTopOf="@+id/team1Name"
                         app:layout_constraintEnd_toStartOf="@+id/matchDate"
                         app:layout_constraintHorizontal_bias="0.5"
                         app:layout_constraintStart_toStartOf="@+id/bg"

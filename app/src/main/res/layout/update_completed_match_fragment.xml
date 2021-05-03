@@ -104,7 +104,6 @@
                 android:layout_marginTop="24dp"
                 android:layout_marginEnd="24dp"
                 android:hint="Team 1 Score*"
-                app:layout_constraintBottom_toBottomOf="@+id/playerTypeTF"
                 app:layout_constraintEnd_toStartOf="@+id/team2ScoreTF"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
