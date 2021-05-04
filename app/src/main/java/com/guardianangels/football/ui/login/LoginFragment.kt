@@ -1,12 +1,15 @@
 package com.guardianangels.football.ui.login
 
+import android.app.Activity
 import android.os.Bundle
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textfield.TextInputLayout
 import com.guardianangels.football.R
 import com.guardianangels.football.databinding.LoginFragmentBinding
 import com.guardianangels.football.network.NetworkState
@@ -32,10 +35,19 @@ class LoginFragment : Fragment(R.layout.login_fragment) {
             setupLoginOrLogout(false, binding)
         }
 
+        val emptyEmailError = "Please enter an email address"
+        val emptyPasswordError = "Password shouldn't be empty"
         binding.loginButton.setOnClickListener {
             val password = binding.passwordEditText.getString()
             val email = binding.emailET.getString()
-            if (password.isNotBlank()) viewModel.login(email, password)
+
+            if (password.isNotBlank() && email.isNotBlank()) viewModel.login(email, password)
+
+            if (password.isBlank()) binding.passwordTF.setOrResetError(emptyPasswordError)
+            else binding.passwordTF.setOrResetError()
+
+            if (email.isBlank()) binding.emailTF.setOrResetError(emptyEmailError)
+            else binding.emailTF.setOrResetError()
         }
 
         binding.logoutButton.setOnClickListener {
@@ -53,10 +65,11 @@ class LoginFragment : Fragment(R.layout.login_fragment) {
 
         binding.passwordResetButton.setOnClickListener {
             val email = binding.emailET.getString()
-            if (email.isNotEmpty())
+            if (email.isNotEmpty()) {
                 viewModel.forgotPassword(email)
-            else
-                binding.emailTF.error = "Please enter an email address"
+                binding.emailTF.setOrResetError()
+            } else
+                binding.emailTF.setOrResetError(emptyEmailError)
         }
 
         binding.cancelPasswordResetButton.setOnClickListener {
@@ -70,10 +83,13 @@ class LoginFragment : Fragment(R.layout.login_fragment) {
                     Toast.makeText(requireContext(), "Successful Login", Toast.LENGTH_SHORT).show()
                     binding.progressBar.visibility = View.GONE
                     setupLoginOrLogout(true, binding)
+                    binding.emailTF.setOrResetError()
                 }
 
                 is NetworkState.Failed -> {
                     Timber.d("$it")
+                    // Hide the Keyboard to make the Snackbar visible, the snackbar doesn't appear above the keyboard.
+                    (requireActivity().getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(view.windowToken, 0)
                     if (it.exception is IllegalArgumentException) {
                         Snackbar.make(view, "Something went wrong. Please check your email or password.", Snackbar.LENGTH_LONG).show()
                     } else {
@@ -116,6 +132,11 @@ class LoginFragment : Fragment(R.layout.login_fragment) {
         binding.emailTF.visibility = if (isLogin) View.GONE else View.VISIBLE
         binding.loginButton.visibility = if (isLogin) View.GONE else View.VISIBLE
         binding.logoutButton.visibility = if (isLogin) View.VISIBLE else View.GONE
+    }
+
+    private fun TextInputLayout.setOrResetError(error: String? = null) {
+        this.error = error
+        isErrorEnabled = error != null
     }
 
 }
