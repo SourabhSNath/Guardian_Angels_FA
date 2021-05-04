@@ -93,6 +93,7 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
             }
         }
 
+        var hideNoEventsCard: Boolean? = null
         /**
          * Get the next upcoming match
          */
@@ -131,8 +132,11 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
                         hideOrShowUpcoming(true)
                         Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
                     }
-                    // Show this if it fails to get the data. EmptyEvents Card is supposed to be shown when both upcoming and previous matches are empty
-                    hideEmptyUpcomingEventsMessageCard(true)
+
+                    if (hideNoEventsCard == null || hideNoEventsCard == false) {
+                        // Show this if it fails to get the data. EmptyEvents Card is supposed to be shown when both upcoming and previous matches are empty
+                        hideEmptyUpcomingEventsMessageCard(true)
+                    }
                 }
             }
         }
@@ -163,6 +167,7 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
                 is NetworkState.Success -> {
                     // Hide the emptyEvents card if success. EmptyEvents Card is supposed to be shown when both upcoming and previous matches are empty
                     hideEmptyUpcomingEventsMessageCard(false)
+                    hideNoEventsCard = true // Incase the previous match loads before the upcoming match, keep the card hidden.
 
                     binding.previousMatchTitle.visibility = View.VISIBLE
                     binding.previousMatchCard.root.visibility = View.VISIBLE
