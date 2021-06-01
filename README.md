@@ -1,7 +1,8 @@
 # Guardian Angels FA Android App
 
 This repository contains the source code for the official Guardian Angels Android App.
-Work In Progress.
+
+[Work In Progress.]
 
 ## [Download App](https://github.com/SourabhSNath/Guardian_Angels_FA/raw/master/app/release/app-release.apk)
 <hr/>
