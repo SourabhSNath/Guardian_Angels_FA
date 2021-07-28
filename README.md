@@ -2,12 +2,6 @@
 
 This repository contains the source code for the official Guardian Angels Android App.
 
-[Work In Progress.]
-
-## [Download App](https://github.com/SourabhSNath/Guardian_Angels_FA/raw/master/app/release/app-release.apk)
-<hr/>
-
-
 # Installation Instructions
 1. Find the downloaded app in your device's Downloads folder and install it.
 2. Click on "INSTALL ANYWAY" in case this prompt appears.
